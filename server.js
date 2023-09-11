@@ -21,13 +21,20 @@ const connect = async () => {
   }
 };
 
-app.use(cors({ origin: "http://127.0.0.1:5173", credentials: true }));
+app.use(cors({ origin: process.env.SRC, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/items", itemRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/init", initRoute);
+
+app.use(
+  "/",
+  express.Router().get("/", (req, res) => {
+    res.send("get out of here :)");
+  })
+);
 
 app.listen(1234, () => {
   connect();
