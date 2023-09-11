@@ -11,25 +11,14 @@ const Item = () => {
   const [quantity, setQuantity] = useState(Number(localStorage.getItem("quantity")));
 
   const getItem = async () => {
-    if (true /*!item || new URLSearchParams(window.location.search).get("id") != item._id*/) {
-      setLoading(true);
-      const res = await req.get("/items?id=" + new URLSearchParams(window.location.search).get("id"));
-      setItem(res.data);
-      localStorage.setItem("item", JSON.stringify(res.data));
-      setImg(res.data.img[0]);
-      setSize(res.data.sizes[0]);
-      setQuantity(1);
-      setLoading(false);
-    } else {
-      setImg(item.img[0]);
-      if (size == null || size == "") {
-        setSize(item.sizes[0]);
-      }
-
-      if (quantity == null || quantity == 0) {
-        setQuantity(1);
-      }
-    }
+    setLoading(true);
+    const res = await req.get("/items?id=" + new URLSearchParams(window.location.search).get("id"));
+    setItem(res.data);
+    localStorage.setItem("item", JSON.stringify(res.data));
+    setImg(res.data.img[0]);
+    setSize(res.data.sizes[0]);
+    setQuantity(1);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -63,38 +52,6 @@ const Item = () => {
   }, []);
 
   const addToCart = async () => {
-    /*setCart((cart) => {
-      if (!cart) {
-        return [
-          {
-            ...item,
-            size: size,
-            quantity: quantity
-          }
-        ];
-      } else {
-        const newCart = [...cart];
-        var found = false;
-        for (var i = 0; i < newCart.length; i++) {
-          if ((item._id + size).toString().replace(" ", "") === (newCart[i]._id + newCart[i].size).toString().replace(" ", "")) {
-            newCart[i].quantity += quantity;
-            return newCart;
-            found = true;
-            break;
-          }
-        }
-
-        if (!found) {
-          newCart.push({
-            ...item,
-            size: size,
-            quantity: quantity
-          });
-          return newCart;
-        }
-      }
-    });*/
-
     if (!cart) {
       setCart([
         {
@@ -124,8 +81,6 @@ const Item = () => {
         setCart(newCart);
       }
     }
-
-    //setIsCartOpen(true);
   };
 
   return (
