@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const newRequest = axios.create({
-  baseURL: "https://bashoe-api.onrender.com/api",
+  baseURL: "http://localhost:1234/api/",
   withCredentials: true
 });
 
