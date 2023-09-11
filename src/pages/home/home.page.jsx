@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Item from "../../components/item/item.component.jsx";
 import req from "../../utils/req.js";
 import "./home.page.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Home = ({ query, setQuery }) => {
   const [items, setItems] = useState(null);
@@ -44,7 +44,6 @@ const Home = ({ query, setQuery }) => {
 
   useEffect(() => {
     getItems();
-    console.log("query changed");
   }, [query]);
 
   const navigate = useNavigate();

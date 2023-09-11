@@ -7,8 +7,8 @@ const Item = () => {
   const [item, setItem] = useState(JSON.parse(localStorage.getItem("item")));
   const [img, setImg] = useState("");
   const [loading, setLoading] = useState(false);
-  const [size, setSize] = useState(localStorage.getItem("size"));
-  const [quantity, setQuantity] = useState(Number(localStorage.getItem("quantity")));
+  const [size, setSize] = useState("");
+  const [quantity, setQuantity] = useState(1);
 
   const getItem = async () => {
     setLoading(true);
@@ -48,7 +48,6 @@ const Item = () => {
 
   useEffect(() => {
     getItem();
-    console.log("getting item");
   }, []);
 
   const addToCart = async () => {

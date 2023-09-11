@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import req from "./utils/req.js";
 import Home from "./pages/home/home.page.jsx";
 import Item from "./pages/item/item.page.jsx";
