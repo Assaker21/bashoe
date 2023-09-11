@@ -1,0 +1,22 @@
+.finish {
+  width: calc(100% - 40px);
+  padding: 100px 20px;
+  height: calc(100vh - 510px);
+  margin: 0 auto;
+  max-width: var(max-width);
+
+  display: flex;
+  justify-content: center;
+
+  .finish-message {
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-color);
+
+    .finish-link {
+      color: var(--text-color);
+      text-decoration: underline;
+    }
+  }
+}

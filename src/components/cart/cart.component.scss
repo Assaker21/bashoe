@@ -1,0 +1,151 @@
+.cart-container {
+  position: absolute;
+  top: 40px;
+  right: 0;
+
+  max-width: 400px;
+  width: calc(100vw - 80px);
+
+  padding: 20px;
+
+  background-color: var(--background-color);
+  border: 1px solid var(--gray1);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  gap: 20px;
+
+  z-index: 200;
+
+  box-shadow: 0 0px 0 500vh rgba(0, 0, 0, 0.114);
+
+  .top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+
+    .cart-title {
+      text-align: start;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--gray2);
+    }
+    .close-button {
+      border: none;
+      background-color: transparent;
+      font-size: 24px;
+      padding: 0;
+      padding-right: 10px;
+      margin: 0;
+
+      display: flex;
+      align-items: start;
+      justify-content: start;
+
+      color: var(--gray2);
+
+      cursor: pointer;
+
+      &:hover {
+        color: var(--text-color);
+      }
+    }
+  }
+
+  .items {
+    scrollbar-width: thin;
+
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 10px;
+
+    max-height: 300px;
+
+    .item {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+
+      padding: 0;
+
+      img {
+        width: 50px;
+      }
+
+      .item-name {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--gray2);
+        flex: 1;
+        text-align: start;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .x {
+        border: none;
+        background-color: transparent;
+        font-size: 24px;
+        padding: 0;
+        padding-right: 10px;
+        margin: 0;
+
+        display: flex;
+        align-items: start;
+        justify-content: start;
+
+        color: var(--gray2);
+
+        cursor: pointer;
+
+        &:hover {
+          color: var(--text-color);
+        }
+      }
+    }
+  }
+
+  .checkout-button {
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+
+    background-color: var(--accent);
+    color: var(--background-color);
+
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .view-cart-button {
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+
+    background-color: var(--background-color);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}
