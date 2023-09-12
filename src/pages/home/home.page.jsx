@@ -9,6 +9,15 @@ const Home = ({ query, setQuery }) => {
   const [loading, setLoading] = useState(false);
   const cats = JSON.parse(localStorage.getItem("cats"));
 
+  const navigate = useNavigate();
+  if (query.get("id")) {
+    navigate("/item?id=" + query.get("id"));
+  } else if (query.get("cart")) {
+    navigate("/cart");
+  } else if (query.get("checkout")) {
+    navigate("/checkout");
+  }
+
   var search = query.get("search");
   var cat = query.get("cat");
 
@@ -45,8 +54,6 @@ const Home = ({ query, setQuery }) => {
   useEffect(() => {
     getItems();
   }, [query]);
-
-  const navigate = useNavigate();
 
   return (
     <>

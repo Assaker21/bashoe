@@ -8,7 +8,7 @@ import Finish from "./pages/finish/finish.page.jsx";
 import Navbar from "./components/navbar/navbar.component.jsx";
 import Footer from "./components/footer/footer.component.jsx";
 
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider, useNavigate } from "react-router-dom";
 
 function App() {
   const [query, setQuery] = useState(new URLSearchParams(window.location.search));
