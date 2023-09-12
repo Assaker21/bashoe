@@ -4,9 +4,9 @@ import "./item.page.scss";
 
 const Item = () => {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")));
-  const [item, setItem] = useState(JSON.parse(localStorage.getItem("item")));
+  const [item, setItem] = useState(null); // JSON.parse(localStorage.getItem("item"))
   const [img, setImg] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(1);
 
@@ -14,7 +14,7 @@ const Item = () => {
     setLoading(true);
     const res = await req.get("/items?id=" + new URLSearchParams(window.location.search).get("id"));
     setItem(res.data);
-    localStorage.setItem("item", JSON.stringify(res.data));
+    //localStorage.setItem("item", JSON.stringify(res.data));
     setImg(res.data.img[0]);
     setSize(res.data.sizes[0]);
     setQuantity(1);
