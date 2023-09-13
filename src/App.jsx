@@ -13,6 +13,21 @@ import Others from "./pages/others/others.page.jsx";
 function App() {
   const [query, setQuery] = useState(new URLSearchParams(window.location.search));
 
+  const init = async () => {
+    try {
+      const res = (await req.get("/init")).data;
+      localStorage.setItem("cats", JSON.stringify(res.cats));
+      localStorage.setItem("shippingFee", res.shippingFee);
+      window.dispatchEvent(new Event("cats&shipping"));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
   const Layout = () => {
     return (
       <>
