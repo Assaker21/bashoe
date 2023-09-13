@@ -21,7 +21,7 @@ const connect = async () => {
   }
 };
 
-app.use(cors({ origin: process.env.SRC, credentials: true }));
+app.use(cors({ origin: ["http://127.0.0.1:5173", "https://bashoe.onrender.com", "https://bashoe-admin.onrender.com"], credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
