@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Home = ({ query, setQuery }) => {
   const [items, setItems] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const cats = JSON.parse(localStorage.getItem("cats"));
 
   const navigate = useNavigate();
