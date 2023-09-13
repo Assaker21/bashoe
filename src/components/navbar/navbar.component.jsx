@@ -58,6 +58,7 @@ const Navbar = ({ query, setQuery }) => {
   };
 
   useEffect(() => {
+    handleResize();
     window.addEventListener("resize", handleResize);
     window.addEventListener("storage", () => {
       setCart(JSON.parse(localStorage.getItem("cart")));
