@@ -1,0 +1,84 @@
+.other {
+  width: calc(100% - 40px);
+  max-width: var(--max-width);
+  padding: 40px 20px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    width: calc(100% - 20px);
+
+    label {
+      width: 100%;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray15);
+    }
+
+    input {
+      width: 100%;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray2);
+
+      border-radius: 4px;
+      border: 2px solid var(--gray15);
+
+      padding: 4px 10px;
+
+      &:focus {
+        border: 2px solid var(--text-color);
+        color: var(--text-color);
+        outline: none;
+      }
+    }
+
+    textarea {
+      width: 100%;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray2);
+
+      border-radius: 4px;
+      border: 2px solid var(--gray15);
+
+      padding: 4px 10px;
+
+      &:focus {
+        border: 2px solid var(--text-color);
+        color: var(--text-color);
+        outline: none;
+      }
+    }
+
+    &:hover {
+      label {
+        color: var(--text-color);
+      }
+    }
+  }
+
+  .save-button {
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+
+    background-color: var(--accent);
+    color: var(--background-color);
+
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}

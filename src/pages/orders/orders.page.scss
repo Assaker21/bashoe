@@ -1,0 +1,131 @@
+.orders {
+  width: calc(100% - 40px);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 40px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .order-filter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    .filter-button {
+      width: calc(50% - 10px);
+      padding: 10px 0;
+      border: none;
+      font-size: 16px;
+      font-weight: 500;
+
+      background-color: var(--accent);
+      color: var(--background-color);
+
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    .filter-button.selected {
+      outline: 1px solid var(--accent);
+      background-color: transparent;
+      color: var(--accent);
+    }
+  }
+
+  .orders-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .order {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      .order-items {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        label {
+          font-size: 16px;
+          font-weight: 600;
+
+          color: var(--text-color);
+        }
+
+        .order-item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 20px;
+          .order-item-img {
+            object-fit: contain;
+            height: 70px;
+            width: 70px;
+          }
+          .order-item-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+
+            span {
+              font-size: 14px;
+              font-weight: 500;
+              color: var(--text-color);
+            }
+          }
+        }
+      }
+
+      .order-client {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .order-client-info {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+
+          label {
+            font-size: 16px;
+            font-weight: 600;
+
+            color: var(--text-color);
+          }
+
+          span {
+            font-size: 14px;
+            font-weight: 400;
+
+            color: var(--text-color);
+          }
+        }
+      }
+
+      .done-button {
+        width: 100%;
+        padding: 10px 0;
+        border: none;
+        font-size: 16px;
+        font-weight: 500;
+
+        background-color: var(--accent);
+        color: var(--background-color);
+
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+}
