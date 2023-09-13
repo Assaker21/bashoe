@@ -31,7 +31,13 @@ const Checkout = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const shippingFee = Number(localStorage.getItem("shippingFee"));
+  const [shippingFee, setShippingFee] = useState(localStorage.getItem("shippingFee") ? Number(localStorage.getItem("shippingFee")) : 0);
+
+  useEffect(() => {
+    window.addEventListener("cats&shipping", () => {
+      setShippingFee(JSON.parse(localStorage.getItem("shippingFee")));
+    });
+  }, []);
 
   useEffect(() => {
     if (cart) {

@@ -5,9 +5,15 @@ import "./home.page.scss";
 import { useNavigate } from "react-router-dom";
 
 const Home = ({ query, setQuery }) => {
-  const [items, setItems] = useState(null);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const cats = JSON.parse(localStorage.getItem("cats"));
+  const [cats, setCats] = useState(localStorage.getItem("cats") ? JSON.parse(localStorage.getItem("cats")) : ["none"]);
+
+  useEffect(() => {
+    window.addEventListener("cats&shipping", () => {
+      setCats(JSON.parse(localStorage.getItem("cats")));
+    });
+  }, []);
 
   const navigate = useNavigate();
   if (query.get("id")) {
@@ -72,13 +78,14 @@ const Home = ({ query, setQuery }) => {
               defaultValue={cat}
             >
               <option value="All">All</option>
-              {cats.map((cat) => {
-                return (
-                  <option key={"_" + cat} value={cat}>
-                    {cat}
-                  </option>
-                );
-              })}
+              {cats != null &&
+                cats.map((cat) => {
+                  return (
+                    <option key={"_" + cat} value={cat}>
+                      {cat}
+                    </option>
+                  );
+                })}
             </select>
           </div>
           {/*<div className="sort">

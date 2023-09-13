@@ -7,12 +7,18 @@ const Navbar = ({ query, setQuery }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [search, setSearch] = useState(query.get("search"));
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")));
-  const cats = JSON.parse(localStorage.getItem("cats"));
+  const [cats, setCats] = useState(localStorage.getItem("cats") ? JSON.parse(localStorage.getItem("cats")) : ["none"]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart")));
   }, [isCartOpen]);
+
+  useEffect(() => {
+    window.addEventListener("cats&shipping", () => {
+      setCats(JSON.parse(localStorage.getItem("cats")));
+    });
+  }, []);
 
   useEffect(() => {
     if (cart) {

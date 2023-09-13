@@ -18,6 +18,7 @@ function App() {
       const res = (await req.get("/init")).data;
       localStorage.setItem("cats", JSON.stringify(res.cats));
       localStorage.setItem("shippingFee", res.shippingFee);
+      window.dispatchEvent(new Event("cats&shipping"));
     } catch (error) {
       console.log(error);
     }

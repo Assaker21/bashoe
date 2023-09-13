@@ -4,7 +4,13 @@ import "./cart.page.scss";
 
 const Cart = () => {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")));
-  const shippingFee = localStorage.getItem("shippingFee");
+  const [shippingFee, setShippingFee] = useState(localStorage.getItem("shippingFee") ? Number(localStorage.getItem("shippingFee")) : 0);
+
+  useEffect(() => {
+    window.addEventListener("cats&shipping", () => {
+      setShippingFee(JSON.parse(localStorage.getItem("shippingFee")));
+    });
+  }, []);
 
   useEffect(() => {
     if (cart) {
