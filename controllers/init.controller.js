@@ -13,6 +13,16 @@ export const createInit = async (req, res) => {
   }
 };
 
+export const updateInit = async (req, res) => {
+  try {
+    await Init.findByIdAndUpdate(req.body._id, { ...req.body });
+    res.status(200).send("Init saved successfully");
+  } catch (error) {
+    res.status(500).send(error.message);
+    console.log(error.message);
+  }
+};
+
 export const init = async (req, res) => {
   try {
     const value = await Init.findOne();

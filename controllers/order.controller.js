@@ -55,12 +55,6 @@ export const createOrder = async (req, res) => {
 };
 
 export const getOrders = async (req, res) => {
-  filters = {
-    done: req.query.done
-  };
-
-  await waiter(500);
-
   try {
     var orders;
     if (req.query.done) {
@@ -70,6 +64,22 @@ export const getOrders = async (req, res) => {
     }
     res.status(200).send(orders);
     console.log(orders);
+  } catch (error) {
+    res.status(500).send(error.message);
+    console.log(error.message);
+  }
+};
+
+export const finishOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.body._id);
+    order.done = true;
+    await Order.findByIdAndUpdate(req.body._id, order);
+
+    const orders = await Order.find();
+
+    res.status(200).send(orders);
+    console.log(order);
   } catch (error) {
     res.status(500).send(error.message);
     console.log(error.message);

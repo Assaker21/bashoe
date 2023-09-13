@@ -9,6 +9,8 @@ router.post("/", createItem);
 
 router.get("/cats", getBrands);
 
+router.patch("/", editItem);
+
 router.get("/shippingFee", (req, res) => {
   res.status(200).send(4);
 });
