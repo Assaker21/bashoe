@@ -62,6 +62,7 @@
     flex-direction: column;
     overflow-y: auto;
     gap: 10px;
+    width: 100%;
 
     max-height: 300px;
 
@@ -73,8 +74,9 @@
       width: 100%;
       display: flex;
       flex-direction: row;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
 
       border: none;
       box-shadow: none;
@@ -85,16 +87,25 @@
         width: 50px;
       }
 
-      .item-name {
-        font-size: 16px;
-        font-weight: 500;
-        color: var(--gray2);
+      .item-info {
         flex: 1;
-        text-align: start;
-        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
 
-        &:hover {
-          text-decoration: underline;
+        .item-name {
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--gray2);
+          flex: 1;
+          text-align: start;
+          cursor: pointer;
+        }
+
+        .item-size-quantity {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--gray15);
         }
       }
 
@@ -123,6 +134,11 @@
         border: none;
         box-shadow: none;
         outline: none;
+        cursor: pointer;
+
+        .item-name {
+          text-decoration: underline;
+        }
       }
     }
   }

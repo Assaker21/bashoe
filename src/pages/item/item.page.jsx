@@ -80,6 +80,8 @@ const Item = () => {
         setCart(newCart);
       }
     }
+
+    window.dispatchEvent(new Event("opencart"));
   };
 
   return (
@@ -131,16 +133,41 @@ const Item = () => {
               </div>
               <div className="single-item-quantity-container">
                 <label>Quantity</label>
-                <input
-                  type="number"
-                  defaultValue="1"
-                  min="1"
-                  className="quantity-input"
-                  onChange={(e) => {
-                    e.preventDefault();
-                    setQuantity(Number(e.target.value));
-                  }}
-                />
+                <div className="single-item-quantity-input-buttons">
+                  <input
+                    type="number"
+                    value={quantity}
+                    min="1"
+                    className="quantity-input"
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setQuantity(Number(e.target.value));
+                    }}
+                  />
+                  <div className="single-item-quantity-buttons">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setQuantity(quantity + 1);
+                      }}
+                      className="single-item-plus"
+                    >
+                      +
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setQuantity((q) => {
+                          if (q > 1) return q - 1;
+                          else return 1;
+                        });
+                      }}
+                      className="single-item-minus"
+                    >
+                      -
+                    </button>
+                  </div>
+                </div>
               </div>
               <button className="single-item-add-to-cart">Add to cart</button>
             </div>

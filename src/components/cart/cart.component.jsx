@@ -31,7 +31,13 @@ const Cart = ({ setIsCartOpen, setCart, cart }) => {
                 }}
               >
                 <img src={item.img[0]} alt="" />
-                <span className="item-name">{item.name}</span>
+                <div className="item-info">
+                  <span className="item-name">{item.name}</span>
+                  <span className="item-size-quantity">
+                    {item.size} x{item.quantity}
+                  </span>
+                </div>
+
                 <span
                   className="x"
                   onClick={() => {

@@ -18,6 +18,10 @@ const Navbar = ({ query, setQuery }) => {
     window.addEventListener("cats&shipping", () => {
       setCats(JSON.parse(localStorage.getItem("cats")));
     });
+
+    window.addEventListener("opencart", () => {
+      setIsCartOpen(true);
+    });
   }, []);
 
   useEffect(() => {
