@@ -1,5 +1,11 @@
 import express from "express";
-import { createItem, getItems, editItem, getBrands } from "../controllers/item.controller.js";
+import {
+  createItem,
+  getItems,
+  editItem,
+  deleteItem,
+  getBrands,
+} from "../controllers/item.controller.js";
 
 const router = express.Router();
 
@@ -10,6 +16,8 @@ router.post("/", createItem);
 router.get("/cats", getBrands);
 
 router.patch("/", editItem);
+
+router.delete("/:id", deleteItem);
 
 router.get("/shippingFee", (req, res) => {
   res.status(200).send(4);

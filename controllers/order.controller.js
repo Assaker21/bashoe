@@ -14,7 +14,7 @@ export const createOrder = async (req, res) => {
           found = true;
           items[j].variants.push({
             size: cart[i].size,
-            quantity: cart[i].quantity
+            quantity: cart[i].quantity,
           });
 
           break;
@@ -34,16 +34,16 @@ export const createOrder = async (req, res) => {
           variants: [
             {
               size: cart[i].size,
-              quantity: cart[i].quantity
-            }
-          ]
+              quantity: cart[i].quantity,
+            },
+          ],
         });
       }
     }
 
     const newOrder = new Order({
       items: items,
-      client: req.body.client
+      client: req.body.client,
     });
 
     const savedOrder = await newOrder.save();

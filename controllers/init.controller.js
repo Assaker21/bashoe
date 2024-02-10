@@ -4,12 +4,13 @@ export const createInit = async (req, res) => {
   try {
     const newInit = new Init({
       shippingFee: 4,
-      cats: ["Adidas", "Nike", "Erke", "Puma", "Under Armour"]
+      cats: ["Adidas", "Nike", "Erke", "Puma", "Under Armour"],
     });
     await newInit.save();
     res.status(500).send("Init saved successfully");
   } catch (error) {
     res.status(500).send(error.message);
+    console.log(error.message);
   }
 };
 
@@ -28,7 +29,7 @@ export const init = async (req, res) => {
     const value = await Init.findOne();
     res.status(200).json({
       shippingFee: value.shippingFee,
-      cats: value.cats
+      cats: value.cats,
     });
   } catch (error) {
     res.status(500).send(error.message);
