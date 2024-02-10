@@ -21,6 +21,11 @@
       font-weight: 600;
       letter-spacing: -2px;
       color: var(--text-color);
+
+      .logo {
+        width: 100%;
+        max-width: 200px;
+      }
     }
 
     .search {

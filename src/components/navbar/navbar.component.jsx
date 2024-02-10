@@ -7,7 +7,11 @@ const Navbar = ({ query, setQuery }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [search, setSearch] = useState(query.get("search"));
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")));
-  const [cats, setCats] = useState(localStorage.getItem("cats") ? JSON.parse(localStorage.getItem("cats")) : ["none"]);
+  const [cats, setCats] = useState(
+    localStorage.getItem("cats")
+      ? JSON.parse(localStorage.getItem("cats"))
+      : ["none"]
+  );
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
@@ -54,7 +58,11 @@ const Navbar = ({ query, setQuery }) => {
   const handleSearch = (e) => {
     try {
       e.preventDefault();
-      navigate("/?search=" + search + (query.get("cat") ? "&cat=" + query.get("cat") : ""));
+      navigate(
+        "/?search=" +
+          search +
+          (query.get("cat") ? "&cat=" + query.get("cat") : "")
+      );
       setQuery(new URLSearchParams(window.location.search));
     } catch (error) {
       console.log("SEARCH ERROR: " + error);
@@ -80,7 +88,7 @@ const Navbar = ({ query, setQuery }) => {
               setQuery(new URLSearchParams(window.location.search));
             }}
           >
-            BASHOE
+            <img className="logo" src="logo.jpg" />
           </Link>
           {!isSmallScreen && (
             <form className="search search-big" onSubmit={handleSearch}>
@@ -105,9 +113,17 @@ const Navbar = ({ query, setQuery }) => {
                 setIsCartOpen(!isCartOpen);
               }}
             >
-              <span className="cart-amount-inside">{cart ? cart.length : 0}</span>
+              <span className="cart-amount-inside">
+                {cart ? cart.length : 0}
+              </span>
             </i>
-            {isCartOpen && <Cart setIsCartOpen={setIsCartOpen} cart={cart} setCart={setCart} />}
+            {isCartOpen && (
+              <Cart
+                setIsCartOpen={setIsCartOpen}
+                cart={cart}
+                setCart={setCart}
+              />
+            )}
           </button>
         </div>
         {isSmallScreen && (
@@ -125,14 +141,16 @@ const Navbar = ({ query, setQuery }) => {
           </form>
         )}
         <hr />
-        <div className="menu">
+        {/*<div className="menu">
           {cats.map((cat) => {
             return (
               <Link
                 key={cat}
                 className="menu-item"
                 onClick={() => {
-                  navigate("/?cat=" + cat + (search ? "&search=" + search : ""));
+                  navigate(
+                    "/?cat=" + cat + (search ? "&search=" + search : "")
+                  );
                   setQuery(new URLSearchParams(window.location.search));
                 }}
               >
@@ -140,7 +158,7 @@ const Navbar = ({ query, setQuery }) => {
               </Link>
             );
           })}
-        </div>
+        </div>*/}
         <hr />
       </nav>
     </>
