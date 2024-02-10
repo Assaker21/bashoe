@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import req from "../../utils/req.js";
 import "./item.page.scss";
 import { useNavigate } from "react-router-dom";
+import AlertModal from "../../components/alert-modal/alert-modal.component.jsx";
 
 const Item = () => {
   const [item, setItem] = useState(null);
@@ -10,11 +11,15 @@ const Item = () => {
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(1);
 
+  const [alertOpen, setAlertOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const getItem = async () => {
     setLoading(true);
-    const res = await req.get("/items?id=" + new URLSearchParams(window.location.search).get("id"));
+    const res = await req.get(
+      "/items?id=" + new URLSearchParams(window.location.search).get("id")
+    );
     setItem(res.data);
     setImg(res.data.img[0]);
     setSize(res.data.sizes[0]);
@@ -40,14 +45,31 @@ const Item = () => {
     try {
       setLoading(true);
       const res = await req.patch("/items", {
-        ...item
+        ...item,
       });
 
-      setLoading(false);
       if (res.status == 201) {
         location.reload();
         // navigate("/item?id=" + item._id);
       }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      window.alert("Status: " + error.status + ", Error: " + error.message);
+    }
+  };
+
+  const deleteItem = async () => {
+    try {
+      setLoading(true);
+      const res = await req.delete("/items/" + item._id, {
+        ...item,
+      });
+
+      if (res.status == 201) {
+        navigate("/");
+      }
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       window.alert("Status: " + error.status + ", Error: " + error.message);
@@ -64,8 +86,19 @@ const Item = () => {
           }}
           className="edit-item"
         >
-          <div className="label-input">
-            <label>ID: {item._id}</label>
+          <div className="delete-container">
+            <div className="label-input">
+              <label>ID: {item._id}</label>
+            </div>
+            <button
+              onClick={() => {
+                setAlertOpen(Math.random());
+              }}
+              type="button"
+              className="delete-button"
+            >
+              Delete
+            </button>
           </div>
 
           <div className="label-input">
@@ -114,7 +147,7 @@ const Item = () => {
           </div>
 
           <div className="label-input">
-            <label>Category</label>
+            {/*<label>Category</label>
             <input
               type="text"
               defaultValue={item.cat}
@@ -125,8 +158,30 @@ const Item = () => {
                   return newItem;
                 });
               }}
-            />
+            />*/}
+            <label htmlFor="cats">Category</label>
+            <select
+              id="cats"
+              name="cats"
+              defaultValue={item.cat}
+              onChange={(e) => {
+                setItem((item) => {
+                  var newItem = { ...item };
+                  newItem.cat = e.target.value;
+                  return newItem;
+                });
+              }}
+            >
+              {JSON.parse(localStorage.getItem("cats")).map((cat, index) => {
+                return (
+                  <option key={`${cat} ${index}`} value={cat}>
+                    {cat}
+                  </option>
+                );
+              })}
+            </select>
           </div>
+
           <div className="label-input">
             <label>Images</label>
             <textarea
@@ -161,7 +216,7 @@ const Item = () => {
           <button className="save-button">Save item</button>
         </form>
       )}
-
+      <AlertModal openSignal={alertOpen} onYes={deleteItem} />
       <form
         className="single-item-item"
         onSubmit={(e) => {
@@ -177,8 +232,24 @@ const Item = () => {
               <div className="single-item-all-imgs">
                 {item.img.map((_img) => {
                   return (
-                    <div key={Math.random()} className={img == _img ? "all-imgs-wrapper selected" : "all-imgs-wrapper"}>
-                      <img src={_img} alt="" className={img == _img ? "single-item-img selected" : "single-item-img"} onClick={(e) => setImg(e.target.src)} />
+                    <div
+                      key={Math.random()}
+                      className={
+                        img == _img
+                          ? "all-imgs-wrapper selected"
+                          : "all-imgs-wrapper"
+                      }
+                    >
+                      <img
+                        src={_img}
+                        alt=""
+                        className={
+                          img == _img
+                            ? "single-item-img selected"
+                            : "single-item-img"
+                        }
+                        onClick={(e) => setImg(e.target.src)}
+                      />
                     </div>
                   );
                 })}
@@ -195,7 +266,11 @@ const Item = () => {
                     return (
                       <span
                         key={s}
-                        className={size == s ? "single-item-size selected" : "single-item-size"}
+                        className={
+                          size == s
+                            ? "single-item-size selected"
+                            : "single-item-size"
+                        }
                         onClick={() => {
                           setSize(s);
                         }}

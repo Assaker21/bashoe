@@ -10,7 +10,7 @@ const Item = () => {
     desc: "",
     cat: "",
     img: [],
-    sizes: []
+    sizes: [],
   });
   const [img, setImg] = useState("");
 
@@ -30,7 +30,7 @@ const Item = () => {
   const createItem = async () => {
     try {
       const res = await req.post("/items", {
-        ...item
+        ...item,
       });
       if (res.status == 201) {
         navigate("/item?id=" + res.data._id);
@@ -93,7 +93,7 @@ const Item = () => {
         </div>
 
         <div className="label-input">
-          <label>Category</label>
+          {/*<label>Category</label>
           <input
             type="text"
             onChange={(e) => {
@@ -103,7 +103,28 @@ const Item = () => {
                 return newItem;
               });
             }}
-          />
+          />*/}
+          <label htmlFor="cats">Category</label>
+          <select
+            id="cats"
+            name="cats"
+            defaultValue={item.cat}
+            onChange={(e) => {
+              setItem((item) => {
+                var newItem = { ...item };
+                newItem.cat = e.target.value;
+                return newItem;
+              });
+            }}
+          >
+            {JSON.parse(localStorage.getItem("cats")).map((cat, index) => {
+              return (
+                <option key={`${cat} ${index}`} value={cat}>
+                  {cat}
+                </option>
+              );
+            })}
+          </select>
         </div>
 
         <div className="label-input">
@@ -151,8 +172,24 @@ const Item = () => {
           <div className="single-item-all-imgs">
             {item.img.map((_img) => {
               return (
-                <div key={Math.random()} className={img == _img ? "all-imgs-wrapper selected" : "all-imgs-wrapper"}>
-                  <img src={_img} alt="" className={img == _img ? "single-item-img selected" : "single-item-img"} onClick={(e) => setImg(e.target.src)} />
+                <div
+                  key={Math.random()}
+                  className={
+                    img == _img
+                      ? "all-imgs-wrapper selected"
+                      : "all-imgs-wrapper"
+                  }
+                >
+                  <img
+                    src={_img}
+                    alt=""
+                    className={
+                      img == _img
+                        ? "single-item-img selected"
+                        : "single-item-img"
+                    }
+                    onClick={(e) => setImg(e.target.src)}
+                  />
                 </div>
               );
             })}
@@ -169,7 +206,11 @@ const Item = () => {
                 return (
                   <span
                     key={s}
-                    className={size == s ? "single-item-size selected" : "single-item-size"}
+                    className={
+                      size == s
+                        ? "single-item-size selected"
+                        : "single-item-size"
+                    }
                     onClick={() => {
                       setSize(s);
                     }}

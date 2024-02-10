@@ -19,7 +19,11 @@ const Navbar = ({ query, setQuery }) => {
   const handleSearch = (e) => {
     try {
       e.preventDefault();
-      navigate("/?search=" + search + (query.get("cat") ? "&cat=" + query.get("cat") : ""));
+      navigate(
+        "/?search=" +
+          search +
+          (query.get("cat") ? "&cat=" + query.get("cat") : "")
+      );
       setQuery(new URLSearchParams(window.location.search));
     } catch (error) {
       console.log("SEARCH ERROR: " + error);
@@ -79,7 +83,7 @@ const Navbar = ({ query, setQuery }) => {
           <Link className="menu-item" to="/orders">
             Orders
           </Link>
-          <Link className="menu-item" to="/">
+          <Link className="menu-item" to="/?cat=All">
             Items
           </Link>
           <Link className="menu-item" to="/others">
