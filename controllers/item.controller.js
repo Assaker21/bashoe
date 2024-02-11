@@ -21,7 +21,7 @@ export const getItems = async (req, res) => {
   console.log("Getting items.");
 
   const filters = {
-    ...(q.cat && { cat: q.cat.toUpperCase() }),
+    ...(q.cat && { cat: q.cat }),
     ...(q.search && { name: { $regex: q.search, $options: "i" } }),
     ...((q.min || q.max) && {
       price: {
