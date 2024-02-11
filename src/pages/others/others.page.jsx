@@ -5,13 +5,24 @@ import { useNavigate } from "react-router-dom";
 
 const Others = () => {
   const [init, setInit] = useState(null);
+  const [categories, setCategories] = useState(null);
+  const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const getInfo = async () => {
     try {
       setLoading(true);
-      const res = await req.get("/init");
-      setInit(res.data);
+
+      const values = await Promise.all([
+        req.get("/categories"),
+        req.get("/settings"),
+      ]);
+
+      var { data } = values[0];
+      setCategories(data);
+      var { data } = values[1];
+      setSettings(data);
+
       setLoading(false);
     } catch (error) {
       window.alert("Status: " + error.status + ", Error: " + error.message);
@@ -21,9 +32,18 @@ const Others = () => {
   const saveInfo = async () => {
     try {
       setLoading(true);
-      const res = await req.post("/init", {
-        ...init
-      });
+
+      const values = await Promise.all([
+        req.post("/categories", categories),
+        req.post("/settings", settings),
+      ]);
+
+      var { data } = values[0];
+      setCategories(data);
+
+      var { data } = values[1];
+      setSettings(data);
+
       setLoading(false);
     } catch (error) {
       window.alert("Status: " + error.status + ", Error: " + error.message);
@@ -44,12 +64,11 @@ const Others = () => {
               <input
                 type="number"
                 min="0"
-                defaultValue={init.shippingFee}
+                defaultValue={settings.shippingFee}
                 onChange={(e) => {
-                  setInit((i) => {
-                    const newInit = { ...i };
-                    newInit.shippingFee = Number(e.target.value);
-                    return newInit;
+                  setSettings({
+                    ...settings,
+                    shippingFee: Number(e.target.value),
                   });
                 }}
               />
@@ -57,14 +76,34 @@ const Others = () => {
             <div className="container">
               <label> Categories </label>
               <textarea
-                rows={init.cats.length + 5}
-                defaultValue={init.cats.toString().replaceAll(",", "\n")}
+                rows={categories.length + 1}
+                defaultValue={categories
+                  .map((category, index) => {
+                    return `${category.description} - ${category._id}${
+                      index + 1 == categories.length ? "" : "\n"
+                    }`;
+                  })
+                  .join("")}
                 onChange={(e) => {
-                  setInit((i) => {
-                    const newInit = { ...i };
-                    newInit.cats = e.target.value.trim().split("\n");
-                    return newInit;
-                  });
+                  setCategories(
+                    e.target.value
+                      .split("\n")
+                      .map((v) => {
+                        if (v.split(" - ")[0] !== "") {
+                          if (v.split(" - ")[1]) {
+                            return {
+                              _id: v.split(" - ")[1],
+                              description: v.split(" - ")[0],
+                            };
+                          } else {
+                            return {
+                              description: v.split(" - ")[0],
+                            };
+                          }
+                        }
+                      })
+                      .filter((e) => e)
+                  );
                 }}
               ></textarea>
             </div>

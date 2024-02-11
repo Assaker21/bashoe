@@ -7,12 +7,13 @@ import { useNavigate } from "react-router-dom";
 const Home = ({ query, setQuery }) => {
   const [items, setItems] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [cats, setCats] = useState(localStorage.getItem("cats") ? JSON.parse(localStorage.getItem("cats")) : ["none"]);
+  const [cats, setCats] = useState(null);
 
   useEffect(() => {
-    window.addEventListener("cats&shipping", () => {
+    /*window.addEventListener("cats&shipping", () => {
       setCats(JSON.parse(localStorage.getItem("cats")));
-    });
+    });*/
+    getCategories();
   }, []);
 
   const navigate = useNavigate();
@@ -36,20 +37,20 @@ const Home = ({ query, setQuery }) => {
       cat = query.get("cat");
 
       if (search != null && cat != null && cat != "All") {
-        console.log("both");
         res = await req.get(`/items?search=${search}&cat=${cat}`);
       } else if (search != null) {
-        console.log("search");
         res = await req.get(`/items?search=${search}`);
       } else if (cat != null && cat != "All") {
-        console.log("cat");
         res = await req.get(`/items?cat=${cat}`);
       } else {
-        console.log("none");
         res = await req.get(`/items`);
       }
 
-      setItems(res.data);
+      const newItems = res.data;
+      newItems.map((item, index) => {
+        newItems[index].cat = getCategoryById(item.cat);
+      });
+      setItems(newItems);
       setLoading(false);
     } catch (error) {
       console.log("API ERROR: " + error);
@@ -57,9 +58,22 @@ const Home = ({ query, setQuery }) => {
     }
   };
 
+  const getCategories = async () => {
+    const { data } = await req.get("/categories");
+    setCats(data);
+  };
+
+  const getCategoryById = (id) => {
+    for (var i = 0; i < cats.length; i++) {
+      if (cats[i]._id == id) {
+        return cats[i].description;
+      }
+    }
+  };
+
   useEffect(() => {
-    getItems();
-  }, [query]);
+    if (cats) getItems();
+  }, [query, cats]);
 
   return (
     <>
@@ -73,33 +87,44 @@ const Home = ({ query, setQuery }) => {
           Create new item
         </button>
         {search && search != "" && <>Searching for {`"${search}"`}</>}
-        <div className="filter-sort">
-          <div className="filter">
-            <span>Filter by Category: </span>
-            <select
-              name="cat"
-              onChange={(e) => {
-                navigate("/?cat=" + e.target.value + (search ? "&search=" + search : ""));
-                //setCat(e.target.value);
-                setQuery(new URLSearchParams(window.location.search));
-              }}
-              defaultValue={cat}
-            >
-              <option value="All">All</option>
-              {cats.map((cat) => {
-                return (
-                  <option key={"_" + cat} value={cat}>
-                    {cat}
-                  </option>
-                );
-              })}
-            </select>
+        {cats && (
+          <div className="filter-sort">
+            <div className="filter">
+              <span>Filter by Category: </span>
+              <select
+                name="cat"
+                onChange={(e) => {
+                  navigate(
+                    "/?cat=" +
+                      e.target.value +
+                      (search ? "&search=" + search : "")
+                  );
+                  //setCat(e.target.value);
+                  setQuery(new URLSearchParams(window.location.search));
+                }}
+                defaultValue={cat}
+              >
+                <option value="All">All</option>
+                {cats.map((cat) => {
+                  return (
+                    <option key={"_" + cat._id} value={cat._id}>
+                      {cat.description}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
           </div>
-        </div>
+        )}
         {
           <div className="items">
-            {!loading && items != null && items.length > 0 && items.map((item) => <Item key={item._id} item={item} />)}
-            {!loading && (items == null || items.length == 0) && <>We could not find anything. Try something else.</>}
+            {!loading &&
+              items != null &&
+              items.length > 0 &&
+              items.map((item) => <Item key={item._id} item={item} />)}
+            {!loading && (items == null || items.length == 0) && (
+              <>We could not find anything. Try something else.</>
+            )}
             {loading && <>Loading...</>}
           </div>
         }

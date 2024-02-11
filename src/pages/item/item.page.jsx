@@ -6,6 +6,7 @@ import AlertModal from "../../components/alert-modal/alert-modal.component.jsx";
 
 const Item = () => {
   const [item, setItem] = useState(null);
+  const [categories, setCategories] = useState(null);
   const [img, setImg] = useState("");
   const [loading, setLoading] = useState(true);
   const [size, setSize] = useState("");
@@ -17,16 +18,25 @@ const Item = () => {
 
   const getItem = async () => {
     setLoading(true);
-    const res = await req.get(
-      "/items?id=" + new URLSearchParams(window.location.search).get("id")
-    );
-    setItem(res.data);
-    setImg(res.data.img[0]);
-    setSize(res.data.sizes[0]);
+
+    const values = await Promise.all([
+      req.get(
+        "/items?id=" + new URLSearchParams(window.location.search).get("id")
+      ),
+      req.get("/categories"),
+    ]);
+
+    setItem(values[0].data);
+    setImg(values[0].data.img[0]);
+    setSize(values[0].data.sizes[0]);
+
+    setCategories(values[1].data);
+
     setQuantity(1);
     setLoading(false);
 
-    console.log(res.data);
+    console.log(values[0].data);
+    console.log(values[1].data);
   };
 
   useEffect(() => {
@@ -147,18 +157,6 @@ const Item = () => {
           </div>
 
           <div className="label-input">
-            {/*<label>Category</label>
-            <input
-              type="text"
-              defaultValue={item.cat}
-              onChange={(e) => {
-                setItem((item) => {
-                  var newItem = { ...item };
-                  newItem.cat = e.target.value;
-                  return newItem;
-                });
-              }}
-            />*/}
             <label htmlFor="cats">Category</label>
             <select
               id="cats"
@@ -172,10 +170,10 @@ const Item = () => {
                 });
               }}
             >
-              {JSON.parse(localStorage.getItem("cats")).map((cat, index) => {
+              {categories.map((cat, index) => {
                 return (
-                  <option key={`${cat} ${index}`} value={cat}>
-                    {cat}
+                  <option key={`Category: ${cat._id}`} value={cat._id}>
+                    {cat.description}
                   </option>
                 );
               })}
