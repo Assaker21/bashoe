@@ -94,7 +94,7 @@ const Navbar = ({ query, setQuery }) => {
             <form className="search search-big" onSubmit={handleSearch}>
               <input
                 type="text"
-                placeholder="Search Bashoe"
+                placeholder="Search Hoop House"
                 defaultValue={query.get("search")}
                 onChange={(e) => {
                   console.log("Search value: " + e.target.value);
@@ -130,7 +130,7 @@ const Navbar = ({ query, setQuery }) => {
           <form className="search-small" onSubmit={handleSearch}>
             <input
               type="text"
-              placeholder="Search Bashoe"
+              placeholder="Search Hoop House"
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
