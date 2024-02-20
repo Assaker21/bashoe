@@ -48,6 +48,8 @@ const Home = ({ query, setQuery }) => {
 
       const newItems = res.data;
       newItems.map((item, index) => {
+        if (!item?.cat) return;
+        console.log("CAT: " + item.cat);
         newItems[index].cat = getCategoryById(item.cat);
       });
       setItems(newItems);

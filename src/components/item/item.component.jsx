@@ -11,7 +11,7 @@ const Item = ({ item }) => {
         </div>
 
         <span className="name">{item.name}</span>
-        <span className="cat">{item.cat.toUpperCase()}</span>
+        <span className="cat">{item?.cat?.toUpperCase()}</span>
         <span className="price">$ {item.price}</span>
         <span className="spacer"></span>
       </Link>
