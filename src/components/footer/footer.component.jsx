@@ -8,7 +8,9 @@ const Footer = () => {
         <div className="footer-info">
           <span className="footer-title">Have any questions? Contact us</span>
           <div className="contact-methods">
-            <span>Email: hoophouse24@outlook.com</span>
+            <a href="mailto:hoophouse24@outlook.com">
+              Email: hoophouse24@outlook.com
+            </a>
           </div>
         </div>
         <div className="footer-foot">
