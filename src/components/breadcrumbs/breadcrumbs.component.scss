@@ -1,0 +1,31 @@
+.breadcrumbs {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+
+  .breadcrumb {
+    font-size: 14px;
+    font-weight: 500;
+
+    .breadcrumb-link {
+      transition: var(--transition);
+
+      color: var(--grayed-text-color2);
+      text-decoration: none;
+    }
+
+    &.selected {
+      .breadcrumb-link {
+        color: var(--text-color);
+        text-decoration: underline;
+      }
+    }
+
+    &:hover {
+      .breadcrumb-link {
+        color: var(--text-color);
+        text-decoration: none;
+      }
+    }
+  }
+}

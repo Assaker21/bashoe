@@ -1,0 +1,17 @@
+.items {
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  margin: 0 auto;
+
+  padding: 24px 20px;
+
+  .items-container {
+    padding: 48px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    gap: 24px;
+  }
+}

@@ -1,0 +1,20 @@
+.category-list {
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .category-list-title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .category-list-items {
+    display: flex;
+    flex-direction: row;
+
+    overflow-x: visible;
+    overflow-y: hidden;
+  }
+}
