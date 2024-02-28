@@ -73,7 +73,10 @@ export default function Item() {
               if (!clickingImage) return;
 
               const rect = e.target.getBoundingClientRect();
-              const x = 1 - (e.clientX - rect.left) / rect.width;
+              const x = Math.min(
+                Math.max(1 - (e.clientX - rect.left) / rect.width, 0),
+                1
+              );
 
               setSelectedImage(Math.floor(x * 36 + 1));
             }}
@@ -90,7 +93,14 @@ export default function Item() {
               if (!clickingImage) return;
 
               const rect = e.target.getBoundingClientRect();
-              const x = 1 - (e.clientX - rect.left) / rect.width;
+              const x = Math.min(
+                Math.max(
+                  1 - (e.touches[0].clientX - rect.left) / rect.width,
+                  0
+                ),
+                1
+              );
+              console.log(x);
 
               setSelectedImage(Math.floor(x * 36 + 1));
             }}

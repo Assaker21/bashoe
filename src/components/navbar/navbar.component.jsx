@@ -44,8 +44,7 @@ function SearchMenu() {
 }
 
 function CartMenu() {
-  const { cart, setCart } = useGeneralContext();
-  return <div className="navbar-cart-container">cart shows up here!</div>;
+  return <Cart />;
 }
 
 export default function Navbar() {
