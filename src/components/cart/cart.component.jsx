@@ -10,7 +10,7 @@ import "./cart.component.scss";
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Cart() {
+export default function Cart({ setMenuOpen }) {
   const { cart } = useGeneralContext();
 
   const [items, setItems] = useState([
@@ -76,7 +76,11 @@ export default function Cart() {
             <span>${calculateTotal()}</span>
           </div>
         </div>
-        <Link to="checkout" className="cart-menu-button">
+        <Link
+          to="checkout"
+          onClick={() => setMenuOpen(false)}
+          className="cart-menu-button"
+        >
           Checkout
         </Link>
       </div>

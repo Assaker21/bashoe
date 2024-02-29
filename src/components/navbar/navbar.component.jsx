@@ -19,14 +19,18 @@ import Box from "@mui/material/Box";
 import Line from "../../basic-components/line/line.component.jsx";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-function CategoriesMenu() {
+function CategoriesMenu({ setMenuOpen }) {
   const { categories } = useGeneralContext();
 
   return (
     <div className="small-navbar-categories-container">
       {categories?.map((category) => (
         <>
-          <Link to={`/${category.sku}`} className="small-navbar-category">
+          <Link
+            to={`/${category.sku}`}
+            onClick={() => setMenuOpen(false)}
+            className="small-navbar-category"
+          >
             {category.description}
             <ArrowForwardIcon />
           </Link>
@@ -43,8 +47,8 @@ function SearchMenu() {
   );
 }
 
-function CartMenu() {
-  return <Cart />;
+function CartMenu({ setMenuOpen }) {
+  return <Cart setMenuOpen={setMenuOpen} />;
 }
 
 export default function Navbar() {
@@ -72,7 +76,7 @@ export default function Navbar() {
                 onClick={() => setMenuOpen(true)}
                 className="small-navbar-box-container"
               >
-                {menu == "cart" && <CartMenu />}
+                {menu == "cart" && <CartMenu setMenuOpen={setMenuOpen} />}
               </Box>
             </Drawer>
             <div className="navbar-top-container">
@@ -149,9 +153,11 @@ export default function Navbar() {
                   onClick={() => setMenuOpen(true)}
                   className="small-navbar-box-container"
                 >
-                  {menu == "categories" && <CategoriesMenu />}
-                  {menu == "search" && <SearchMenu />}
-                  {menu == "cart" && <CartMenu />}
+                  {menu == "categories" && (
+                    <CategoriesMenu setMenuOpen={setMenuOpen} />
+                  )}
+                  {menu == "search" && <SearchMenu setMenuOpen={setMenuOpen} />}
+                  {menu == "cart" && <CartMenu setMenuOpen={setMenuOpen} />}
                 </Box>
               </Drawer>
 
