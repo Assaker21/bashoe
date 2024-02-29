@@ -5,7 +5,7 @@
   --darker-background-color: #f4f3f1;
   --light-background-color: #fafafa;
 
-  --text-color: black;
+  --text-color: #0f0f0f;
   --grayed-text-color: #242424;
   --grayed-text-color2: #4a4a4a;
 
@@ -22,6 +22,7 @@
 
 * {
   font-family: var(--font-family);
+  color: var(--text-color);
 }
 
 body {

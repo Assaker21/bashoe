@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import PreloadImages from "../../../basic-components/preload-images/preload-images.component";
 import Line from "../../../basic-components/line/line.component";
 import ItemList from "../../../components/item-list/item-list.component";
+//import Slider from "../../../basic-components/slider/slider.component";
+import Slider from "@mui/material/Slider";
 
 export default function Item() {
   const { categorySku, itemSku } = useParams();
@@ -113,15 +115,15 @@ export default function Item() {
               setClickingImage(false);
             }}
           />
-          <input
-            className="single-item-image-slider"
-            type="range"
-            id="slider"
-            name="slider"
-            min="1"
-            max="36"
+
+          <Slider
+            sx={{ maxWidth: "300px" }}
+            valueLabelDisplay="off"
+            min={1}
+            max={36}
             value={selectedImage}
             onChange={(e) => {
+              console.log(e);
               setSelectedImage(e.target.value);
             }}
           />

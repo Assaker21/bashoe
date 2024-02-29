@@ -69,7 +69,7 @@ export default function Navbar() {
               <Box
                 sx={{ width: "300px", height: "100vh" }}
                 role="presentation"
-                onClick={() => setMenuOpen(false)}
+                onClick={() => setMenuOpen(true)}
                 className="small-navbar-box-container"
               >
                 {menu == "cart" && <CartMenu />}
@@ -140,9 +140,13 @@ export default function Navbar() {
                 className="small-navbar-drawer-container"
               >
                 <Box
-                  sx={{ width: "100vw", height: "100vh", paddingTop: "55px" }}
+                  sx={{
+                    width: "100vw",
+                    height: "calc(100vh - 55px)",
+                    paddingTop: "55px",
+                  }}
                   role="presentation"
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => setMenuOpen(true)}
                   className="small-navbar-box-container"
                 >
                   {menu == "categories" && <CategoriesMenu />}
