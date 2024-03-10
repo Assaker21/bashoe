@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id Int @id @default(autoincrement())
+
+  firstName   String?
+  lastName    String?
+  email       String?
+  phoneNumber String?
+
+  orders order[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model item {
+  id Int @id @default(autoincrement())
+
+  name        String?
+  description String?
+  price       Decimal?
+  discount    Decimal? @default(0)
+  sku         String?  @unique
+
+  categories   category[]
+  images       image[]
+  orderItems   orderItem[]
+  itemVariants itemVariant[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model itemVariant {
+  id Int @id @default(autoincrement())
+
+  items item[]
+
+  orderItems orderItem[]
+
+  description String?
+
+  itemVariantGroup   itemVariantGroup? @relation(fields: [itemVariantGroupId], references: [id])
+  itemVariantGroupId Int?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model itemVariantGroup {
+  id Int @id @default(autoincrement())
+
+  description String?
+
+  itemVariants itemVariant[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model image {
+  id Int @id @default(autoincrement())
+
+  url String?
+
+  item   item? @relation(fields: [itemId], references: [id])
+  itemId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model category {
+  id Int @id @default(autoincrement())
+
+  items item[]
+
+  description String?
+  sku         String?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model order {
+  id Int @id @default(autoincrement())
+
+  address   address? @relation(fields: [addressId], references: [id])
+  addressId Int?
+
+  user   user? @relation(fields: [userId], references: [id])
+  userId Int?
+
+  orderStatus   orderStatus? @relation(fields: [orderStatusId], references: [id])
+  orderStatusId Int?
+
+  orderItems orderItem[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model orderStatus {
+  id Int @id @default(autoincrement())
+
+  description String?
+
+  orders order[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model orderItem {
+  id Int @id @default(autoincrement())
+
+  order   order? @relation(fields: [orderId], references: [id])
+  orderId Int?
+
+  item   item? @relation(fields: [itemId], references: [id])
+  itemId Int?
+
+  quantity Int?
+
+  itemVariant   itemVariant? @relation(fields: [itemVariantId], references: [id])
+  itemVariantId Int?
+}
+
+model address {
+  id Int @id @default(autoincrement())
+
+  city    String?
+  address String?
+
+  country   country? @relation(fields: [countryId], references: [id])
+  countryId Int?
+
+  orders order[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model country {
+  id Int @id @default(autoincrement())
+
+  addresses address[]
+
+  name String?
+  code String?
+  flag String?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
