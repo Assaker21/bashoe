@@ -1,0 +1,26 @@
+.list-category {
+  display: flex;
+  flex-direction: column;
+
+  padding: 4px;
+  min-width: 170px;
+
+  &:hover {
+    cursor: pointer;
+    .list-category-name {
+      text-decoration: underline;
+    }
+  }
+
+  .list-category-image {
+    width: 100%;
+  }
+
+  .list-category-name {
+    font-size: 14px;
+    padding: 2px 8px;
+    font-weight: 600;
+
+    background-color: var(--darker-background-color);
+  }
+}

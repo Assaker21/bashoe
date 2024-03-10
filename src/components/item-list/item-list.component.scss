@@ -1,0 +1,21 @@
+.item-list {
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  .item-list-title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .item-list-items {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+    overflow-x: visible;
+    overflow-y: hidden;
+  }
+}

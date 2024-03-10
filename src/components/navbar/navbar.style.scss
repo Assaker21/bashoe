@@ -1,0 +1,255 @@
+.navbar {
+  .navbar-container {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+
+    .navbar-top-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      background-color: var(--background-color);
+
+      gap: 48px;
+      padding: 12px 28px;
+      border-bottom: 1px solid var(--gray-color);
+      .navbar-logo {
+        color: var(--text-color);
+        text-decoration: none;
+
+        font-size: 32px;
+        font-weight: 800;
+      }
+
+      .navbar-search-container {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+
+        padding: 0 16px;
+        border: 1px solid var(--gray-color);
+        background-color: var(--light-background-color);
+
+        transition: var(--transition);
+
+        &:hover {
+          border: 1px solid var(--text-color);
+          .navbar-search-icon {
+            color: var(--text-color);
+          }
+        }
+
+        &.focus {
+          border: 1px solid var(--text-color);
+          outline: 1px solid var(--text-color);
+          outline-offset: -2px;
+          .navbar-search-icon {
+            color: var(--text-color);
+          }
+        }
+
+        .navbar-search-input {
+          flex: 1;
+
+          background-color: transparent;
+          border: none;
+
+          min-height: 44px;
+          font-size: 16px;
+          font-weight: 500;
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        .navbar-search-icon {
+          color: var(--grayed-text-color);
+        }
+      }
+    }
+
+    .navbar-bottom-container {
+      background-color: var(--darker-background-color);
+
+      .navbar-categories {
+        width: calc(100% - 24px);
+        max-width: 1000px;
+        margin: 0 auto;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .navbar-category-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          transition: var(--transition);
+
+          .navbar-category {
+            font-size: 18px;
+            font-weight: 700;
+            padding: 10px 24px;
+            cursor: pointer;
+
+            color: var(--text-color);
+            text-decoration: none;
+
+            display: flex;
+            flex-direction: column;
+          }
+
+          .navbar-category-border {
+            height: 3px;
+            width: 0;
+            background-color: var(--text-color);
+
+            transition: var(--transition);
+          }
+
+          &:hover {
+            .navbar-category-border {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-offset {
+    height: 131px;
+    background-color: var(--background-color);
+  }
+}
+
+.small-navbar {
+  .small-navbar-container {
+    position: fixed;
+    width: 100%;
+    z-index: 1201;
+
+    .small-navbar-top-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      background-color: var(--background-color);
+
+      gap: 12px;
+      padding: 6px 14px;
+      border-bottom: 1px solid var(--gray-color);
+
+      .flex-center {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .small-navbar-logo {
+        color: var(--text-color);
+        text-decoration: none;
+
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      .small-navbar-search-container {
+        flex: 1;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+
+        padding: 0 16px;
+        border: 1px solid var(--gray-color);
+
+        background-color: var(--light-background-color);
+
+        transition: var(--transition);
+
+        min-width: 0;
+
+        &:hover {
+          border: 1px solid var(--text-color);
+          .small-navbar-search-icon {
+            color: var(--text-color);
+          }
+        }
+
+        &.focus {
+          border: 1px solid var(--text-color);
+          outline: 1px solid var(--text-color);
+          outline-offset: -2px;
+          .small-navbar-search-icon {
+            color: var(--text-color);
+          }
+        }
+
+        .small-navbar-search-input {
+          flex: 1;
+
+          background-color: transparent;
+          border: none;
+
+          min-height: 35px;
+          min-width: 0;
+          font-size: 16px;
+          font-weight: 500;
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        .small-navbar-search-icon {
+          color: var(--grayed-text-color);
+        }
+      }
+    }
+  }
+
+  .small-navbar-offset {
+    height: 43px;
+    background-color: var(--background-color);
+    background-color: red;
+  }
+}
+
+.small-navbar-categories-container {
+  .small-navbar-category {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 50px;
+    padding: 0px 24px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    cursor: pointer;
+
+    color: var(--text-color);
+    text-decoration: none;
+  }
+}
+
+.small-navbar-drawer-search-container {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 50px;
+  padding: 0px 24px;
+
+  color: var(--grayed-text-color2);
+}

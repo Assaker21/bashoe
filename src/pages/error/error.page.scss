@@ -1,0 +1,24 @@
+#error-page {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--background-color);
+
+  h1 {
+    font-weight: 800;
+    font-size: 32px;
+    color: var(--text-color);
+  }
+
+  p {
+    font-weight: 600;
+    color: var(--text-color);
+
+    i {
+      color: var(--grayed-text-color2);
+    }
+  }
+}
