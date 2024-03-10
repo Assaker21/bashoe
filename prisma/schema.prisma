@@ -73,7 +73,7 @@ model itemVariantGroup {
 model image {
   id Int @id @default(autoincrement())
 
-  url String?
+  url String? @db.LongText
 
   item   item? @relation(fields: [itemId], references: [id])
   itemId Int?
