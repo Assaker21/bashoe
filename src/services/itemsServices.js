@@ -11,6 +11,10 @@ function updateItem(payload) {
   return put("items", null, payload);
 }
 
+function removeItem(query) {
+  return remove("items", query);
+}
+
 function getItemVariants() {
   return get("items/variants");
 }
@@ -40,4 +44,5 @@ export default {
   deleteItemVariant,
   updateItem,
   upsertItemVariant,
+  removeItem,
 };

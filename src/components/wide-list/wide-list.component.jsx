@@ -3,16 +3,14 @@ import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
+import { TextField } from "@mui/material";
+
 import "./wide-list.component.scss";
 
-export default function WideList() {
+export default function WideList({ value, onChange }) {
   const [showingIndex, setShowingIndex] = useState(0);
 
-  const sectionRefs = useRef(
-    Array(5)
-      .fill(null)
-      .map(() => createRef())
-  );
+  const sectionRefs = useRef(value.content.map(() => createRef()));
 
   const scrollerRef = useRef();
 
@@ -21,14 +19,14 @@ export default function WideList() {
   }, [showingIndex]);
 
   function incrementShowingIndex() {
-    setShowingIndex((showingIndex + 1) % 5);
+    setShowingIndex((showingIndex + 1) % value.content.length);
   }
 
   function decrementShowingIndex() {
     if (showingIndex - 1 < 0) {
       return setShowingIndex(4);
     }
-    setShowingIndex((showingIndex - 1) % 5);
+    setShowingIndex((showingIndex - 1) % value.content.length);
   }
 
   function scrollToSection(index) {
@@ -39,30 +37,44 @@ export default function WideList() {
   }
 
   return (
-    <div className="wide-list">
-      <div className="wide-list-items" ref={scrollerRef}>
-        {[1, 2, 3, 4, 5].map((value, index) => (
-          <img
-            ref={sectionRefs.current[index]}
-            className="wide-list-item"
-            src="https://images-cs.stockx.com/v3/assets/blt818b0c67cf450811/blt41bb7ee8a07ef84f/65d9985e4bb818ced9675d88/AJ1_High_Black_WhitePrimary_Desktop.jpg?auto=webp&format=pjpg&width=1246&dpr=1&quality=80 1x, https://images-cs.stockx.com/v3/assets/blt818b0c67cf450811/blt41bb7ee8a07ef84f/65d9985e4bb818ced9675d88/AJ1_High_Black_WhitePrimary_Desktop.jpg?auto=webp&format=pjpg&width=1246&dpr=2&quality=75 2x, https://images-cs.stockx.com/v3/assets/blt818b0c67cf450811/blt41bb7ee8a07ef84f/65d9985e4bb818ced9675d88/AJ1_High_Black_WhitePrimary_Desktop.jpg?auto=webp&format=pjpg&width=1246&dpr=3&quality=50 3x"
-          />
-        ))}
+    <>
+      <TextField
+        fullWidth
+        multiline
+        rows={6}
+        dense
+        value={value.content.join("\n")}
+        onChange={(e) => {
+          const newContent = e.target.value.trim().split("\n");
+          onChange({ ...value, content: newContent });
+        }}
+        size="small"
+      />
+      <div className="wide-list">
+        <div className="wide-list-items" ref={scrollerRef}>
+          {value.content.map((item, index) => (
+            <img
+              ref={sectionRefs.current[index]}
+              className="wide-list-item"
+              src={item}
+            />
+          ))}
+        </div>
+        <div className="wide-list-buttons">
+          <IconButton
+            className="wide-list-button wide-list-button-left"
+            onClick={decrementShowingIndex}
+          >
+            <ArrowBackIcon sx={{ color: "var(--text-color)" }} />
+          </IconButton>
+          <IconButton
+            className="wide-list-button wide-list-button-right"
+            onClick={incrementShowingIndex}
+          >
+            <ArrowForwardIcon sx={{ color: "var(--text-color)" }} />
+          </IconButton>
+        </div>
       </div>
-      <div className="wide-list-buttons">
-        <IconButton
-          className="wide-list-button wide-list-button-left"
-          onClick={decrementShowingIndex}
-        >
-          <ArrowBackIcon sx={{ color: "var(--text-color)" }} />
-        </IconButton>
-        <IconButton
-          className="wide-list-button wide-list-button-right"
-          onClick={incrementShowingIndex}
-        >
-          <ArrowForwardIcon sx={{ color: "var(--text-color)" }} />
-        </IconButton>
-      </div>
-    </div>
+    </>
   );
 }

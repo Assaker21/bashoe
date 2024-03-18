@@ -1,22 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import categoriesServices from "../services/categoriesServices";
-
-/*[
-    { id: 1, description: "Sneakers", sku: "sneakers" },
-    { id: 2, description: "Jackets", sku: "jackets" },
-    { id: 3, description: "Short", sku: "shorts" },
-    { id: 4, description: "Balls", sku: "balls" },
-    { id: 5, description: "Jerseys", sku: "jerseys" },
-    { id: 6, description: "Socks", sku: "socks" },
-  ] */
+import itemsServices from "../services/itemsServices";
 
 const GeneralContext = createContext();
 
 export function GeneralContextProvider({ children }) {
   const [cart, setCart] = useState(null);
   const [categories, setCategories] = useState(null);
+  const [items, setItems] = useState(null);
 
   function getCategoryBySku(categorySku) {
+    if (categorySku === "all") return { sku: "all", description: "All" };
     for (var i = 0; i < categories.length; i++) {
       if (categories[i].sku == categorySku) {
         return { ...categories[i] };
@@ -33,6 +27,15 @@ export function GeneralContextProvider({ children }) {
     }
   }
 
+  async function getItems() {
+    const [ok, data] = await itemsServices.getItems();
+    if (ok) {
+      setItems(data);
+    } else {
+      console.log("error: ", data);
+    }
+  }
+
   useEffect(() => {
     console.log("Cart has been changed");
   }, [cart]);
@@ -43,13 +46,22 @@ export function GeneralContextProvider({ children }) {
 
   useEffect(() => {
     getCategories();
+    getItems();
   }, []);
 
   return (
     <GeneralContext.Provider
-      value={{ cart, setCart, categories, setCategories, getCategoryBySku }}
+      value={{
+        cart,
+        setCart,
+        categories,
+        setCategories,
+        getCategoryBySku,
+        items,
+        setItems,
+      }}
     >
-      {categories && children}
+      {categories && items && children}
     </GeneralContext.Provider>
   );
 }

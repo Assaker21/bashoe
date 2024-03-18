@@ -12,14 +12,19 @@ export default function Items() {
   const { getCategoryBySku } = useGeneralContext();
   const category = getCategoryBySku(categorySku);
   const [items, setItems] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   async function getItems() {
+    setLoading(true);
+    console.log("Category: ", categorySku);
     const [ok, data] = await itemsServices.getItems({
       categorySku: categorySku,
     });
     if (ok) {
       setItems(data);
     }
+
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -38,7 +43,7 @@ export default function Items() {
           },
         ]}
       />
-      {items && (
+      {!loading && items && (
         <div className="items-container">
           {items.map((item, index) => {
             return (
@@ -51,6 +56,8 @@ export default function Items() {
           })}
         </div>
       )}
+      {loading && "Loading..."}
+      {items?.length === 0 && "There are no items here"}
     </section>
   );
 }

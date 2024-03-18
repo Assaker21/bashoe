@@ -1,13 +1,43 @@
 import "./category.component.scss";
 
-export default function Category() {
+import { TextField } from "@mui/material";
+
+export default function Category({ value, edit, onChange }) {
   return (
     <div className="list-category">
-      <img
-        className="list-category-image"
-        src="https://images-cs.stockx.com/v3/assets/blt818b0c67cf450811/blt409de50cb3a5a1b3/6549194da6e009040a741042/jordan.jpg?auto=webp&format=pjpg&width=234&height=160&dpr=1&quality=80"
-      />
-      <span className="list-category-name">Jordan</span>
+      {!edit && (
+        <>
+          <img className="list-category-image" src={value?.url} />
+          <span className="list-category-name">{value?.description}</span>
+        </>
+      )}
+      {edit && (
+        <>
+          <TextField
+            label="Description"
+            size="small"
+            fullWidth
+            value={value.description}
+            onChange={(e) => {
+              const newValue = { ...value };
+              newValue.description = e.target.value;
+              onChange(newValue);
+            }}
+            sx={{ mb: 1 }}
+          />
+          <TextField
+            label="Url"
+            size="small"
+            fullWidth
+            value={value.url}
+            onChange={(e) => {
+              const newValue = { ...value };
+              newValue.url = e.target.value;
+              onChange(newValue);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }

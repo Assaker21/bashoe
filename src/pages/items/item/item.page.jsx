@@ -29,6 +29,8 @@ export default function Item() {
   const [clickingImage, setClickingImage] = useState(false);
   const [itemVariantGroups, setItemVariantGroups] = useState(null);
 
+  const [loading, setLoading] = useState(false);
+
   const [item, setItem] = useState({
     name: "",
     sku: "",
@@ -60,6 +62,7 @@ export default function Item() {
       item.itemVariants = [...item.itemVariants, ...itemVariants];
     });
 
+    setLoading("Loading...");
     const [ok, data] = await itemsServices.createItem(item);
     if (ok) {
       console.log("data: ", data);
@@ -67,6 +70,8 @@ export default function Item() {
     } else {
       console.log("error: ", data);
     }
+
+    setLoading(false);
   }
 
   async function handleUpdateItem() {
@@ -75,6 +80,7 @@ export default function Item() {
       item.itemVariants = [...item.itemVariants, ...itemVariants];
     });
 
+    setLoading("Updating...");
     const [ok, data] = await itemsServices.updateItem(item);
     if (ok) {
       console.log("data: ", data);
@@ -82,20 +88,35 @@ export default function Item() {
     } else {
       console.log("error: ", data);
     }
+    setLoading(false);
+  }
+
+  async function handleDelete() {
+    console.log("DELETING");
+    setLoading("Deleting...");
+    const [ok, data] = await itemsServices.removeItem({ id: item.id });
+    if (ok) {
+      navigate("/");
+    }
+    setLoading(false);
   }
 
   async function getItemVariantGroups() {
+    setLoading("Loading...");
     const [ok, data] = await itemsServices.getItemVariants();
     if (ok) {
       setItemVariantGroups(data);
     } else {
       console.log("error: ", data);
     }
+
+    setLoading(false);
   }
 
   async function getItem() {
     if (!itemSku) return;
 
+    setLoading("Loading...");
     const [ok, data] = await itemsServices.getItems({
       itemSku,
     });
@@ -104,6 +125,8 @@ export default function Item() {
       console.log("Data: ", data);
       setItem(data);
     }
+
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -185,220 +208,226 @@ export default function Item() {
           },
         ]}
       />
-      <PreloadImages images={allPossibleImages} />
 
-      {itemVariantGroups && (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (item.id) handleUpdateItem();
-            else handleCreateItem();
-          }}
-        >
-          <Box display="flex" flexDirection={"column"} gap={1} sx={{ mb: 3 }}>
-            <TextField
-              label="Name"
-              size="small"
-              fullWidth
-              required
-              variant="filled"
-              value={item.name}
-              onChange={(e) => {
-                setItem({ ...item, name: e.target.value });
-              }}
-            />
-            <TextField
-              label="Sku"
-              size="small"
-              fullWidth
-              required
-              variant="filled"
-              value={item.sku}
-              onChange={(e) => {
-                setItem({ ...item, sku: e.target.value });
-              }}
-            />
-            <TextField
-              label="Description"
-              size="small"
-              fullWidth
-              multiline
-              rows={4}
-              required
-              variant="filled"
-              value={item.description}
-              onChange={(e) => {
-                setItem({ ...item, description: e.target.value });
-              }}
-            />
-            <TextField
-              label="Price"
-              size="small"
-              type="number"
-              fullWidth
-              required
-              variant="filled"
-              value={item.price}
-              onChange={(e) => {
-                setItem({ ...item, price: e.target.value });
-              }}
-            />
-            <TextField
-              label="Images"
-              size="small"
-              fullWidth
-              multiline
-              value={item.images.map((image) => image.url).join("\n")}
-              rows={4}
-              required
-              variant="filled"
-              onChange={(e) => {
-                const value = e.target.value;
-                const newImages = [];
-                value.split("\n").map((url) => {
-                  if (url.trim() === "") return;
-                  newImages.push({ url: url });
-                });
-                setItem({ ...item, images: [...newImages] });
-              }}
-            />
-            <TextField
-              value={item.categories[0].sku}
-              onChange={(e, value) => {
-                setItem({
-                  ...item,
-                  categories: [getCategoryBySku(e.target.value)],
-                });
-              }}
-              select
-              required
-              label="Category"
-            >
-              {categories.map((category) => {
-                return (
-                  <MenuItem
-                    key={"Category: " + category.sku}
-                    value={category.sku}
-                  >
-                    {category.description}
-                  </MenuItem>
-                );
-              })}
-            </TextField>
-            <GroupedSelect
-              allValues={itemVariantGroups}
-              values={item.itemVariantGroups}
-              setValues={(newValue) => {
-                setItem({ ...item, itemVariantGroups: newValue });
-              }}
-              required
-            />
-          </Box>
-          <div className="single-item-container">
-            <div className="single-item-image-container">
-              <img
-                draggable={false}
-                className="single-item-image"
-                src={image}
-                onMouseMove={(e) => {
-                  e.preventDefault();
-                  if (!clickingImage) return;
-
-                  const rect = e.target.getBoundingClientRect();
-                  const x = Math.min(
-                    Math.max(1 - (e.clientX - rect.left) / rect.width, 0),
-                    1
-                  );
-
-                  setSelectedImage(Math.floor(x * 36 + 1));
-                }}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  setClickingImage(true);
-                }}
-                onMouseUp={(e) => {
-                  e.preventDefault();
-                  setClickingImage(false);
-                }}
-                onTouchMove={(e) => {
-                  e.preventDefault();
-                  if (!clickingImage) return;
-
-                  const rect = e.target.getBoundingClientRect();
-                  const x = Math.min(
-                    Math.max(
-                      1 - (e.touches[0].clientX - rect.left) / rect.width,
-                      0
-                    ),
-                    1
-                  );
-                  console.log(x);
-
-                  setSelectedImage(Math.floor(x * 36 + 1));
-                }}
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                  setClickingImage(true);
-                }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  setClickingImage(false);
-                }}
-              />
-
-              <Slider
-                sx={{ maxWidth: "300px" }}
-                valueLabelDisplay="off"
-                min={1}
-                max={36}
-                value={selectedImage}
+      {!loading && itemVariantGroups && (
+        <>
+          <PreloadImages images={allPossibleImages} />
+          <button onClick={handleDelete} style={{ width: "100px" }}>
+            DELETE
+          </button>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (item.id) handleUpdateItem();
+              else handleCreateItem();
+            }}
+          >
+            <Box display="flex" flexDirection={"column"} gap={1} sx={{ mb: 3 }}>
+              <TextField
+                label="Name"
+                size="small"
+                fullWidth
+                required
+                variant="filled"
+                value={item.name}
                 onChange={(e) => {
-                  console.log(e);
-                  setSelectedImage(e.target.value);
+                  setItem({ ...item, name: e.target.value });
                 }}
               />
-            </div>
-            <div className="single-item-info-container">
-              <span className="single-item-name">{item.name}</span>
-              <span className="single-item-price">${item.price}</span>
-              <span className="single-item-description">
-                {item.description}
-              </span>
-              {item.itemVariantGroups.map(
-                ({ id, description, itemVariants }) => {
-                  if (itemVariants.length === 0) return null;
+              <TextField
+                label="Sku"
+                size="small"
+                fullWidth
+                required
+                variant="filled"
+                value={item.sku}
+                onChange={(e) => {
+                  setItem({ ...item, sku: e.target.value });
+                }}
+              />
+              <TextField
+                label="Description"
+                size="small"
+                fullWidth
+                multiline
+                rows={4}
+                required
+                variant="filled"
+                value={item.description}
+                onChange={(e) => {
+                  setItem({ ...item, description: e.target.value });
+                }}
+              />
+              <TextField
+                label="Price"
+                size="small"
+                type="number"
+                fullWidth
+                required
+                variant="filled"
+                value={item.price}
+                onChange={(e) => {
+                  setItem({ ...item, price: e.target.value });
+                }}
+              />
+              <TextField
+                label="Images"
+                size="small"
+                fullWidth
+                multiline
+                value={item.images.map((image) => image.url).join("\n")}
+                rows={4}
+                required
+                variant="filled"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const newImages = [];
+                  value.split("\n").map((url) => {
+                    if (url.trim() === "") return;
+                    newImages.push({ url: url });
+                  });
+                  setItem({ ...item, images: [...newImages] });
+                }}
+              />
+              <TextField
+                value={item.categories[0].sku}
+                onChange={(e, value) => {
+                  setItem({
+                    ...item,
+                    categories: [getCategoryBySku(e.target.value)],
+                  });
+                }}
+                select
+                required
+                label="Category"
+              >
+                {categories.map((category) => {
                   return (
-                    <div
-                      className="single-item-variants-container"
-                      key={id + description}
+                    <MenuItem
+                      key={"Category: " + category.sku}
+                      value={category.sku}
                     >
-                      <span className="single-item-variant-name">
-                        {description}
-                      </span>
-                      <div className="single-item-variant-table">
-                        {itemVariants.map((itemVariant, index) => {
-                          return (
-                            <button
-                              key={`${description}: ${index}`}
-                              className="single-item-variant"
-                              type="button"
-                            >
-                              {itemVariant.description}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+                      {category.description}
+                    </MenuItem>
                   );
-                }
-              )}
-              <button type="submit" className="single-item-button">
-                Save
-              </button>
+                })}
+              </TextField>
+              <GroupedSelect
+                allValues={itemVariantGroups}
+                values={item.itemVariantGroups}
+                setValues={(newValue) => {
+                  setItem({ ...item, itemVariantGroups: newValue });
+                }}
+                required
+              />
+            </Box>
+            <div className="single-item-container">
+              <div className="single-item-image-container">
+                <img
+                  draggable={false}
+                  className="single-item-image"
+                  src={image}
+                  onMouseMove={(e) => {
+                    e.preventDefault();
+                    if (!clickingImage) return;
+
+                    const rect = e.target.getBoundingClientRect();
+                    const x = Math.min(
+                      Math.max(1 - (e.clientX - rect.left) / rect.width, 0),
+                      1
+                    );
+
+                    setSelectedImage(Math.floor(x * 36 + 1));
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    setClickingImage(true);
+                  }}
+                  onMouseUp={(e) => {
+                    e.preventDefault();
+                    setClickingImage(false);
+                  }}
+                  onTouchMove={(e) => {
+                    e.preventDefault();
+                    if (!clickingImage) return;
+
+                    const rect = e.target.getBoundingClientRect();
+                    const x = Math.min(
+                      Math.max(
+                        1 - (e.touches[0].clientX - rect.left) / rect.width,
+                        0
+                      ),
+                      1
+                    );
+                    console.log(x);
+
+                    setSelectedImage(Math.floor(x * 36 + 1));
+                  }}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    setClickingImage(true);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    setClickingImage(false);
+                  }}
+                />
+
+                <Slider
+                  sx={{ maxWidth: "300px" }}
+                  valueLabelDisplay="off"
+                  min={1}
+                  max={36}
+                  value={selectedImage}
+                  onChange={(e) => {
+                    console.log(e);
+                    setSelectedImage(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="single-item-info-container">
+                <span className="single-item-name">{item.name}</span>
+                <span className="single-item-price">${item.price}</span>
+                <span className="single-item-description">
+                  {item.description}
+                </span>
+                {item.itemVariantGroups.map(
+                  ({ id, description, itemVariants }) => {
+                    if (itemVariants.length === 0) return null;
+                    return (
+                      <div
+                        className="single-item-variants-container"
+                        key={id + description}
+                      >
+                        <span className="single-item-variant-name">
+                          {description}
+                        </span>
+                        <div className="single-item-variant-table">
+                          {itemVariants.map((itemVariant, index) => {
+                            return (
+                              <button
+                                key={`${description}: ${index}`}
+                                className="single-item-variant"
+                                type="button"
+                              >
+                                {itemVariant.description}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+                <button type="submit" className="single-item-button">
+                  Save
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </>
       )}
+      {loading && loading}
     </section>
   );
 }

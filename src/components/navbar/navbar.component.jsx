@@ -76,19 +76,24 @@ export default function Navbar() {
             </div>
             <div className="navbar-bottom-container">
               <div className="navbar-categories">
-                {categories.map((category, index) => {
-                  return (
-                    <div
-                      className="navbar-category-container"
-                      key={`Category ${category.sku}`}
-                    >
-                      <Link to={`/${category.sku}`} className="navbar-category">
-                        {category.description}
-                      </Link>
-                      <div className="navbar-category-border"></div>
-                    </div>
-                  );
-                })}
+                {[{ sku: "all", description: "All" }, ...categories].map(
+                  (category, index) => {
+                    return (
+                      <div
+                        className="navbar-category-container"
+                        key={`Category ${category.sku}`}
+                      >
+                        <Link
+                          to={`/${category.sku}`}
+                          className="navbar-category"
+                        >
+                          {category.description}
+                        </Link>
+                        <div className="navbar-category-border"></div>
+                      </div>
+                    );
+                  }
+                )}
               </div>
             </div>
           </section>
