@@ -12,6 +12,10 @@ async function getItems(query, data) {
         sku: query.categorySku,
       },
     };
+
+    if (query.categorySku === "all") {
+      delete prismaQuery.categories;
+    }
   }
 
   if (query.itemSku) {
@@ -202,6 +206,18 @@ async function updateItem(query, data) {
   return await getItems({ itemSku: data.sku });
 }
 
+async function removeItem(query, data) {
+  await prisma.item.update({
+    where: {
+      id: Number(query.id),
+    },
+    data: {
+      isActive: false,
+    },
+  });
+  return "Done";
+}
+
 async function getItemVariants(query, data) {
   const prismaQuery = {
     select: {
@@ -313,4 +329,5 @@ module.exports = {
   createItemVariantGroup,
   updateItemVariantGroup,
   removeItemVariantGroup,
+  removeItem,
 };

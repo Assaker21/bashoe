@@ -26,7 +26,7 @@ model item {
   id Int @id @default(autoincrement())
 
   name        String?
-  description String?
+  description String?  @db.LongText
   price       Decimal?
   discount    Decimal? @default(0)
   sku         String?  @unique
@@ -165,6 +165,19 @@ model country {
   name String?
   code String?
   flag String?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model list {
+  id Int @id @default(autoincrement())
+
+  description String?
+  type        String?
+  position    String?
+  content     Json?
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())

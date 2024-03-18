@@ -6,6 +6,7 @@ const {
   createItem,
   getItemVariants,
   updateItem,
+  removeItem,
   upsertItemVariant,
   removeItemVariant,
   upsertItemVariantGroup,
@@ -19,6 +20,7 @@ router.post("/", createItem);
 router.post("/variants", upsertItemVariant);
 router.post("/variantGroups", upsertItemVariantGroup);
 
+router.delete("/", removeItem);
 router.delete("/variants", removeItemVariant);
 router.delete("/variantGroups", removeItemVariantGroup);
 

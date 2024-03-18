@@ -21,6 +21,16 @@ async function createItem(req, res) {
   }
 }
 
+async function removeItem(req, res) {
+  try {
+    const result = await itemsServices.removeItem(req.query, req.body);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json("Internal error");
+    console.log(`Error: ${error}`);
+  }
+}
+
 async function getItemVariants(req, res) {
   try {
     const result = await itemsServices.getItemVariants(null, req.body);
@@ -103,4 +113,5 @@ module.exports = {
   removeItemVariant,
   upsertItemVariantGroup,
   removeItemVariantGroup,
+  removeItem,
 };

@@ -7,6 +7,7 @@ const port = 3000;
 const allowedOrigins = [
   "http://127.0.0.1:5173",
   "http://localhost:5173",
+  "http://127.0.0.1:5174",
   "https://hoophousev2-admin.onrender.com",
 ];
 
@@ -23,10 +24,17 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const { itemsRouter, categoriesRouter } = require("./src/routes/index.js");
+const {
+  itemsRouter,
+  categoriesRouter,
+  ordersRouter,
+  listsRouter,
+} = require("./src/routes/index.js");
 
 app.use("/items", itemsRouter);
 app.use("/categories", categoriesRouter);
+app.use("/orders", ordersRouter);
+app.use("/lists", listsRouter);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
