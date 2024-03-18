@@ -1,6 +1,7 @@
 const prisma = require("../utils/prisma");
 
 async function getLists(query, data) {
+  console.log("Getting lists");
   const prismaQuery = {
     where: {
       isActive: true,
