@@ -8,55 +8,26 @@ import Line from "../../basic-components/line/line.component.jsx";
 
 import "./cart.component.scss";
 import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Cart({ setMenuOpen }) {
-  const { cart } = useGeneralContext();
+  const { cart, setCart, calculateTotal, calculateSubtotal } =
+    useGeneralContext();
 
-  const [items, setItems] = useState([
-    {
-      name: "Jordan 4 Retro Bred Reimagined (GS)",
-      images: [
-        "https://images.stockx.com/360/Crocs-Classic-Clog-Lightning-McQueen/Images/Crocs-Classic-Clog-Lightning-McQueen/Lv2/img19.jpg?fm=avif&auto=compress&w=576&dpr=1&updated_at=1635308105&h=384&q=57 1x",
-      ],
-      variant: {
-        description: "Size",
-        value: "44",
-      },
-      price: 79,
-      quantity: 50,
-    },
-    {
-      name: "Jordan 4 Retro Bred Reimagined (GS)",
-      images: [
-        "https://images.stockx.com/360/Crocs-Classic-Clog-Lightning-McQueen/Images/Crocs-Classic-Clog-Lightning-McQueen/Lv2/img19.jpg?fm=avif&auto=compress&w=576&dpr=1&updated_at=1635308105&h=384&q=57 1x",
-      ],
-      variant: {
-        description: "Size",
-        value: "44",
-      },
-      price: 79,
-      quantity: 50,
-    },
-  ]);
-
-  const calculateSubtotal = useCallback(() => {
-    var subtotal = 0;
-    items.map((item) => (subtotal += item.price * item.quantity));
-    return subtotal;
-  }, [items]);
-
-  const calculateTotal = useCallback(() => {
-    return calculateSubtotal() + 4;
-  }, [calculateSubtotal]);
+  const navigate = useNavigate();
 
   return (
     <section className="cart-menu">
-      <span className="cart-menu-title">Your cart ({items.length})</span>
+      <span className="cart-menu-title">Your cart ({cart.length})</span>
       <div className="cart-menu-items">
-        {items?.map((cartItem, index) => (
+        {cart?.map((cartItem, index) => (
           <>
-            <CartItem items={items} setItems={setItems} index={index} />
+            <CartItem
+              items={cart}
+              setCart={setCart}
+              setItems={setCart}
+              index={index}
+            />
             <Line />
           </>
         )) || "Nothing in your cart, yet!"}
@@ -65,39 +36,50 @@ export default function Cart({ setMenuOpen }) {
         <div className="cart-menu-totals">
           <div className="cart-menu-total">
             <span>Subtotal</span>
-            <span>${calculateSubtotal()}</span>
+            <span>${calculateSubtotal().toFixed(1)}</span>
           </div>
           <div className="cart-menu-total">
             <span>Shipping</span>
-            <span>$4</span>
+            <span>${cart.length > 0 ? "4.0" : "0.0"}</span>
           </div>
           <div className="cart-menu-total">
             <span>Total</span>
-            <span>${calculateTotal()}</span>
+            <span>
+              ${cart.length > 0 ? calculateTotal().toFixed(1) : "0.0"}
+            </span>
           </div>
         </div>
-        <Link
+        <button
           to="checkout"
-          onClick={() => setMenuOpen(false)}
+          onClick={() => {
+            if (cart.length > 0) {
+              setMenuOpen(false);
+              navigate("checkout");
+            }
+          }}
           className="cart-menu-button"
         >
           Checkout
-        </Link>
+        </button>
       </div>
     </section>
   );
 }
 
-function CartItem({ items, setItems, index }) {
+function CartItem({ items, setItems, index, setCart }) {
   return (
     <div className="cart-menu-item">
-      <img className="cart-menu-item-image" src={items[index].images[0]} />
-      <span className="cart-menu-item-name">{items[index].name}</span>
+      <img
+        className="cart-menu-item-image"
+        src={items[index].item.images[0].url.replace("<number>", "01")}
+      />
+      <span className="cart-menu-item-name">{items[index].item.name}</span>
       <span className="cart-menu-item-variant">
-        {items[index].variant.description}: {items[index].variant.value}
+        {items[index].item.itemVariantGroups[0].description}:{" "}
+        {items[index].variant.description}
       </span>
       <div className="cart-menu-item-price-and-quantity">
-        <span className="cart-menu-item-price">${items[index].price}</span>
+        <span className="cart-menu-item-price">${items[index].item.price}</span>
         <div className="cart-menu-item-quantity">
           <IconButton
             onClick={() => {
@@ -137,7 +119,7 @@ function CartItem({ items, setItems, index }) {
         onClick={() => {
           const newItems = [...items];
           newItems.splice(index, 1);
-          setItems(newItems);
+          setCart(newItems);
         }}
       >
         <CloseIcon />

@@ -1,40 +1,34 @@
 import "./item.component.scss";
 
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-export default function Item() {
-  const images = [
-    "https://images.stockx.com/images/Air-Jordan-1-High-OG-Black-White-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=75&fm=avif&auto=compress&dpr=1&trim=color&updated_at=1707164705&q=57",
-    "https://images.stockx.com/images/Crocs-Classic-Clog-Lightning-McQueen-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=75&fm=avif&auto=compress&dpr=1&trim=color&updated_at=1620405722&q=57",
-    "https://images.stockx.com/images/Nike-Dunk-Low-Photon-Dust-W-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=75&fm=avif&auto=compress&dpr=1&trim=color&updated_at=1620404906&q=57",
-    "https://images.stockx.com/images/Air-Jordan-1-Mid-Light-Smoke-Grey-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=75&fm=avif&auto=compress&dpr=1&trim=color&updated_at=1606319491&q=57",
-  ];
-
-  const category = {
-    sku: "sneakers",
-    description: "Sneakers",
-  };
-
-  const name = "Jordan 4 Retro Bred Reimagined (GS)";
-  const sku = name.toLowerCase().replaceAll(" ", "-");
-
-  const [image, setImage] = useState(
-    images[Math.floor(Math.random() * images.length)]
-  );
-
+export default function Item({ item }) {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate(`/${category.sku}/${sku}`);
+    navigate(`/${item?.categories[0].sku}/${item?.sku}`);
   }
 
   return (
     <div className="list-item" onClick={handleClick}>
-      <img src={image} alt="shoe" className="list-item-image" />
-      <span className="list-item-name">{name}</span>
-      <span className="list-item-category">{category.description}</span>
-      <span className="list-item-price">$79</span>
+      {item?.images[0] ? (
+        <img
+          src={item?.images[0].url.replace("<number>", "01")}
+          alt="shoe"
+          className="list-item-image"
+        />
+      ) : (
+        <Skeleton height="100px" />
+      )}
+      <span className="list-item-name">{item?.name || <Skeleton />}</span>
+      <span className="list-item-category">
+        {item?.categories[0].description || <Skeleton />}
+      </span>
+      <span className="list-item-price">
+        {(item?.price && `$${item?.price}`) || <Skeleton />}
+      </span>
     </div>
   );
 }

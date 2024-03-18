@@ -4,21 +4,40 @@ import WideList from "../../components/wide-list/wide-list.component";
 
 import "./home.page.scss";
 
+import { useState, useEffect } from "react";
+import listsServices from "../../services/lists-services";
+
 export default function Home() {
+  const [content, setContent] = useState([
+    { type: "wide-list" },
+    { type: "item-list" },
+    { type: "category-list" },
+    { type: "wide-list" },
+    { type: "item-list" },
+    { type: "category-list" },
+    { type: "wide-list" },
+    { type: "item-list" },
+    { type: "category-list" },
+  ]);
+
+  async function fetch() {
+    const [ok, data] = await listsServices.getLists();
+    if (ok) {
+      setContent(data);
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
   return (
     <section className="home">
-      <WideList />
-      <ItemList />
-      <CategoryList />
-      <WideList />
-      <ItemList />
-      <CategoryList />
-      <WideList />
-      <ItemList />
-      <CategoryList />
-      <WideList />
-      <ItemList />
-      <CategoryList />
+      {content?.map((list, index) => {
+        if (list.type === "wide-list") return <WideList value={list} />;
+        if (list.type === "item-list") return <ItemList value={list} />;
+        if (list.type === "category-list") return <CategoryList value={list} />;
+      })}
     </section>
   );
 }

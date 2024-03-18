@@ -3,46 +3,65 @@ import Breadcrumbs from "../../../components/breadcrumbs/breadcrumbs.component";
 import { useGeneralContext } from "../../../contexts/context";
 
 import "./item.page.scss";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PreloadImages from "../../../basic-components/preload-images/preload-images.component";
 import Line from "../../../basic-components/line/line.component";
 import ItemList from "../../../components/item-list/item-list.component";
-//import Slider from "../../../basic-components/slider/slider.component";
 import Slider from "@mui/material/Slider";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
+import itemsServices from "../../../services/items-services";
 
 export default function Item() {
   const { categorySku, itemSku } = useParams();
-  const { getCategoryBySku } = useGeneralContext();
+  const { getCategoryBySku, addToCart, itemList } = useGeneralContext();
   const category = getCategoryBySku(categorySku);
 
+  const [item, setItem] = useState(null);
+  const [cartItem, setCartItem] = useState(null);
+
   const [selectedImage, setSelectedImage] = useState(1);
-  const [baseImage, setBaseImage] = useState(
-    "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Black-Cool-Grey/Images/Nike-Kobe-11-EM-Low-Black-Cool-Grey/Lv2/img<number>.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635281372&h=320&q=60"
-  );
   const [allPossibleImages, setAllPossibleImages] = useState([]);
-  const [image, setImage] = useState(
-    "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Barcelona/Images/Nike-Kobe-11-EM-Low-Barcelona/Lv2/img01.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635175004&h=320&q=60"
-  );
+  const [image, setImage] = useState("");
   const [clickingImage, setClickingImage] = useState(false);
 
-  const name = "Jordan 4 Retro Bred Reimagined (GS)";
-  const sizes = [38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
+  async function fetch() {
+    const [ok, data] = await itemsServices.getItems({ categorySku, itemSku });
+    if (ok) {
+      setItem(data);
+      console.log("Item: ", data);
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   useEffect(() => {
     const _allPossibleImages = [];
     for (var i = 1; i < 37; i++) {
       _allPossibleImages.push(
-        baseImage.replace("<number>", String(i).padStart(2, "0"))
+        item?.images[0].url.replace("<number>", String(i).padStart(2, "0"))
       );
     }
     setAllPossibleImages(_allPossibleImages);
-  }, [baseImage]);
+
+    setCartItem({
+      item,
+      variant: item?.itemVariantGroups[0].itemVariants[0],
+      quantity: 1,
+    });
+  }, [item]);
 
   useEffect(() => {
     setImage(
-      baseImage.replace("<number>", String(selectedImage).padStart(2, "0"))
+      item?.images[0].url.replace(
+        "<number>",
+        String(selectedImage).padStart(2, "0")
+      )
     );
-  }, [selectedImage]);
+  }, [item, selectedImage]);
 
   return (
     <section className="single-item">
@@ -53,12 +72,12 @@ export default function Item() {
             to: "/",
           },
           {
-            name: category.description,
-            to: `/${category.sku}`,
+            name: category?.description,
+            to: `/${categorySku}`,
           },
           {
-            name: name,
-            to: `/${category.sku}/${itemSku}`,
+            name: item?.name,
+            to: `/${categorySku}/${itemSku}`,
           },
         ]}
       />
@@ -66,102 +85,141 @@ export default function Item() {
 
       <div className="single-item-container">
         <div className="single-item-image-container">
-          <img
-            draggable={false}
-            className="single-item-image"
-            src={image}
-            onMouseMove={(e) => {
-              e.preventDefault();
-              if (!clickingImage) return;
+          {item ? (
+            <>
+              <img
+                draggable={false}
+                className="single-item-image"
+                src={image}
+                onMouseMove={(e) => {
+                  e.preventDefault();
+                  if (!clickingImage) return;
 
-              const rect = e.target.getBoundingClientRect();
-              const x = Math.min(
-                Math.max(1 - (e.clientX - rect.left) / rect.width, 0),
-                1
-              );
+                  const rect = e.target.getBoundingClientRect();
+                  const x = Math.min(
+                    Math.max(1 - (e.clientX - rect.left) / rect.width, 0),
+                    1
+                  );
 
-              setSelectedImage(Math.floor(x * 36 + 1));
-            }}
-            onMouseDown={(e) => {
-              e.preventDefault();
-              setClickingImage(true);
-            }}
-            onMouseUp={(e) => {
-              e.preventDefault();
-              setClickingImage(false);
-            }}
-            onTouchMove={(e) => {
-              e.preventDefault();
-              if (!clickingImage) return;
+                  setSelectedImage(Math.floor(x * 36 + 1));
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setClickingImage(true);
+                }}
+                onMouseUp={(e) => {
+                  e.preventDefault();
+                  setClickingImage(false);
+                }}
+                onTouchMove={(e) => {
+                  e.preventDefault();
+                  if (!clickingImage) return;
 
-              const rect = e.target.getBoundingClientRect();
-              const x = Math.min(
-                Math.max(
-                  1 - (e.touches[0].clientX - rect.left) / rect.width,
-                  0
-                ),
-                1
-              );
-              console.log(x);
+                  const rect = e.target.getBoundingClientRect();
+                  const x = Math.min(
+                    Math.max(
+                      1 - (e.touches[0].clientX - rect.left) / rect.width,
+                      0
+                    ),
+                    1
+                  );
+                  console.log(x);
 
-              setSelectedImage(Math.floor(x * 36 + 1));
-            }}
-            onTouchStart={(e) => {
-              e.preventDefault();
-              setClickingImage(true);
-            }}
-            onTouchEnd={(e) => {
-              e.preventDefault();
-              setClickingImage(false);
-            }}
-          />
-
-          <Slider
-            sx={{ maxWidth: "300px" }}
-            valueLabelDisplay="off"
-            min={1}
-            max={36}
-            value={selectedImage}
-            onChange={(e) => {
-              console.log(e);
-              setSelectedImage(e.target.value);
-            }}
-          />
+                  setSelectedImage(Math.floor(x * 36 + 1));
+                }}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                  setClickingImage(true);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  setClickingImage(false);
+                }}
+              />
+              <Slider
+                sx={{ maxWidth: "300px" }}
+                valueLabelDisplay="off"
+                min={1}
+                max={36}
+                value={selectedImage}
+                onChange={(e) => {
+                  console.log(e);
+                  setSelectedImage(e.target.value);
+                }}
+              />
+            </>
+          ) : (
+            <Skeleton />
+          )}
         </div>
         <div className="single-item-info-container">
-          <span className="single-item-name">
-            Jordan 4 Retro Bred Reimagined
+          <span className="single-item-name">{item?.name || <Skeleton />}</span>
+          <span className="single-item-price">
+            {(item?.price && "$" + item?.price) || <Skeleton />}
           </span>
-          <span className="single-item-price">$79</span>
           <span className="single-item-description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Perspiciatis veritatis dolores, animi et, necessitatibus illum quod
-            natus atque in voluptatibus, voluptate minima doloribus nesciunt
-            blanditiis illo nostrum facilis provident omnis. Praesentium,
-            inventore. Atque dolor mollitia quidem quos similique maxime harum
-            optio illo aliquam esse provident, sint perspiciatis dolorem quaerat
-            culpa!
+            {item?.description || <Skeleton />}
           </span>
           <div className="single-item-variants-container">
-            <span className="single-item-variant-name">Size</span>
-            <div className="single-item-variant-table">
-              {sizes.map((size, index) => {
-                return (
-                  <button
-                    key={`Size: ${index}`}
-                    className="single-item-variant"
-                  >
-                    {size}
-                  </button>
-                );
-              })}
-            </div>
+            {item?.itemVariantGroups.map((group, groupIndex) => {
+              if (
+                item?.itemVariantGroups[groupIndex].itemVariants?.length === 0
+              )
+                return;
+              return (
+                <React.Fragment key={"Group: " + group.id}>
+                  <span className="single-item-variant-name">
+                    {item?.itemVariantGroups[groupIndex].description}
+                  </span>
+                  <div className="single-item-variant-table">
+                    {item?.itemVariantGroups[groupIndex].itemVariants.map(
+                      (variant, index) => {
+                        return (
+                          <button
+                            key={`Variant: ${variant.id}`}
+                            className={
+                              variant === cartItem?.variant
+                                ? "single-item-variant selected"
+                                : "single-item-variant"
+                            }
+                            onClick={() => {
+                              setCartItem({
+                                ...cartItem,
+                                variant: variant,
+                                quantity: 1,
+                              });
+                            }}
+                          >
+                            {
+                              item?.itemVariantGroups[groupIndex].itemVariants[
+                                index
+                              ].description
+                            }
+                          </button>
+                        );
+                      }
+                    )}
+                  </div>
+                </React.Fragment>
+              );
+            })}
           </div>
-          <button className="single-item-button">Add To Cart</button>
+          {item ? (
+            <button
+              className="single-item-button"
+              onClick={() => {
+                addToCart(cartItem);
+              }}
+            >
+              Add To Cart
+            </button>
+          ) : (
+            <Skeleton />
+          )}
         </div>
       </div>
       <Line />
-      <ItemList />
+      <ItemList value={itemList} />
     </section>
   );
 }

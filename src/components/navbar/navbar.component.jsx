@@ -18,6 +18,7 @@ import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import Line from "../../basic-components/line/line.component.jsx";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useParams } from "react-router-dom";
 
 function CategoriesMenu({ setMenuOpen }) {
   const { categories } = useGeneralContext();
@@ -53,6 +54,7 @@ function CartMenu({ setMenuOpen }) {
 
 export default function Navbar() {
   const [searchInputFocused, setSearchInputFocused] = useState(false);
+  const params = useParams();
   const { cart, categories } = useGeneralContext();
   const { width, height } = useScreenDimensions();
 
@@ -114,19 +116,29 @@ export default function Navbar() {
             </div>
             <div className="navbar-bottom-container">
               <div className="navbar-categories">
-                {categories.map((category, index) => {
-                  return (
-                    <div
-                      className="navbar-category-container"
-                      key={`Category ${category.sku}`}
-                    >
-                      <Link to={`/${category.sku}`} className="navbar-category">
-                        {category.description}
-                      </Link>
-                      <div className="navbar-category-border"></div>
-                    </div>
-                  );
-                })}
+                {[{ sku: "all", description: "All" }, ...categories].map(
+                  (category, index) => {
+                    return (
+                      <div
+                        className={
+                          "navbar-category-container" +
+                          (params?.categorySku === category.sku
+                            ? " selected"
+                            : "")
+                        }
+                        key={`Category ${category.sku}`}
+                      >
+                        <Link
+                          to={`/${category.sku}`}
+                          className="navbar-category"
+                        >
+                          {category.description}
+                        </Link>
+                        <div className="navbar-category-border"></div>
+                      </div>
+                    );
+                  }
+                )}
               </div>
             </div>
           </section>

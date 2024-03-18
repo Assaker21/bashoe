@@ -10,6 +10,7 @@ import Items from "./pages/items/items.page.jsx";
 import Item from "./pages/items/item/item.page.jsx";
 import Home from "./pages/home/home.page.jsx";
 import Checkout from "./pages/checkout/checkout.page.jsx";
+import Finish from "./pages/finish/finish.page.jsx";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
         path: "checkout",
         element: <Checkout />,
       },
+      { path: "finish", element: <Finish /> },
       {
         path: ":categorySku",
         element: <Items />,

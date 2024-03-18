@@ -96,7 +96,8 @@
 
             transition: var(--transition);
 
-            &:hover {
+            &:hover,
+            &.selected {
               cursor: pointer;
               background-color: var(--text-color);
               color: var(--background-color);
