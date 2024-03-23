@@ -22,6 +22,12 @@ async function getItems(query, data) {
     prismaQuery.sku = query.itemSku;
   }
 
+  if (query.search) {
+    prismaQuery.name = {
+      contains: query.search,
+    };
+  }
+
   var result = await prisma.item.findMany({
     where: prismaQuery,
     select: {
