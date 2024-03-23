@@ -12,8 +12,8 @@ export default function ItemList({ value }) {
       </span>
       <div className="item-list-items">
         {value?.content
-          ? value?.content?.map((item) => (
-              <Item item={item} key={`Item: ${item.id}`} />
+          ? value?.content?.map((item, index) => (
+              <Item item={item} key={`Item: ${item.id} ${index}`} />
             ))
           : [1, 2, 3, 4, 5, 6].map((value) => <Item />)}
       </div>

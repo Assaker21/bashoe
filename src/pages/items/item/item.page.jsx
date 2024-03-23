@@ -27,6 +27,7 @@ export default function Item() {
   const [clickingImage, setClickingImage] = useState(false);
 
   async function fetch() {
+    setItem(null);
     const [ok, data] = await itemsServices.getItems({ categorySku, itemSku });
     if (ok) {
       setItem(data);
@@ -36,7 +37,7 @@ export default function Item() {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [itemSku, categorySku]);
 
   useEffect(() => {
     const _allPossibleImages = [];

@@ -34,9 +34,12 @@ export default function Home() {
   return (
     <section className="home">
       {content?.map((list, index) => {
-        if (list.type === "wide-list") return <WideList value={list} />;
-        if (list.type === "item-list") return <ItemList value={list} />;
-        if (list.type === "category-list") return <CategoryList value={list} />;
+        if (list.type === "wide-list")
+          return <WideList key={"Home: " + index} value={list} />;
+        if (list.type === "item-list")
+          return <ItemList key={"Home: " + index} value={list} />;
+        if (list.type === "category-list")
+          return <>{/*<CategoryList value={list} />*/}</>;
       })}
     </section>
   );

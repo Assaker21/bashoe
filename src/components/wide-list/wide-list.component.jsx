@@ -9,6 +9,7 @@ import "./wide-list.component.scss";
 
 export default function WideList({ value }) {
   const [showingIndex, setShowingIndex] = useState(0);
+  const [id, setId] = useState(Math.random());
 
   const sectionRefs = useRef(
     (value?.content || [1, 2, 3, 4, 5]).map(() => createRef())
@@ -45,6 +46,7 @@ export default function WideList({ value }) {
           <div className="wide-list-items" ref={scrollerRef}>
             {value?.content?.map((v, index) => (
               <img
+                key={"images " + index + id}
                 ref={sectionRefs.current[index]}
                 className="wide-list-item"
                 src={v}
