@@ -16,239 +16,49 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import "./orders.page.scss";
 
+import ordersServices from "../../services/ordersServices";
+
 export default function Orders() {
   const [tab, setTab] = useState(0);
-  const [orders, setOrders] = useState({
-    finished: [
-      {
-        id: 1,
-        address: {
-          city: "Jbeil",
-          country: {
-            name: "Lebanon",
-            code: "961",
-            flag: "",
-          },
-          address: "1227 street Cosobo",
-        },
-        user: {
-          firstName: "Charbel",
-          lastName: "Assaker",
-          email: "ca@admin.com",
-          phoneNumber: "03344223",
-        },
-        orderItems: [
-          {
-            item: {
-              id: 1,
-              name: "Jordan",
-              description: "",
-              price: 23,
-              sku: "",
-              images: [
-                "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Barcelona/Images/Nike-Kobe-11-EM-Low-Barcelona/Lv2/img<number>.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635175004&h=320&q=60",
-              ],
-            },
-            quantity: 1,
-            itemVariant: {
-              id: 1,
-              description: "45",
-            },
-          },
-          {
-            item: {
-              id: 1,
-              name: "Jordan",
-              description: "",
-              price: 23,
-              sku: "",
-              images: [
-                "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Barcelona/Images/Nike-Kobe-11-EM-Low-Barcelona/Lv2/img<number>.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635175004&h=320&q=60",
-              ],
-            },
-            quantity: 1,
-            itemVariant: {
-              id: 1,
-              description: "45",
-            },
-          },
-          {
-            item: {
-              id: 1,
-              name: "Jordan",
-              description: "",
-              price: 23,
-              sku: "jordan-black",
-              images: [
-                "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Barcelona/Images/Nike-Kobe-11-EM-Low-Barcelona/Lv2/img<number>.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635175004&h=320&q=60",
-              ],
-            },
-            quantity: 1,
-            itemVariant: {
-              id: 1,
-              description: "45",
-            },
-          },
-        ],
-      },
-      {
-        id: 2,
-        address: {
-          city: "Jbeil",
-          country: {
-            name: "Lebanon",
-            code: "961",
-            flag: "",
-          },
-          address: "1227 street Cosobo",
-        },
-        user: {
-          firstName: "Charbel",
-          lastName: "Assaker",
-          email: "ca@admin.com",
-          phoneNumber: "03344223",
-        },
-        orderItems: [
-          {
-            item: {
-              id: 1,
-              name: "Jordan",
-              description: "",
-              price: 23,
-              sku: "",
-              images: [
-                "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Barcelona/Images/Nike-Kobe-11-EM-Low-Barcelona/Lv2/img<number>.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635175004&h=320&q=60",
-              ],
-            },
-            quantity: 1,
-            itemVariant: {
-              id: 1,
-              description: "45",
-            },
-          },
-        ],
-      },
-    ],
-    cancelled: [
-      {
-        id: 3,
-        address: {
-          city: "Jbeil",
-          country: {
-            name: "Lebanon",
-            code: "961",
-            flag: "",
-          },
-          address: "1227 street Cosobo",
-        },
-        user: {
-          firstName: "Charbel",
-          lastName: "Assaker",
-          email: "ca@admin.com",
-          phoneNumber: "03344223",
-        },
-        orderItems: [
-          {
-            item: {
-              id: 1,
-              name: "Jordan",
-              description: "",
-              price: 23,
-              sku: "",
-              images: [
-                "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Barcelona/Images/Nike-Kobe-11-EM-Low-Barcelona/Lv2/img<number>.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635175004&h=320&q=60",
-              ],
-            },
-            quantity: 1,
-            itemVariant: {
-              id: 1,
-              description: "45",
-            },
-          },
-        ],
-      },
-    ],
-    unfinished: [
-      {
-        id: 4,
-        address: {
-          city: "Jbeil",
-          country: {
-            name: "Lebanon",
-            code: "961",
-            flag: "",
-          },
-          address: "1227 street Cosobo",
-        },
-        user: {
-          firstName: "Charbel",
-          lastName: "Assaker",
-          email: "ca@admin.com",
-          phoneNumber: "03344223",
-        },
-        orderItems: [
-          {
-            item: {
-              id: 1,
-              name: "Jordan",
-              description: "",
-              price: 23,
-              sku: "",
-              images: [
-                "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Barcelona/Images/Nike-Kobe-11-EM-Low-Barcelona/Lv2/img<number>.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635175004&h=320&q=60",
-              ],
-            },
-            quantity: 1,
-            itemVariant: {
-              id: 1,
-              description: "45",
-            },
-          },
-        ],
-      },
-      {
-        id: 5,
-        address: {
-          city: "Jbeil",
-          country: {
-            name: "Lebanon",
-            code: "961",
-            flag: "",
-          },
-          address: "1227 street Cosobo",
-        },
-        user: {
-          firstName: "Charbel",
-          lastName: "Assaker",
-          email: "ca@admin.com",
-          phoneNumber: "03344223",
-        },
-        orderItems: [
-          {
-            item: {
-              id: 1,
-              name: "Jordan",
-              description: "",
-              price: 23,
-              sku: "",
-              images: [
-                "https://images.stockx.com/360/Nike-Kobe-11-EM-Low-Barcelona/Images/Nike-Kobe-11-EM-Low-Barcelona/Lv2/img<number>.jpg?fm=avif&auto=compress&w=480&dpr=2&updated_at=1635175004&h=320&q=60",
-              ],
-            },
-            quantity: 1,
-            itemVariant: {
-              id: 1,
-              description: "45",
-            },
-          },
-        ],
-      },
-    ],
-  });
+  const [orders, setOrders] = useState(null);
+
+  async function fetch() {
+    const [ok, data] = await ordersServices.getOrders();
+    if (ok) {
+      console.log("Data: ", data);
+
+      setOrders(formatOrders(data));
+    }
+  }
+
+  function formatOrders(data) {
+    const newOrders = { finished: [], cancelled: [], unfinished: [] };
+    data.map((item) => {
+      if (item.orderStatusId === 3) {
+        newOrders.finished.push(item);
+      } else if (item.orderStatusId === 2) {
+        newOrders.cancelled.push(item);
+      } else if (item.orderStatusId === 1) {
+        newOrders.unfinished.push(item);
+      }
+    });
+    return newOrders;
+  }
+
+  async function handleUpdate(query, payload) {
+    const [ok, data] = await ordersServices.updateOrder(query, payload);
+    if (ok) {
+      setOrders(formatOrders(data));
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   return (
     <section className="orders">
@@ -311,17 +121,30 @@ export default function Orders() {
         />
       </Tabs>
       <div className="orders-container">
-        {orders[
-          tab === 0 ? "unfinished" : tab === 1 ? "finished" : "cancelled"
-        ].map((order) => (
-          <Order key={"Order: " + order.id} order={order} />
-        ))}
+        {orders &&
+          orders[
+            tab === 0 ? "unfinished" : tab === 1 ? "finished" : "cancelled"
+          ].map((order) => (
+            <Order
+              key={"Order: " + order.id}
+              order={order}
+              onUpdate={handleUpdate}
+            />
+          ))}
       </div>
     </section>
   );
 }
 
-function Order({ order }) {
+function Order({ order, onUpdate }) {
+  const calculateOrderCost = useCallback(() => {
+    let total = 0;
+    order.orderItems.map((orderItem) => {
+      total += orderItem.quantity * orderItem.item.price;
+    });
+    return total + 4;
+  }, [order]);
+
   return (
     <div className="order-container">
       <h4 className="order-title">Address</h4>
@@ -334,14 +157,14 @@ function Order({ order }) {
 
       <h4 className="order-title">Items</h4>
 
-      {order.orderItems.map((orderItem) => (
+      {order?.orderItems.map((orderItem) => (
         <div
           key={"OrderItem: " + orderItem.id}
           className="order-item-container"
         >
           <img
             className="order-item-image"
-            src={orderItem.item.images[0].replace("<number>", "01")}
+            src={orderItem.item.images[0].url.replace("<number>", "01")}
           />
           <div className="order-item-info-container">
             <p className="order-item-info">Name: {orderItem.item.name}</p>
@@ -354,10 +177,34 @@ function Order({ order }) {
         </div>
       ))}
 
-      <h4 className="order-title">Total + shipping: $99.99</h4>
-      <button>Mark as finished</button>
-      <button>Mark as unfinished</button>
-      <button>Mark as cancelled</button>
+      <h4 className="order-title">Total + shipping: ${calculateOrderCost()}</h4>
+      {order.orderStatusId !== 3 && (
+        <button
+          onClick={() => {
+            onUpdate({ id: order.id }, { orderStatusId: 3 });
+          }}
+        >
+          Mark as finished
+        </button>
+      )}
+      {order.orderStatusId !== 1 && (
+        <button
+          onClick={() => {
+            onUpdate({ id: order.id }, { orderStatusId: 1 });
+          }}
+        >
+          Mark as unfinished
+        </button>
+      )}
+      {order.orderStatusId !== 2 && (
+        <button
+          onClick={() => {
+            onUpdate({ id: order.id }, { orderStatusId: 2 });
+          }}
+        >
+          Mark as cancelled
+        </button>
+      )}
     </div>
   );
 }

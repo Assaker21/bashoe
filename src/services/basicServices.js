@@ -4,6 +4,7 @@ async function request(method, endpoint, query, payload, useMockApi = false) {
   let url = useMockApi
     ? "http://localhost:3000"
     : "https://bashoe-fty2.onrender.com"; // "http://localhost:3000";
+  url = "http://localhost:3000";
   const res = await axios({
     method,
     url: `${url}/${endpoint}${generateQuery(query)}`,
