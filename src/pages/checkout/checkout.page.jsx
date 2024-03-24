@@ -181,7 +181,7 @@ export default function Checkout() {
               </TextField>
             </Grid>
           </Grid>
-          {loading ? (
+          {!loading ? (
             <button
               disabled={getNumberOfItems() === 0}
               type="submit"
