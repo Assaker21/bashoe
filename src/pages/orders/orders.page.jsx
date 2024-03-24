@@ -147,6 +147,13 @@ function Order({ order, onUpdate }) {
 
   return (
     <div className="order-container">
+      <h4 className="order-title">User</h4>
+      <p>
+        {order.user.firstName} {order.user.lastName}, {order.user.email},{" "}
+        {order.user.phoneNumber}
+      </p>
+      <br />
+
       <h4 className="order-title">Address</h4>
       <p>
         {order.address.country.name}, {order.address.city},{" "}
@@ -178,33 +185,38 @@ function Order({ order, onUpdate }) {
       ))}
 
       <h4 className="order-title">Total + shipping: ${calculateOrderCost()}</h4>
-      {order.orderStatusId !== 3 && (
-        <button
-          onClick={() => {
-            onUpdate({ id: order.id }, { orderStatusId: 3 });
-          }}
-        >
-          Mark as finished
-        </button>
-      )}
-      {order.orderStatusId !== 1 && (
-        <button
-          onClick={() => {
-            onUpdate({ id: order.id }, { orderStatusId: 1 });
-          }}
-        >
-          Mark as unfinished
-        </button>
-      )}
-      {order.orderStatusId !== 2 && (
-        <button
-          onClick={() => {
-            onUpdate({ id: order.id }, { orderStatusId: 2 });
-          }}
-        >
-          Mark as cancelled
-        </button>
-      )}
+      <div className="order-buttons-container">
+        {order.orderStatusId !== 3 && (
+          <button
+            className="order-button"
+            onClick={() => {
+              onUpdate({ id: order.id }, { orderStatusId: 3 });
+            }}
+          >
+            Mark as finished
+          </button>
+        )}
+        {order.orderStatusId !== 1 && (
+          <button
+            className="order-button"
+            onClick={() => {
+              onUpdate({ id: order.id }, { orderStatusId: 1 });
+            }}
+          >
+            Mark as unfinished
+          </button>
+        )}
+        {order.orderStatusId !== 2 && (
+          <button
+            className="order-button"
+            onClick={() => {
+              onUpdate({ id: order.id }, { orderStatusId: 2 });
+            }}
+          >
+            Mark as cancelled
+          </button>
+        )}
+      </div>
     </div>
   );
 }

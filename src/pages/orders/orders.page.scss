@@ -47,6 +47,31 @@
           }
         }
       }
+      .order-buttons-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        gap: 12px;
+
+        .order-button {
+          padding: 8px 16px;
+
+          border: 1px solid var(--text-color);
+          border-radius: none;
+          font-size: 18px;
+          font-weight: 600;
+          background-color: var(--text-color);
+          color: var(--background-color);
+
+          transition: var(--transition);
+
+          &:hover {
+            cursor: pointer;
+            background-color: var(--background-color);
+            color: var(--text-color);
+          }
+        }
+      }
     }
   }
 }
