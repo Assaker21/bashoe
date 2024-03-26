@@ -22,7 +22,7 @@ const corsOptions = {
   },
 };
 
-app.use(express.static("uploads"));
+app.use(express.static("src/uploads"));
 app.use(cors(corsOptions));
 app.use(express.json());
 
