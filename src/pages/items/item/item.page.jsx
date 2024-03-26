@@ -73,6 +73,8 @@ export default function Item() {
           property="og:description"
           content={item?.description || "DESC HERE"}
         />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://hoophousev2.onrender.com" />
         <meta
           property="og:image"
           content={
