@@ -11,6 +11,7 @@ import Item from "./pages/items/item/item.page.jsx";
 import Home from "./pages/home/home.page.jsx";
 import Orders from "./pages/orders/orders.page.jsx";
 import Settings from "./pages/settings/settings.page.jsx";
+import Images from "./pages/images/images.page.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
         path: "orders",
         element: <Orders />,
       },
+      { path: "images", element: <Images /> },
       {
         path: ":categorySku",
         element: <Items />,

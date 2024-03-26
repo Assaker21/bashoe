@@ -1,0 +1,16 @@
+.images {
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  margin: 0 auto;
+
+  padding: 24px 20px;
+
+  .images-image {
+    &:hover {
+      scale: 0.95;
+      cursor: pointer;
+    }
+
+    transition: var(--transition);
+  }
+}

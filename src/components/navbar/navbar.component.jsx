@@ -17,6 +17,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import AddIcon from "@mui/icons-material/Add";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 function CategoriesMenu({ setMenuOpen }) {
   const { categories } = useGeneralContext();
@@ -70,6 +71,11 @@ export default function Navbar() {
                 <Link to="/new" className="navbar-button">
                   <IconButton>
                     <AddIcon />
+                  </IconButton>
+                </Link>
+                <Link to="/images" className="navbar-button">
+                  <IconButton>
+                    <AddPhotoAlternateIcon />
                   </IconButton>
                 </Link>
               </div>

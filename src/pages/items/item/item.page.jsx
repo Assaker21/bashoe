@@ -389,7 +389,12 @@ export default function Item() {
                 <span className="single-item-name">{item.name}</span>
                 <span className="single-item-price">${item.price}</span>
                 <span className="single-item-description">
-                  {item.description}
+                  {item?.description?.split("\n").map((line) => (
+                    <>
+                      <p>{line}</p>
+                      <br />
+                    </>
+                  ))}
                 </span>
                 {item.itemVariantGroups.map(
                   ({ id, description, itemVariants }) => {
