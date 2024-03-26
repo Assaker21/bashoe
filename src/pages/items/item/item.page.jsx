@@ -12,6 +12,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import itemsServices from "../../../services/items-services";
+import Helmet from "react-helmet";
 
 export default function Item() {
   const { categorySku, itemSku } = useParams();
@@ -66,6 +67,14 @@ export default function Item() {
 
   return (
     <section className="single-item">
+      <Helmet>
+        <meta property="og:title" content={item?.name || ""} />
+        <meta property="og:description" content={item?.description || ""} />
+        <meta
+          property="og:image"
+          content={item?.images[0]?.url?.replace("<number>", "01") || ""}
+        />
+      </Helmet>
       <Breadcrumbs
         items={[
           {
