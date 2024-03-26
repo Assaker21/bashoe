@@ -68,11 +68,17 @@ export default function Item() {
   return (
     <section className="single-item">
       <Helmet>
-        <meta property="og:title" content={item?.name || ""} />
-        <meta property="og:description" content={item?.description || ""} />
+        <meta property="og:title" content={item?.name || "TITLE HERE"} />
+        <meta
+          property="og:description"
+          content={item?.description || "DESC HERE"}
+        />
         <meta
           property="og:image"
-          content={item?.images[0]?.url?.replace("<number>", "01") || ""}
+          content={
+            item?.images[0]?.url?.replace("<number>", "01") ||
+            "https://mir-s3-cdn-cf.behance.net/projects/404/5b96ce111493611.Y3JvcCwyNDAwLDE4NzcsMCw0NTE.png"
+          }
         />
       </Helmet>
       <Breadcrumbs
