@@ -2,10 +2,7 @@ import axios from "axios";
 
 async function request(method, endpoint, query, payload) {
   console.log("endpoint", endpoint, "query", query, "payload", payload);
-  console.log(
-    "process.env.REACT_APP_API_BASE_URL",
-    process.env.REACT_APP_API_BASE_URL
-  );
+
   let url = process.env.REACT_APP_API_BASE_URL;
   const res = await axios({
     method,

@@ -15,6 +15,7 @@ export default function Items() {
   const [items, setItems] = useState(null);
 
   async function fetch() {
+    setItems(null);
     const [ok, data] = await itemsServices.getItems({ categorySku });
     if (ok) {
       setItems(data);

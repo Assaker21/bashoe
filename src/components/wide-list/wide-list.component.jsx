@@ -27,7 +27,7 @@ export default function WideList({ value }) {
 
   function decrementShowingIndex() {
     if (showingIndex - 1 < 0) {
-      return setShowingIndex(4);
+      return setShowingIndex(value?.content?.length - 1);
     }
     setShowingIndex((showingIndex - 1) % value?.content?.length);
   }

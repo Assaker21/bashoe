@@ -159,7 +159,12 @@ export default function Item() {
             {(item?.price && "$" + item?.price) || <Skeleton />}
           </span>
           <span className="single-item-description">
-            {item?.description || <Skeleton />}
+            {item?.description?.split("\n").map((line) => (
+              <>
+                <p>{line}</p>
+                <br />
+              </>
+            )) || <Skeleton />}
           </span>
           <div className="single-item-variants-container">
             {item?.itemVariantGroups.map((group, groupIndex) => {
