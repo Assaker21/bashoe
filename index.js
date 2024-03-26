@@ -22,6 +22,7 @@ const corsOptions = {
   },
 };
 
+app.use(express.static("uploads"));
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -30,12 +31,14 @@ const {
   categoriesRouter,
   ordersRouter,
   listsRouter,
+  imagesRouter,
 } = require("./src/routes/index.js");
 
 app.use("/items", itemsRouter);
 app.use("/categories", categoriesRouter);
 app.use("/orders", ordersRouter);
 app.use("/lists", listsRouter);
+app.use("/images", imagesRouter);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
