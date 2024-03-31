@@ -48,6 +48,9 @@ app.use("/categories", categoriesRouter);
 app.use("/orders", ordersRouter);
 app.use("/lists", listsRouter);
 app.use("/images", imagesRouter);
+app.use("/", (req, res) => {
+  res.send("No.");
+});
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
