@@ -190,6 +190,13 @@ export default function Navbar() {
             </Drawer>
             <div className="navbar-top-container">
               <Link to="/" className="navbar-logo">
+                <img
+                  style={{
+                    width: "50px",
+                  }}
+                  src="/images/hoophouse-logo-white-512.jpg"
+                  alt="logo"
+                />
                 HoopHouse
               </Link>
               <div

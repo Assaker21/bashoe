@@ -71,15 +71,17 @@ function CartItem({ items, setItems, index, setCart }) {
     <div className="cart-menu-item">
       <img
         className="cart-menu-item-image"
-        src={items[index].item.images[0].url.replace("<number>", "01")}
+        src={items[index].item?.images[0].url.replace("<number>", "01")}
       />
-      <span className="cart-menu-item-name">{items[index].item.name}</span>
+      <span className="cart-menu-item-name">{items[index].item?.name}</span>
       <span className="cart-menu-item-variant">
-        {items[index].item.itemVariantGroups[0].description}:{" "}
-        {items[index].variant.description}
+        {items[index].item?.itemVariantGroups[0].description}:{" "}
+        {items[index].variant?.description}
       </span>
       <div className="cart-menu-item-price-and-quantity">
-        <span className="cart-menu-item-price">${items[index].item.price}</span>
+        <span className="cart-menu-item-price">
+          ${items[index].item?.price}
+        </span>
         <div className="cart-menu-item-quantity">
           <IconButton
             onClick={() => {
@@ -94,7 +96,7 @@ function CartItem({ items, setItems, index, setCart }) {
           </IconButton>
           <input
             type="number"
-            value={items[index].quantity}
+            value={items[index]?.quantity}
             onChange={(e) => {
               if (e.target.value > 0) {
                 const newItems = [...items];

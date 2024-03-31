@@ -50,7 +50,7 @@ export function GeneralContextProvider({ children }) {
   function addToCart(item) {
     const index = cart.findIndex(
       (cartItem) =>
-        cartItem.item.id === item.item.id && cartItem.variant === item.variant
+        cartItem.item.id === item.item?.id && cartItem.variant === item.variant
     );
     console.log("Index: ", index);
     if (index !== -1) {
@@ -65,7 +65,7 @@ export function GeneralContextProvider({ children }) {
 
   const calculateSubtotal = useCallback(() => {
     var subtotal = 0;
-    cart?.map((item) => (subtotal += item.item.price * item.quantity));
+    cart?.map((item) => (subtotal += item.item?.price * item.quantity));
     return subtotal;
   }, [cart]);
 

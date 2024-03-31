@@ -27,7 +27,35 @@
       .single-item-image {
         width: calc(100% - 48px);
         padding: 24px;
-        cursor: e-resize;
+
+        &.drag {
+          cursor: e-resize;
+        }
+      }
+
+      .single-item-all-images-container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        .single-item-all-images-image {
+          cursor: pointer;
+          width: 15%;
+          border: 1px solid var(--gray-color);
+          box-shadow: 0px 0px 0px 1px transparent;
+          padding: 12px;
+
+          &.selected {
+            border: 1px solid var(--text-color);
+            box-shadow: 0px 0px 0px 1px var(--text-color);
+          }
+
+          &:hover {
+            border: 1px solid var(--text-color);
+          }
+        }
       }
 
       .single-item-image-slider {
@@ -78,8 +106,8 @@
         }
 
         .single-item-variant-table {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+          display: flex;
+          /*grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));*/
           flex-direction: row;
           flex-wrap: wrap;
           gap: 12px;
@@ -93,14 +121,28 @@
             font-weight: 600;
             background-color: var(--background-color);
             color: var(--text-color);
+            box-shadow: 0px 0px 0px 1px var(--background-color);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
 
             transition: var(--transition);
 
+            .single-item-variant-image {
+              margin: 0 -8px;
+              margin-bottom: 4px;
+              width: 100px;
+            }
+
             &:hover,
             &.selected {
-              cursor: pointer;
+              cursor: pointer; /*
               background-color: var(--text-color);
-              color: var(--background-color);
+              color: var(--background-color);*/
+              border: 1px solid var(--text-color);
+              box-shadow: 0px 0px 0px 1px var(--text-color);
             }
           }
         }
