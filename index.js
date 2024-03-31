@@ -12,7 +12,7 @@ const allowedOrigins = [
   "http://localhost:5173/images",
   "https://hoophousev2-admin.onrender.com",
   "https://hoophousev2.onrender.com",
-  "https://hoophouselb.onrender.com/",
+  "https://hoophouselb.onrender.com",
 ];
 
 const corsOptions = {
