@@ -24,37 +24,9 @@ import "./settings.page.scss";
 
 //categories, variants, shipping fees
 export default function Settings() {
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      description: "Sneakers",
-    },
-    {
-      id: 2,
-      description: "Sneakers1",
-    },
-    {
-      id: 3,
-      description: "Sneakers2",
-    },
-  ]);
+  const [categories, setCategories] = useState([]);
 
-  const [itemVariantGroups, setItemVariantGroups] = useState([
-    {
-      id: 1,
-      description: "Size",
-      itemVariants: [
-        { id: 1, description: "41" },
-        { id: 2, description: "42" },
-        { id: 3, description: "43" },
-      ],
-    },
-    {
-      id: 2,
-      description: "Color",
-      itemVariants: [{ id: 4, description: "Red" }],
-    },
-  ]);
+  const [itemVariantGroups, setItemVariantGroups] = useState([]);
 
   const [shippingFee, setShippingFee] = useState(0);
 
@@ -120,7 +92,9 @@ export default function Settings() {
     );
     if (ok) {
       console.log("data: ", data);
-      setItemVariantGroups(data);
+      setItemVariantGroups(
+        updateItemVariantGroupsWithChangingCollapse(itemVariantGroups, data)
+      );
       return true;
     } else {
       console.log("error: ", data);
@@ -135,7 +109,9 @@ export default function Settings() {
       itemVariantGroup
     );
     if (ok) {
-      setItemVariantGroups(data);
+      setItemVariantGroups(
+        updateItemVariantGroupsWithChangingCollapse(itemVariantGroups, data)
+      );
       return true;
     } else {
       console.log("error: ", data);
@@ -154,7 +130,13 @@ export default function Settings() {
       itemVariantGroupId: itemVariantGroups[itemVariantGroupIndex].id,
     });
     if (ok) {
-      setItemVariantGroups(data);
+      console.log(
+        "Data: ",
+        updateItemVariantGroupsWithChangingCollapse(itemVariantGroups, data)
+      );
+      setItemVariantGroups(
+        updateItemVariantGroupsWithChangingCollapse(itemVariantGroups, data)
+      );
       return true;
     } else {
       console.log("error: ", data);
@@ -170,11 +152,23 @@ export default function Settings() {
 
     const [ok, data] = await itemsServices.deleteItemVariant({ id });
     if (ok) {
-      setItemVariantGroups(data);
+      setItemVariantGroups(
+        updateItemVariantGroupsWithChangingCollapse(itemVariantGroups, data)
+      );
       return true;
     } else {
       console.log("error: ", data);
     }
+  }
+
+  function updateItemVariantGroupsWithChangingCollapse(oldValue, newValue) {
+    return newValue.map((v, index) => {
+      if (!oldValue || !oldValue[index]?.collapsed) return v;
+      return {
+        ...v,
+        collapsed: oldValue[index].collapsed,
+      };
+    });
   }
 
   async function handleSaveShippingFee() {}
@@ -405,10 +399,16 @@ export default function Settings() {
                       accessor: "id",
                     },
                     {
-                      width: "100%",
+                      width: "50%",
                       description: "Description",
                       align: "left",
                       accessor: "description",
+                    },
+                    {
+                      width: "50%",
+                      description: "Image",
+                      align: "left",
+                      accessor: "image",
                     },
                     {
                       accessor: "action",
@@ -453,6 +453,23 @@ export default function Settings() {
                         />
                       ) : (
                         itemVariant.description
+                      ),
+                      image: itemVariant.editing ? (
+                        <TextField
+                          variant="standard"
+                          size="small"
+                          sx={{ width: "100%" }}
+                          value={itemVariant.url}
+                          onChange={(e) => {
+                            const newItemVariantGroups = [...itemVariantGroups];
+                            newItemVariantGroups[index].itemVariants[
+                              itemVariantIndex
+                            ].url = e.target.value;
+                            setItemVariantGroups(newItemVariantGroups);
+                          }}
+                        />
+                      ) : (
+                        itemVariant.url
                       ),
                       action: (
                         <Box

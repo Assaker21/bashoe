@@ -89,13 +89,16 @@ export default function GroupedSelect({ allValues, values, setValues }) {
                 />
                 {value.description}
               </ListSubheader>,
-              ...value.itemVariants.map(({ id, description }) => (
-                <MenuItem key={description + id} value={id}>
+              ...value.itemVariants.map((itemVariant) => (
+                <MenuItem
+                  key={itemVariant.description + itemVariant.id}
+                  value={itemVariant.id}
+                >
                   &nbsp;&nbsp;
                   <Checkbox
                     checked={
                       answer.itemVariants.findIndex(
-                        (variant) => variant.id == id
+                        (variant) => variant.id == itemVariant.id
                       ) !== -1
                     }
                     onChange={(e) => {
@@ -104,21 +107,18 @@ export default function GroupedSelect({ allValues, values, setValues }) {
                         const newValues = [...values];
 
                         newValues[valueIndex].itemVariants =
-                          answer.itemVariants.filter((itemVariant) => {
-                            return itemVariant.id !== id;
+                          answer.itemVariants.filter((_itemVariant) => {
+                            return _itemVariant.id !== itemVariant.id;
                           });
                         setValues(newValues);
                       } else {
                         const newValues = [...values];
-                        newValues[valueIndex].itemVariants.push({
-                          id,
-                          description,
-                        });
+                        newValues[valueIndex].itemVariants.push(itemVariant);
                         setValues(newValues);
                       }
                     }}
                   />
-                  <ListItemText primary={description} />
+                  <ListItemText primary={itemVariant.description} />
                 </MenuItem>
               )),
             ];

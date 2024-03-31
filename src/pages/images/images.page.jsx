@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { styled } from "@mui/material/styles";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import { useDownload } from "../../utils/useDownload";
 
 import imagesServices from "../../services/imagesServices";
 
@@ -52,6 +53,7 @@ const VisuallyHiddenInput = styled("input")({
 export default function Images() {
   const [images, setImages] = useState(null);
   const [maxImages, setMaxImages] = useState(20);
+  const { handleZip } = useDownload();
 
   async function fetch() {
     const [ok, data] = await imagesServices.getImages();
@@ -109,21 +111,38 @@ export default function Images() {
         }}
       >
         <h1>Images</h1>
-        <Button
-          component="label"
-          role={undefined}
-          variant="contained"
-          sx={{ fontWeight: "bold" }}
-        >
-          Upload image
-          <VisuallyHiddenInput
-            type="file"
-            onChange={(e) => {
-              handleUploadImages(e.target.files);
+        <Box display="flex" flexDirection="row" gap="12px">
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            sx={{ fontWeight: "bold" }}
+          >
+            Upload image
+            <VisuallyHiddenInput
+              type="file"
+              onChange={(e) => {
+                handleUploadImages(e.target.files);
+              }}
+              multiple
+            />
+          </Button>
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            sx={{ fontWeight: "bold" }}
+            onClick={() => {
+              handleZip(
+                images.map(
+                  (item) => process.env.REACT_APP_API_BASE_URL + "/" + item.url
+                )
+              );
             }}
-            multiple
-          />
-        </Button>
+          >
+            Download all images
+          </Button>
+        </Box>
       </Box>
 
       <div>
@@ -174,5 +193,15 @@ export default function Images() {
         )}
       </div>
     </section>
+  );
+}
+
+function Downloader({ files }) {
+  return (
+    <div style={{ display: "none" }}>
+      {files?.map(({ url }) => (
+        <iframe src={url} />
+      ))}
+    </div>
   );
 }

@@ -166,11 +166,20 @@ export default function Item() {
 
   useEffect(() => {
     const _allPossibleImages = [];
-    for (var i = 1; i < 37; i++) {
-      _allPossibleImages.push(
-        item.images[0]?.url.replace("<number>", String(i).padStart(2, "0"))
-      );
+    if (item?.imagesType === "One-by-one") {
+      setSelectedImage(0);
+      for (var i = 1; i < item?.images?.length; i++) {
+        _allPossibleImages.push(item?.images[i].url);
+      }
+    } else {
+      setSelectedImage(1);
+      for (var i = 1; i < 37; i++) {
+        _allPossibleImages.push(
+          item?.images[0].url.replace("<number>", String(i).padStart(2, "0"))
+        );
+      }
     }
+
     setAllPossibleImages(_allPossibleImages);
 
     setImage(
@@ -182,13 +191,17 @@ export default function Item() {
   }, [item.images]);
 
   useEffect(() => {
-    setImage(
-      item.images[0]?.url.replace(
-        "<number>",
-        String(selectedImage).padStart(2, "0")
-      )
-    );
-  }, [selectedImage]);
+    if (item?.imagesType === "One-by-one") {
+      setImage(item?.images[selectedImage]?.url);
+    } else {
+      setImage(
+        item?.images[0].url.replace(
+          "<number>",
+          String(selectedImage).padStart(2, "0")
+        )
+      );
+    }
+  }, [item, selectedImage]);
 
   return (
     <section className="single-item">
@@ -290,6 +303,21 @@ export default function Item() {
                 }}
               />
               <TextField
+                value={item?.imagesType || ""}
+                onChange={(e, value) => {
+                  setItem({
+                    ...item,
+                    imagesType: e.target.value,
+                  });
+                }}
+                select
+                required
+                label="Images type"
+              >
+                <MenuItem value={"One-by-one"}>One-by-one</MenuItem>
+                <MenuItem value={"Slider"}>Slider</MenuItem>
+              </TextField>
+              <TextField
                 value={item.categories[0].sku}
                 onChange={(e, value) => {
                   setItem({
@@ -323,67 +351,95 @@ export default function Item() {
             </Box>
             <div className="single-item-container">
               <div className="single-item-image-container">
-                <img
-                  draggable={false}
-                  className="single-item-image"
-                  src={image}
-                  onMouseMove={(e) => {
-                    e.preventDefault();
-                    if (!clickingImage) return;
+                <>
+                  <img
+                    draggable={false}
+                    className={
+                      "single-item-image" +
+                      (item?.imagesType === "One-by-one" ? "" : " drag")
+                    }
+                    src={image}
+                    onMouseMove={(e) => {
+                      e.preventDefault();
+                      if (item?.imagesType === "One-by-one") return;
+                      if (!clickingImage) return;
 
-                    const rect = e.target.getBoundingClientRect();
-                    const x = Math.min(
-                      Math.max(1 - (e.clientX - rect.left) / rect.width, 0),
-                      1
-                    );
+                      const rect = e.target.getBoundingClientRect();
+                      const x = Math.min(
+                        Math.max(1 - (e.clientX - rect.left) / rect.width, 0),
+                        1
+                      );
 
-                    setSelectedImage(Math.floor(x * 36 + 1));
-                  }}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    setClickingImage(true);
-                  }}
-                  onMouseUp={(e) => {
-                    e.preventDefault();
-                    setClickingImage(false);
-                  }}
-                  onTouchMove={(e) => {
-                    e.preventDefault();
-                    if (!clickingImage) return;
+                      setSelectedImage(Math.floor(x * 36 + 1));
+                    }}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      if (item?.imagesType === "One-by-one") return;
+                      setClickingImage(true);
+                    }}
+                    onMouseUp={(e) => {
+                      e.preventDefault();
+                      if (item?.imagesType === "One-by-one") return;
+                      setClickingImage(false);
+                    }}
+                    onTouchMove={(e) => {
+                      e.preventDefault();
+                      if (item?.imagesType === "One-by-one") return;
+                      if (!clickingImage) return;
 
-                    const rect = e.target.getBoundingClientRect();
-                    const x = Math.min(
-                      Math.max(
-                        1 - (e.touches[0].clientX - rect.left) / rect.width,
-                        0
-                      ),
-                      1
-                    );
-                    console.log(x);
+                      const rect = e.target.getBoundingClientRect();
+                      const x = Math.min(
+                        Math.max(
+                          1 - (e.touches[0].clientX - rect.left) / rect.width,
+                          0
+                        ),
+                        1
+                      );
+                      console.log(x);
 
-                    setSelectedImage(Math.floor(x * 36 + 1));
-                  }}
-                  onTouchStart={(e) => {
-                    e.preventDefault();
-                    setClickingImage(true);
-                  }}
-                  onTouchEnd={(e) => {
-                    e.preventDefault();
-                    setClickingImage(false);
-                  }}
-                />
-
-                <Slider
-                  sx={{ maxWidth: "300px" }}
-                  valueLabelDisplay="off"
-                  min={1}
-                  max={36}
-                  value={selectedImage}
-                  onChange={(e) => {
-                    console.log(e);
-                    setSelectedImage(e.target.value);
-                  }}
-                />
+                      setSelectedImage(Math.floor(x * 36 + 1));
+                    }}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      if (item?.imagesType === "One-by-one") return;
+                      setClickingImage(true);
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      if (item?.imagesType === "One-by-one") return;
+                      setClickingImage(false);
+                    }}
+                  />
+                  {item?.imagesType === "One-by-one" ? (
+                    <div className="single-item-all-images-container">
+                      {item?.images.map(({ url }, index) => (
+                        <img
+                          key={"all-images-" + index}
+                          src={url}
+                          onClick={() => {
+                            setSelectedImage(index);
+                          }}
+                          className={
+                            "single-item-all-images-image" +
+                            (selectedImage == index ? " selected" : "")
+                          }
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <Slider
+                      sx={{ maxWidth: "300px" }}
+                      valueLabelDisplay="off"
+                      min={1}
+                      max={36}
+                      value={selectedImage}
+                      onChange={(e) => {
+                        console.log(e);
+                        setSelectedImage(e.target.value);
+                      }}
+                    />
+                  )}
+                </>
               </div>
               <div className="single-item-info-container">
                 <span className="single-item-name">{item.name}</span>
@@ -415,6 +471,12 @@ export default function Item() {
                                 className="single-item-variant"
                                 type="button"
                               >
+                                {itemVariant.url && (
+                                  <img
+                                    className="single-item-variant-image"
+                                    src={itemVariant.url}
+                                  />
+                                )}
                                 {itemVariant.description}
                               </button>
                             );
