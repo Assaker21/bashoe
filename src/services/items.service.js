@@ -36,6 +36,7 @@ async function getItems(query, data) {
       description: true,
       price: true,
       discount: true,
+      imagesType: true,
       sku: true,
       categories: {
         select: {
@@ -87,6 +88,7 @@ async function getItem(query, data) {
       longDescription: true,
       price: true,
       discount: true,
+      imagesType: true,
       sku: true,
       categories: {
         select: {
@@ -117,6 +119,7 @@ async function createItem(query, data) {
       description: data.description,
       price: data.price,
       sku: data.sku,
+      imagesType: data.imagesType,
       categories: {
         connect: data.categories.map((category) => ({ id: category.id })),
       },
@@ -182,6 +185,7 @@ async function updateItem(query, data) {
       description: data.description,
       price: data.price,
       sku: data.sku,
+      imagesType: data.imagesType,
       categories: {
         disconnect: toBeRemovedCategories.map((category) => ({
           id: category.id,
@@ -229,6 +233,7 @@ async function getItemVariants(query, data) {
     select: {
       id: true,
       description: true,
+      url: true,
     },
     where: {
       isActive: true,
@@ -259,6 +264,7 @@ async function createItemVariant(query, data) {
   await prisma.itemVariant.create({
     data: {
       description: data.description,
+      url: data.url,
       itemVariantGroupId: data.itemVariantGroupId,
     },
   });
@@ -272,6 +278,7 @@ async function updateItemVariant(query, data) {
     },
     data: {
       description: data.description,
+      url: data.url,
     },
   });
   return await getItemVariants();

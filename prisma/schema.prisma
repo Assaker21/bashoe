@@ -30,6 +30,7 @@ model item {
   price       Decimal?
   discount    Decimal? @default(0)
   sku         String?  @unique
+  imagesType  String?
 
   categories   category[]
   images       image[]
@@ -49,6 +50,7 @@ model itemVariant {
   orderItems orderItem[]
 
   description String?
+  url         String? @db.LongText
 
   itemVariantGroup   itemVariantGroup? @relation(fields: [itemVariantGroupId], references: [id])
   itemVariantGroupId Int?

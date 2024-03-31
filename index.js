@@ -8,8 +8,11 @@ const allowedOrigins = [
   "http://127.0.0.1:5173",
   "http://localhost:5173",
   "http://127.0.0.1:5174",
+  "http://localhost:5174",
+  "http://localhost:5173/images",
   "https://hoophousev2-admin.onrender.com",
   "https://hoophousev2.onrender.com",
+  "https://hoophouselb.onrender.com/",
 ];
 
 const corsOptions = {
@@ -22,6 +25,12 @@ const corsOptions = {
   },
 };
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 app.use(express.static("src/uploads"));
 app.use(cors(corsOptions));
 app.use(express.json());
