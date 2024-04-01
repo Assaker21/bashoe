@@ -41,6 +41,10 @@ export default function WideList({ value }) {
     scrollToSection(showingIndex);
   }, [aspectRatios]);
 
+  useEffect(() => {
+    scrollToSection(0);
+  }, [aspectRatios, value]);
+
   function incrementShowingIndex() {
     setShowingIndex((showingIndex + 1) % value?.content?.length);
   }
