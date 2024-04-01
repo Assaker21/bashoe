@@ -76,7 +76,7 @@ export default function WideList({ value }) {
             className="wide-list-items"
             ref={scrollerRef}
             style={{
-              aspectRatio: aspectRatios[showingIndex],
+              aspectRatio: 3.16455 || aspectRatios[showingIndex] || 3.16455,
             }}
           >
             {value?.content?.map((v, index) => (
@@ -93,7 +93,7 @@ export default function WideList({ value }) {
                 className="wide-list-item"
                 src={v}
                 style={{
-                  aspectRatio: aspectRatios[index],
+                  aspectRatio: 3.16455 || aspectRatios[index] || 3.16455,
                   minWidth: scrollerRef.current?.clientWidth,
                 }}
               />
