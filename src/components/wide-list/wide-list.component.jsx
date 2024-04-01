@@ -10,16 +10,36 @@ import "./wide-list.component.scss";
 export default function WideList({ value }) {
   const [showingIndex, setShowingIndex] = useState(0);
   const [id, setId] = useState(Math.random());
+  const [aspectRatios, setAspectRatios] = useState({});
 
   const sectionRefs = useRef(
     (value?.content || [1, 2, 3, 4, 5]).map(() => createRef())
   );
-
   const scrollerRef = useRef();
+  const timerRef = useRef();
+
+  function resetTimeout() {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+  }
+
+  useEffect(() => {
+    resetTimeout();
+    timerRef.current = setTimeout(() => incrementShowingIndex(), 5000);
+
+    return () => {
+      resetTimeout();
+    };
+  }, [value, showingIndex]);
 
   useEffect(() => {
     scrollToSection(showingIndex);
   }, [showingIndex]);
+
+  useEffect(() => {
+    scrollToSection(showingIndex);
+  }, [aspectRatios]);
 
   function incrementShowingIndex() {
     setShowingIndex((showingIndex + 1) % value?.content?.length);
@@ -34,8 +54,13 @@ export default function WideList({ value }) {
 
   function scrollToSection(index) {
     if (scrollerRef.current) {
-      scrollerRef.current.scrollLeft =
-        sectionRefs.current[index].current.clientWidth * showingIndex;
+      var fullWidth = 0;
+      sectionRefs.current.map((c, i) => {
+        if (i < index) {
+          fullWidth += c.current.clientWidth;
+        }
+      });
+      scrollerRef.current.scrollLeft = fullWidth;
     }
   }
 
@@ -43,29 +68,63 @@ export default function WideList({ value }) {
     <div className="wide-list">
       {value?.content ? (
         <>
-          <div className="wide-list-items" ref={scrollerRef}>
+          <div
+            className="wide-list-items"
+            ref={scrollerRef}
+            style={{
+              aspectRatio: aspectRatios[showingIndex],
+            }}
+          >
             {value?.content?.map((v, index) => (
               <img
+                onLoad={(e) => {
+                  setAspectRatios((oldAspectRatios) => {
+                    oldAspectRatios[index] =
+                      e.target.naturalWidth / e.target.naturalHeight;
+                    return oldAspectRatios;
+                  });
+                }}
                 key={"images " + index + id}
                 ref={sectionRefs.current[index]}
                 className="wide-list-item"
                 src={v}
+                style={{
+                  aspectRatio: aspectRatios[index],
+                  minWidth: scrollerRef.current?.clientWidth,
+                }}
               />
             ))}
           </div>
           <div className="wide-list-buttons">
-            <IconButton
-              className="wide-list-button wide-list-button-left"
-              onClick={decrementShowingIndex}
-            >
-              <ArrowBackIcon sx={{ color: "var(--text-color)" }} />
-            </IconButton>
-            <IconButton
-              className="wide-list-button wide-list-button-right"
-              onClick={incrementShowingIndex}
-            >
-              <ArrowForwardIcon sx={{ color: "var(--text-color)" }} />
-            </IconButton>
+            {showingIndex > 0 && (
+              <IconButton
+                className="wide-list-button wide-list-button-left"
+                onClick={decrementShowingIndex}
+              >
+                <ArrowBackIcon sx={{ color: "var(--text-color)" }} />
+              </IconButton>
+            )}
+            {showingIndex < value?.content?.length - 1 && (
+              <IconButton
+                className="wide-list-button wide-list-button-right"
+                onClick={incrementShowingIndex}
+              >
+                <ArrowForwardIcon sx={{ color: "var(--text-color)" }} />
+              </IconButton>
+            )}
+          </div>
+          <div className="wide-list-markers">
+            {value?.content?.map((v, index) => (
+              <div
+                onClick={() => {
+                  setShowingIndex(index);
+                }}
+                className={
+                  "wide-list-marker" +
+                  (index === showingIndex ? " selected" : "")
+                }
+              ></div>
+            ))}
           </div>
         </>
       ) : (
