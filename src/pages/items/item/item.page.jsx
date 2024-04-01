@@ -203,6 +203,19 @@ export default function Item() {
     }
   }, [item, selectedImage]);
 
+  useEffect(() => {
+    if (!categorySku && itemVariantGroups) {
+      setItem({
+        ...item,
+        itemVariantGroups: itemVariantGroups.map(({ id, description }) => ({
+          id,
+          description,
+          itemVariants: [],
+        })),
+      });
+    }
+  }, [itemVariantGroups]);
+
   return (
     <section className="single-item">
       <Breadcrumbs

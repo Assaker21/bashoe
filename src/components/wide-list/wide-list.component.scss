@@ -16,6 +16,7 @@
     scroll-behavior: smooth;
 
     position: relative;
+    /*aspect-ratio: 3.33;*/
 
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* Internet Explorer and Edge */
@@ -25,7 +26,8 @@
     }
 
     .wide-list-item {
-      width: calc(100vw - 41px);
+      /*width: calc(100vw - 41px);*/
+      /*aspect-ratio: 3.33;*/
 
       &:hover {
         cursor: pointer;
@@ -54,6 +56,36 @@
 
       &.wide-list-button-left {
         left: 20px;
+      }
+    }
+  }
+
+  .wide-list-markers {
+    position: absolute;
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+    .wide-list-marker {
+      width: 24px;
+      height: 8px;
+      background-color: var(--background-color);
+      border-radius: 50px;
+      opacity: 0.5;
+
+      transition: var(--transition);
+
+      &.selected {
+        opacity: 1;
+        width: 64px;
+      }
+
+      &:hover {
+        cursor: pointer;
+        opacity: 1;
       }
     }
   }

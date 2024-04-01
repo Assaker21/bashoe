@@ -20,19 +20,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
 export default function GroupedSelect({ allValues, values, setValues }) {
   const [displayValue, setDisplayValue] = React.useState([]);
 
@@ -64,15 +51,16 @@ export default function GroupedSelect({ allValues, values, setValues }) {
         >
           {allValues.map((value, valueIndex) => {
             const answer = values[valueIndex];
+            console.log("VALUE: ", values);
             return [
               <ListSubheader key={valueIndex + "-header"}>
                 <Checkbox
                   checked={
-                    value.itemVariants.length === answer.itemVariants.length
+                    value.itemVariants.length === answer?.itemVariants.length
                   }
                   indeterminate={
-                    value.itemVariants.length !== answer.itemVariants.length &&
-                    answer.itemVariants.length !== 0
+                    value.itemVariants.length !== answer?.itemVariants.length &&
+                    answer?.itemVariants.length !== 0
                   }
                   onChange={(e) => {
                     const checked = e.target.checked;
@@ -97,7 +85,7 @@ export default function GroupedSelect({ allValues, values, setValues }) {
                   &nbsp;&nbsp;
                   <Checkbox
                     checked={
-                      answer.itemVariants.findIndex(
+                      answer?.itemVariants.findIndex(
                         (variant) => variant.id == itemVariant.id
                       ) !== -1
                     }
@@ -107,7 +95,7 @@ export default function GroupedSelect({ allValues, values, setValues }) {
                         const newValues = [...values];
 
                         newValues[valueIndex].itemVariants =
-                          answer.itemVariants.filter((_itemVariant) => {
+                          answer?.itemVariants.filter((_itemVariant) => {
                             return _itemVariant.id !== itemVariant.id;
                           });
                         setValues(newValues);
