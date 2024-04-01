@@ -31,6 +31,10 @@ export default function WideList({ value, onChange }) {
   }, [value, showingIndex]);
 
   useEffect(() => {
+    scrollToSection(0);
+  }, [value]);
+
+  useEffect(() => {
     scrollToSection(showingIndex);
   }, [showingIndex]);
 
