@@ -41,6 +41,7 @@ const {
   ordersRouter,
   listsRouter,
   imagesRouter,
+  analyticsRouter,
 } = require("./src/routes/index.js");
 
 app.use("/items", itemsRouter);
@@ -48,6 +49,7 @@ app.use("/categories", categoriesRouter);
 app.use("/orders", ordersRouter);
 app.use("/lists", listsRouter);
 app.use("/images", imagesRouter);
+app.use("/analytics", analyticsRouter);
 app.use("/", (req, res) => {
   res.send("No.");
 });

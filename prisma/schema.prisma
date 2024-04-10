@@ -185,3 +185,14 @@ model list {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model analytic {
+  id Int @id @default(autoincrement())
+
+  ipAddress String?
+  time      DateTime?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
