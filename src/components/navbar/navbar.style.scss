@@ -107,6 +107,8 @@
             color: var(--text-color);
             text-decoration: none;
 
+            white-space: nowrap;
+
             display: flex;
             flex-direction: column;
           }

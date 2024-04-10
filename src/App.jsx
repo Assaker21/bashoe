@@ -11,6 +11,8 @@ import Item from "./pages/items/item/item.page.jsx";
 import Home from "./pages/home/home.page.jsx";
 import Checkout from "./pages/checkout/checkout.page.jsx";
 import Finish from "./pages/finish/finish.page.jsx";
+import { useEffect, useRef } from "react";
+import analyticsServices from "./services/analytics-services.js";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,22 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
+  const createdEntry = useRef();
+
+  useEffect(() => {
+    if (createdEntry.current) return;
+    createdEntry.current = true;
+
+    fetch();
+
+    async function fetch() {
+      const [ok, data] = await analyticsServices.createEntry({
+        ipAddress: "199.123.123.123",
+        time: new Date(),
+      });
+    }
+  }, [createdEntry]);
+
   return (
     <GeneralContextProvider>
       <RouterProvider router={router} />
