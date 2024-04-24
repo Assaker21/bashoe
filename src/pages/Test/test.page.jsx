@@ -8,17 +8,6 @@ export default function Test() {
   const [response, setResponse] = useState("");
 
   async function request() {
-    /*{
-      method,
-      url: url,
-      data: payload,
-      headers: {
-        "Content-Type": "application/json",
-        channel: "10192788",
-        secret: "53a4546d02fb4c0386c93b328f3da175",
-        websiteurl: "hoophouselb.onrender.com",
-      },
-    } */
     try {
       const res = await axios(JSON.parse(axiosParams));
       setResponse(JSON.stringify(res));

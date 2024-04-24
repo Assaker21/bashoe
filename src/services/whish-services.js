@@ -19,9 +19,6 @@ async function request(method, endpoint, payload) {
     data: payload,
     headers: {
       "Content-Type": "application/json",
-      channel: "10192788",
-      secret: "53a4546d02fb4c0386c93b328f3da175",
-      websiteurl: "hoophouselb.onrender.com",
     },
   });
 
