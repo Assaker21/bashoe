@@ -160,7 +160,7 @@ export default function Navbar() {
           >
             <Drawer
               disableEnforceFocus
-              open={console.log("MENU OPEN: ", menuOpen) || menuOpen}
+              open={menuOpen}
               anchor={menu === "search" ? "top" : "right"}
               onClose={() => setMenuOpen(false)}
               className="small-navbar-drawer-container"

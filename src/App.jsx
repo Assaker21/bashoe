@@ -13,6 +13,7 @@ import Checkout from "./pages/checkout/checkout.page.jsx";
 import Finish from "./pages/finish/finish.page.jsx";
 import { useEffect, useRef } from "react";
 import analyticsServices from "./services/analytics-services.js";
+import Test from "./pages/Test/test.page.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "checkout",
         element: <Checkout />,
+      },
+      {
+        path: "test-charbel-assaker-no-one-here-123123",
+        element: <Test />,
       },
       { path: "finish", element: <Finish /> },
       {

@@ -60,7 +60,9 @@ export default function Item() {
 
     setCartItem({
       item,
-      variant: item?.itemVariantGroups[0].itemVariants[0],
+      variant: item?.itemVariantGroups.find(
+        ({ itemVariants }) => itemVariants.length > 0
+      ).itemVariants[0],
       quantity: 1,
     });
   }, [item]);

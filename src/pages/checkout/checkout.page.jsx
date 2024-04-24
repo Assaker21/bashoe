@@ -10,6 +10,13 @@ import Grid from "@mui/material/Grid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState } from "react";
 import ordersService from "../../services/orders-service";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import { Button } from "@mui/material";
+import whishServices from "../../services/whish-services";
 
 const theme = createTheme({
   palette: {
@@ -24,11 +31,13 @@ export default function Checkout() {
     useGeneralContext();
   const [info, setInfo] = useState({
     region: "Lebanon",
+    paymentMethod: "Cash on delivery",
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    console.log(e.target.value);
     const { name, value } = e.target;
     setInfo((prevData) => ({
       ...prevData,
@@ -52,6 +61,21 @@ export default function Checkout() {
     setLoading(false);
   };
 
+  async function buttonClick() {
+    const [ok, data] = await whishServices.getBalance(); /*{
+      amount: 900,
+      currency: "USD",
+      invoice: "This is the invoice",
+      externalId: 23,
+      successCallbackUrl: "https://successCallbackUrl.com",
+      failureCallbackUrl: "https://failedCallbackUrl.com",
+      successRedirectUrl: "https://successRedirectUrl.com",
+      failureRedirectUrl: "https://failureRedirectUrl.com",
+    } */
+
+    console.log("Received from whish to whish: ", data);
+  }
+
   return (
     <section className="checkout">
       <Breadcrumbs
@@ -60,9 +84,13 @@ export default function Checkout() {
           { name: "Checkout", to: `/checkout` },
         ]}
       />
+
       <ThemeProvider theme={theme}>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={1.5} sx={{ pb: 1.5 }}>
+            <Grid item xs={12}>
+              <span className="item-list-title">Personal details</span>
+            </Grid>
             <Grid item xs={6}>
               <TextField
                 fullWidth
@@ -127,7 +155,6 @@ export default function Checkout() {
                 name="region"
                 size="small"
                 value="Lebanon"
-                defaultValue="Lebanon"
                 sx={{ backgroundColor: "var(--lighter-background-color)" }}
                 onChange={handleChange}
                 required
@@ -160,9 +187,12 @@ export default function Checkout() {
               />
             </Grid>
           </Grid>
-          <Grid container spacing={1.5} sx={{ pb: 1.5 }}>
+          <Grid container spacing={1.5} sx={{ pb: 1.5, mt: 1.5 }}>
             <Grid item xs={12}>
-              <TextField
+              <span className="item-list-title">Payment method</span>
+            </Grid>
+            <Grid item xs={12}>
+              {/*<TextField
                 fullWidth
                 select
                 label="Payment method"
@@ -178,8 +208,100 @@ export default function Checkout() {
                     {option}
                   </MenuItem>
                 ))}
-              </TextField>
+              </TextField>*/}
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                name="paymentMethod"
+                className="checkout-payment-method-container"
+                onChange={handleChange}
+                value={info.paymentMethod}
+              >
+                <span className="checkout-payment-method-option">
+                  <FormControlLabel
+                    value="Cash on delivery"
+                    control={<Radio />}
+                    label={
+                      <div className="checkout-payment-method-option-info">
+                        <p>Cash on delivery</p>
+                        <span>Pay once delivered to your doorstep.</span>
+                      </div>
+                    }
+                  />
+                </span>
+                {/*<span className="checkout-payment-method-option">
+                  <FormControlLabel
+                    value="Whish money"
+                    control={<Radio />}
+                    label={
+                      <div className="checkout-payment-method-option-info">
+                        <p>
+                          <img src="images/iconwhish.png" />
+                          Whish money
+                        </p>
+                        <span>Pay via Whish Money and get free delivery.</span>
+                      </div>
+                    }
+                  />
+                  <span className="checkout-payment-method-option-badge">
+                    FREE DELIVERY
+                  </span>
+                  </span>*/}
+              </RadioGroup>
             </Grid>
+          </Grid>
+
+          <Grid container spacing={1.5} sx={{ pb: 1.5, mt: 1.5 }}>
+            <Grid item xs={12}>
+              <span className="item-list-title">Order summary</span>
+            </Grid>
+            <Grid item xs={12}>
+              {cart && (
+                <div className="checkout-order-summary">
+                  {cart.map((item, index) => (
+                    <div
+                      className="checkout-order-summary-item"
+                      key={"order summary item: " + index}
+                    >
+                      <img
+                        className="checkout-order-summary-item-image"
+                        src={item.item?.images[0].url.replace("<number>", "01")}
+                      />
+                      <span className="checkout-order-summary-item-name">
+                        {item.item.name} - {item.variant.description}
+                      </span>
+
+                      <span className="checkout-order-summary-item-price">
+                        ${item.item.price} x {item.quantity}
+                      </span>
+                    </div>
+                  ))}
+
+                  <div className="checkout-order-summary-item">
+                    <span className="checkout-order-summary-item-name">
+                      Shipping
+                    </span>
+
+                    <span className="checkout-order-summary-item-price">
+                      {info.paymentMethod == "Whish money"
+                        ? "FREE DELIVERY"
+                        : "$4"}
+                    </span>
+                  </div>
+                  <div className="checkout-order-summary-item">
+                    <span className="checkout-order-summary-item-name">
+                      Total
+                    </span>
+                    <span className="checkout-order-summary-item-price">
+                      $
+                      {calculateTotal() -
+                        (info.paymentMethod == "Whish money" ? 4 : 0)}
+                    </span>
+                  </div>
+                </div>
+              )}
+              {!cart && "No items in your cart"}
+            </Grid>
+            <Grid item xs={12}></Grid>
           </Grid>
           {!loading ? (
             <button
@@ -187,8 +309,9 @@ export default function Checkout() {
               type="submit"
               className="checkout-button"
             >
-              Checkout - {getNumberOfItems()} item
-              {getNumberOfItems() === 1 ? "" : "s"} - ${calculateTotal()}
+              {info.paymentMethod == "Whish money"
+                ? "Complete payment via Whish"
+                : "Checkout"}
             </button>
           ) : (
             <button disabled={true} type="button" className="checkout-button">

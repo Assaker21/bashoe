@@ -34,19 +34,17 @@ export default function Cart({ setMenuOpen }) {
       </div>
       <div className="cart-menu-bottom">
         <div className="cart-menu-totals">
-          <div className="cart-menu-total">
+          {/*<div className="cart-menu-total">
             <span>Subtotal</span>
             <span>${calculateSubtotal().toFixed(1)}</span>
           </div>
           <div className="cart-menu-total">
             <span>Shipping</span>
             <span>${cart.length > 0 ? "4.0" : "0.0"}</span>
-          </div>
+      </div>*/}
           <div className="cart-menu-total">
             <span>Total</span>
-            <span>
-              ${cart.length > 0 ? calculateTotal().toFixed(1) : "0.0"}
-            </span>
+            <span>${cart.length > 0 ? calculateSubtotal() : "0"}</span>
           </div>
         </div>
         <button
