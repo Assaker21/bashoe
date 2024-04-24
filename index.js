@@ -13,6 +13,8 @@ const allowedOrigins = [
   "https://hoophousev2-admin.onrender.com",
   "https://hoophousev2.onrender.com",
   "https://hoophouselb.onrender.com",
+  "https://hoophouse.store",
+  "https://www.hoophouse.store",
 ];
 
 const corsOptions = {
