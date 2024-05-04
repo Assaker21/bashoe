@@ -44,7 +44,10 @@ const {
   listsRouter,
   imagesRouter,
   analyticsRouter,
+  authenticationRouter,
 } = require("./src/routes/index.js");
+const sendOrderMail = require("./src/utils/mail.js");
+const prisma = require("./src/utils/prisma.js");
 
 app.use("/items", itemsRouter);
 app.use("/categories", categoriesRouter);
@@ -52,7 +55,31 @@ app.use("/orders", ordersRouter);
 app.use("/lists", listsRouter);
 app.use("/images", imagesRouter);
 app.use("/analytics", analyticsRouter);
-app.use("/", (req, res) => {
+app.use("/authentication", authenticationRouter);
+app.use("/", async (req, res) => {
+  /*const order = await prisma.order.findUnique({
+    where: { id: 12 },
+    include: {
+      user: true,
+      address: {
+        include: {
+          country: true,
+        },
+      },
+      orderItems: {
+        include: {
+          item: {
+            include: {
+              images: true,
+            },
+          },
+          itemVariant: true,
+        },
+      },
+      orderStatus: true,
+    },
+  });
+  sendOrderMail("bloackhead@gmail.com", "order", order);*/
   res.send("No.");
 });
 

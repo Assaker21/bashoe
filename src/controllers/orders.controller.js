@@ -1,9 +1,11 @@
 const ordersServices = require("../services/orders.service");
+const sendMail = require("../utils/mail");
 
 async function createOrder(req, res) {
   try {
     const result = await ordersServices.createOrder(null, req.body);
-    res.status(200).json(result);
+    sendMail(result.user.email, "order", result);
+    res.status(200).json("Done");
   } catch (error) {
     res.status(400).json("Internal error");
     console.log(`Error: ${error}`);

@@ -2,7 +2,7 @@ const prisma = require("../utils/prisma");
 
 async function createOrder(query, data) {
   console.log("Data: ", data);
-  await prisma.order.create({
+  return await prisma.order.create({
     data: {
       address: {
         create: {
@@ -31,6 +31,25 @@ async function createOrder(query, data) {
           itemVariantId: i.variant.id,
         })),
       },
+    },
+    include: {
+      user: true,
+      address: {
+        include: {
+          country: true,
+        },
+      },
+      orderItems: {
+        include: {
+          item: {
+            include: {
+              images: true,
+            },
+          },
+          itemVariant: true,
+        },
+      },
+      orderStatus: true,
     },
   });
   return "Done";
