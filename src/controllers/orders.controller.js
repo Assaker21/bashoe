@@ -5,6 +5,8 @@ async function createOrder(req, res) {
   try {
     const result = await ordersServices.createOrder(null, req.body);
     sendMail(result.user.email, "order", result);
+    sendMail(process.env.ADMIN_EMAIL_1, "order", result);
+    sendMail(process.env.ADMIN_EMAIL_2, "order", result);
     res.status(200).json("Done");
   } catch (error) {
     res.status(400).json("Internal error");
