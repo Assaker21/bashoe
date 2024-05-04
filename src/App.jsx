@@ -12,6 +12,7 @@ import Home from "./pages/home/home.page.jsx";
 import Orders from "./pages/orders/orders.page.jsx";
 import Settings from "./pages/settings/settings.page.jsx";
 import Images from "./pages/images/images.page.jsx";
+import Login from "./pages/login/login.page.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
       {
         path: "new",

@@ -6,8 +6,13 @@ const GeneralContext = createContext();
 
 export function GeneralContextProvider({ children }) {
   const [cart, setCart] = useState(null);
-  const [categories, setCategories] = useState(null);
-  const [items, setItems] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [items, setItems] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  function updateAuthentication(value) {
+    setIsAuthenticated(value);
+  }
 
   function getCategoryBySku(categorySku) {
     if (categorySku === "all") return { sku: "all", description: "All" };
@@ -45,9 +50,11 @@ export function GeneralContextProvider({ children }) {
   }, [categories]);
 
   useEffect(() => {
-    getCategories();
-    getItems();
-  }, []);
+    if (isAuthenticated) {
+      getCategories();
+      getItems();
+    }
+  }, [isAuthenticated]);
 
   return (
     <GeneralContext.Provider
@@ -59,9 +66,11 @@ export function GeneralContextProvider({ children }) {
         getCategoryBySku,
         items,
         setItems,
+        updateAuthentication,
+        isAuthenticated,
       }}
     >
-      {categories && items && children}
+      {children}
     </GeneralContext.Provider>
   );
 }
