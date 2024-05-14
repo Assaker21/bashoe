@@ -50,30 +50,40 @@ export default function Checkout() {
     if (loading) return;
 
     setLoading(true);
+
+    if (info.paymentMethod === "Cash on delivery") {
+      await closeOrder();
+    } else {
+      const externalId = Math.floor(Math.random() * 100000);
+      localStorage.setItem("externalId", externalId);
+      localStorage.setItem("order", JSON.stringify({ info, cart }));
+      const [ok, data] = await whishServices.requestPayment({
+        invoice: "Payment for HoopHouse",
+        amount: calculateTotal() - 4,
+        externalId: externalId,
+        successRedirectUrl: `${window.location.origin}/finish?status=success&externalId=${externalId}`,
+        failureRedirectUrl: `${window.location.origin}/finish?status=fail&externalId=${externalId}`,
+      });
+
+      if (ok) {
+        console.log("New external id: ", externalId);
+        console.log("Data: ", data);
+        window.location.href = data.data.collectUrl;
+      }
+    }
+
+    setLoading(false);
+  };
+
+  async function closeOrder() {
     const [ok, data] = await ordersService.createOrder({ info, cart });
     if (ok) {
       console.log("Response: ", data);
       setCart([]);
-      navigate("/finish");
+      navigate("/finish?status=success");
     } else {
       console.log("ERROR: ", data);
     }
-    setLoading(false);
-  };
-
-  async function buttonClick() {
-    const [ok, data] = await whishServices.getBalance(); /*{
-      amount: 900,
-      currency: "USD",
-      invoice: "This is the invoice",
-      externalId: 23,
-      successCallbackUrl: "https://successCallbackUrl.com",
-      failureCallbackUrl: "https://failedCallbackUrl.com",
-      successRedirectUrl: "https://successRedirectUrl.com",
-      failureRedirectUrl: "https://failureRedirectUrl.com",
-    } */
-
-    console.log("Received from whish to whish: ", data);
   }
 
   return (
@@ -228,7 +238,7 @@ export default function Checkout() {
                     }
                   />
                 </span>
-                {/*<span className="checkout-payment-method-option">
+                <span className="checkout-payment-method-option">
                   <FormControlLabel
                     value="Whish money"
                     control={<Radio />}
@@ -245,7 +255,7 @@ export default function Checkout() {
                   <span className="checkout-payment-method-option-badge">
                     FREE DELIVERY
                   </span>
-                  </span>*/}
+                </span>
               </RadioGroup>
             </Grid>
           </Grid>
