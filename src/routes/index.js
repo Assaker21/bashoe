@@ -5,6 +5,7 @@ const listsRouter = require("./lists.route.js");
 const imagesRouter = require("./images.route.js");
 const analyticsRouter = require("./analytics.route.js");
 const authenticationRouter = require("./authentication.route.js");
+const paymentsRouter = require("./payments.route.js");
 
 module.exports = {
   itemsRouter,
@@ -14,4 +15,5 @@ module.exports = {
   imagesRouter,
   analyticsRouter,
   authenticationRouter,
+  paymentsRouter,
 };

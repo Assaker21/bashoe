@@ -45,6 +45,7 @@ const {
   imagesRouter,
   analyticsRouter,
   authenticationRouter,
+  paymentsRouter,
 } = require("./src/routes/index.js");
 const sendOrderMail = require("./src/utils/mail.js");
 const prisma = require("./src/utils/prisma.js");
@@ -56,6 +57,7 @@ app.use("/lists", listsRouter);
 app.use("/images", imagesRouter);
 app.use("/analytics", analyticsRouter);
 app.use("/authentication", authenticationRouter);
+app.use("/payments", paymentsRouter);
 app.use("/", async (req, res) => {
   /*const order = await prisma.order.findUnique({
     where: { id: 12 },
