@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+
+:root {
+  --font-family: "Manrope", "Inter", system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+
+  --text-color: #303030;
+  --text-color-2: #616161;
+
+  --border-color: rgba(227, 227, 227, 1);
+
+  --background-color: #f1f1f1;
+  --background-color-2: #ebebeb;
+  --background-color-3: white;
+  --background-color-4: #f7f7f7;
+
+  --error-color: rgb(208, 13, 29);
+  --warning-color: rgb(255, 225, 0);
+  --success-color: rgb(12, 130, 51);
+  --info-color: rgb(31, 126, 234);
+
+  --accent-color: #fc7309;
+
+  --transition: all 0.1s ease-in-out;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  color: var(--text-color);
+}
+
+input {
+  font-family: var(--font-family);
+  border-radius: 0.5rem;
+  min-width: 0;
+  flex: 1;
+
+  border: 1px solid var(--border-color);
+  padding: 6px;
+  outline: none;
+
+  color: var(--text-color);
+
+  font-size: 13px;
+  font-weight: 550;
+}
+
+input.compact {
+  padding: 3px 6px;
+}
+
+input:focus {
+  border: 1px solid var(--text-color);
+}
+
+textarea {
+  font-family: var(--font-family);
+  border-radius: 0.5rem;
+  min-width: 0;
+  flex: 1;
+
+  border: 1px solid var(--border-color);
+  padding: 6px;
+  outline: none;
+
+  color: var(--text-color);
+
+  font-size: 13px;
+  font-weight: 550;
+}
+
+textarea.compact {
+  padding: 3px 6px;
+}
+
+textarea:focus {
+  border: 1px solid var(--text-color);
+}
+
+button {
+  border-radius: 0.5rem;
+  border: none;
+  padding: 6px 12px;
+  font-family: var(--font-family);
+  font-weight: 550;
+  font-size: 13px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+button.primary {
+  background-color: var(--text-color);
+  color: var(--background-color-3);
+}
+
+button.warning {
+  background-color: var(--warning-color);
+  border-radius: 0.5rem;
+  color: var(--text-color);
+}
+
+button.error {
+  background-color: var(--error-color);
+  border-radius: 0.5rem;
+  color: var(--background-color-3);
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button.icon {
+  background-color: transparent;
+  color: var(--text-color);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+
+  aspect-ratio: 1;
+}
+
+button.icon.text {
+  aspect-ratio: unset;
+  padding-right: 25px;
+}
+
+button.icon > .icon-item {
+  padding: 0;
+  margin: -20px;
+}
+
+button.icon:hover {
+  background-color: var(--background-color-4);
+}
+
+button.with-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+div.chip {
+  margin: 0;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  display: inline-block;
+}
+
+div.chip.primary {
+  background-color: var(--success-color);
+  color: var(--background-color-3);
+}
+
+div.chip.warning {
+  background-color: var(--warning-color);
+  color: var(--text-color);
+}
+
+div.chip.error {
+  background-color: var(--error-color);
+  color: var(--background-color-3);
+}
+
+div.chip.info {
+  background-color: var(--info-color);
+  color: var(--background-color-3);
+}

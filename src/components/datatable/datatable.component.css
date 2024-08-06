@@ -1,0 +1,65 @@
+.p-datatable {
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color-3);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.p-datatable-thead {
+  background-color: var(--background-color-4);
+}
+
+.p-datatable-thead > tr > th {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-color-2);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.p-datatable-tbody {
+  background-color: var(--background-color-3);
+}
+
+.p-datatable-tbody > tr > td {
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+  font-weight: 550;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.p-datatable-tbody > tr:hover > td {
+  color: var(--info-color);
+  text-decoration: underline;
+}
+
+.p-datatable .p-sortable-column .p-sortable-column-icon {
+  margin-left: 6px;
+  padding: 2px;
+}
+
+.p-datatable .p-checkbox .p-checkbox-box .p-checkbox-icon {
+  display: none !important;
+}
+
+.p-datatable-reorder-indicator {
+  border-top: 2px solid #007ad9; /* Change this color to your desired one */
+  pointer-events: none;
+  width: 100%;
+  z-index: 100;
+  background-color: red;
+}
+
+.p-datatable-dragpoint-bottom {
+  box-shadow: 0 2px 0 0 var(--info-color);
+}
+
+.p-checkbox-input {
+  margin: 0;
+  padding: 0;
+  height: 16px;
+  width: 16px;
+}

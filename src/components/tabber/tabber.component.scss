@@ -1,0 +1,14 @@
+.tabber {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  header.tabber {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    padding: 12px;
+    background-color: var(--background-color-3);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+  }
+}

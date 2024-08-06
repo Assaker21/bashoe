@@ -1,0 +1,40 @@
+.form-dialog {
+  background-color: var(--background-color-3);
+  width: 60vw;
+  padding: 14px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  transition: var(--transition);
+
+  .form-dialog-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+    padding-bottom: 12px;
+  }
+
+  .form-dialog-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding-top: 12px;
+    gap: 12px;
+  }
+
+  .form-dialog-loading {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.p-dialog-mask {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

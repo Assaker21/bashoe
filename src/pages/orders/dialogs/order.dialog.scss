@@ -1,0 +1,37 @@
+.p-dropdown {
+  background-color: var(--background-color-3);
+  border: 1px solid var(--border-color);
+  padding: 6px;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--text-color);
+  border-radius: 0.5rem;
+
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: center;
+}
+
+.p-dropdown-panel {
+  background-color: var(--background-color-3);
+  border: 1px solid var(--border-color);
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--text-color);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.p-dropdown-item {
+  padding: 6px;
+
+  &:hover {
+    background-color: var(--background-color);
+  }
+}
+
+.p-dropdown-open {
+  border: 1px solid var(--text-color-2);
+}

@@ -1,0 +1,26 @@
+.confirmation-dialog {
+  background-color: var(--background-color-3);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 20px;
+
+  .p-dialog-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 12px;
+  }
+
+  .p-dialog-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+  }
+
+  .p-dialog-content {
+    padding: 20px 0;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}

@@ -1,0 +1,30 @@
+.datatable-header {
+  font-size: 13px;
+  font-weight: 550;
+  padding: 6px 6px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+
+  .selection-counter {
+    padding: 0 4px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  input.search-input {
+    border-radius: 0.5rem;
+    min-width: 0;
+    flex: 1;
+
+    border: 1px solid var(--border-color);
+    padding: 3px 6px;
+    outline: none;
+
+    color: var(--text-color);
+
+    font-size: 13px;
+    font-weight: 550;
+  }
+}
