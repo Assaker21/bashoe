@@ -2,7 +2,7 @@ const categoriesServices = require("../services/categories.service.js");
 
 async function getCategories(req, res) {
   try {
-    const result = await categoriesServices.getCategories(null, req.body);
+    const result = await categoriesServices.getCategories(req.query, req.body);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json("Internal error");
@@ -10,14 +10,19 @@ async function getCategories(req, res) {
   }
 }
 
-async function upsertCategory(req, res) {
+async function updateCategory(req, res) {
   try {
-    var result;
-    if (req.body.id) {
-      result = await categoriesServices.updateCategory(null, req.body);
-    } else {
-      result = await categoriesServices.createCategory(null, req.body);
-    }
+    const result = await categoriesServices.updateCategory(req.query, req.body);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json("Internal error");
+    console.log(`Error: ${error}`);
+  }
+}
+
+async function createCategory(req, res) {
+  try {
+    const result = await categoriesServices.createCategory(req.query, req.body);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json("Internal error");
@@ -36,4 +41,9 @@ async function removeCategory(req, res) {
   }
 }
 
-module.exports = { getCategories, upsertCategory, removeCategory };
+module.exports = {
+  getCategories,
+  updateCategory,
+  createCategory,
+  removeCategory,
+};

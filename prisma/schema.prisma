@@ -32,28 +32,53 @@ model item {
   sku         String?  @unique
   imagesType  String?
 
-  categories   category[]
-  images       image[]
-  orderItems   orderItem[]
-  itemVariants itemVariant[]
+  categories         category[]
+  images             image[]
+  orderItems         orderItem[]
+  itemCustomVariants itemCustomVariant[]
+
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  itemVariant   itemVariant? @relation(fields: [itemVariantId], references: [id])
+  itemVariantId Int?
+}
+
+model itemVariant {
+  id Int @id @default(autoincrement())
+
+  items              item[]
+  orderItems         orderItem[]
+  itemCustomVariants itemCustomVariant[]
+
+  description    String?
+  url            String? @db.LongText
+  sequenceNumber Float?
+
+  itemVariantGroup   itemVariantGroup? @relation(fields: [itemVariantGroupId], references: [id])
+  itemVariantGroupId Int?
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model itemVariant {
+model itemCustomVariant {
   id Int @id @default(autoincrement())
 
-  items item[]
-
-  orderItems orderItem[]
-
-  description String?
-  url         String? @db.LongText
+  itemVariant   itemVariant? @relation(fields: [itemVariantId], references: [id])
+  itemVariantId Int?
 
   itemVariantGroup   itemVariantGroup? @relation(fields: [itemVariantGroupId], references: [id])
   itemVariantGroupId Int?
+
+  item   item? @relation(fields: [itemId], references: [id])
+  itemId Int?
+
+  description    String?
+  url            String?  @db.LongText
+  sequenceNumber Float?
+  enabled        Boolean?
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -65,7 +90,8 @@ model itemVariantGroup {
 
   description String?
 
-  itemVariants itemVariant[]
+  itemVariants       itemVariant[]
+  itemCustomVariants itemCustomVariant[]
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -75,7 +101,8 @@ model itemVariantGroup {
 model image {
   id Int @id @default(autoincrement())
 
-  url String? @db.LongText
+  url            String? @db.LongText
+  sequenceNumber Float?
 
   item   item? @relation(fields: [itemId], references: [id])
   itemId Int?
@@ -89,8 +116,14 @@ model category {
 
   items item[]
 
-  description String?
-  sku         String?
+  description    String?
+  sku            String?
+  sequenceNumber Float?
+
+  parentCategory   category? @relation("CategoryToSubcategories", fields: [parentCategoryId], references: [id])
+  parentCategoryId Int?
+
+  subcategories category[] @relation("CategoryToSubcategories")
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -108,6 +141,8 @@ model order {
 
   orderStatus   orderStatus? @relation(fields: [orderStatusId], references: [id])
   orderStatusId Int?
+
+  info Json?
 
   orderItems orderItem[]
 
@@ -141,6 +176,8 @@ model orderItem {
 
   itemVariant   itemVariant? @relation(fields: [itemVariantId], references: [id])
   itemVariantId Int?
+
+  info Json?
 }
 
 model address {

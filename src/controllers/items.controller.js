@@ -2,7 +2,6 @@ const itemsServices = require("../services/items.service.js");
 
 async function getItems(req, res) {
   try {
-    console.log("Query: ", req.query);
     const result = await itemsServices.getItems(req.query);
     res.status(200).json(result);
   } catch (error) {
@@ -43,7 +42,7 @@ async function getItemVariants(req, res) {
 
 async function updateItem(req, res) {
   try {
-    const result = await itemsServices.updateItem(null, req.body);
+    const result = await itemsServices.updateItem(req.query, req.body);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json("Internal error");

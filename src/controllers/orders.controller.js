@@ -4,6 +4,7 @@ const sendMail = require("../utils/mail");
 async function createOrder(req, res) {
   try {
     const result = await ordersServices.createOrder(null, req.body);
+    console.log("RESULT: ", result);
     sendMail(result.user.email, "order", result);
     sendMail(process.env.ADMIN_EMAIL_1, "order", result);
     sendMail(process.env.ADMIN_EMAIL_2, "order", result);

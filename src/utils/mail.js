@@ -19,7 +19,6 @@ var transport = nodemailer.createTransport({
 });*/
 
 function generateOrderEmail(order) {
-  console.log("Order: ", order);
   return {
     from: "orders@hoophouse.store",
     subject: "Your order has been confirmed",
@@ -76,8 +75,8 @@ function generateOrderEmail(order) {
       </div>
       <div class="order-details">
         <h2>Order Details</h2>
-        <p><strong>Order ID:</strong> #${order.id + 623}</p>
-        <p><strong>Date:</strong> ${order.createdAt.toLocaleDateString(
+        <p><strong>Order ID:</strong> #${order?.id + 623}</p>
+        <p><strong>Date:</strong> ${order?.createdAt.toLocaleDateString(
           "en-US",
           {
             month: "long",
@@ -88,12 +87,12 @@ function generateOrderEmail(order) {
       </div>
       <div class="order-items">
         <h2>Order Items</h2>
-        ${order.orderItems
-          .map((orderItem) => {
+        ${order?.info
+          ?.map((orderItem) => {
             return `<div class="order-item">
-            <p><strong>Product:</strong> ${orderItem.item.name}</p>
-            <p><strong>Quantity:</strong> ${orderItem.quantity}</p>
-            <p><strong>Price:</strong> $${orderItem.item.price} x ${orderItem.quantity}</p>
+            <p><strong>Product:</strong> ${orderItem?.item.name}</p>
+            <p><strong>Quantity:</strong> ${orderItem?.quantity}</p>
+            <p><strong>Price:</strong> $${orderItem?.item.price} x ${orderItem?.quantity}</p>
           </div>`;
           })
           .join("\n")}

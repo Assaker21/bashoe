@@ -1,7 +1,7 @@
 const prisma = require("../utils/prisma");
 
 async function createOrder(query, data) {
-  console.log("Data: ", data);
+  console.log("DATA: ", data);
   return await prisma.order.create({
     data: {
       address: {
@@ -24,13 +24,14 @@ async function createOrder(query, data) {
           id: 1,
         },
       },
-      orderItems: {
+      info: data.cart,
+      /*orderItems: {
         create: data.cart.map((i) => ({
           itemId: i.item.id,
           quantity: i.quantity,
           itemVariantId: i.variant.id,
         })),
-      },
+      },*/
     },
     include: {
       user: true,
@@ -56,7 +57,6 @@ async function createOrder(query, data) {
 }
 
 async function getOrders(query, data) {
-  console.log("GETTING ORDERS: ");
   return await prisma.order.findMany({
     where: {
       isActive: true,
@@ -84,7 +84,6 @@ async function getOrders(query, data) {
 }
 
 async function updateOrder(query, data) {
-  console.log("UPDATE: ", query);
   await prisma.order.update({
     where: {
       id: Number(query.id),

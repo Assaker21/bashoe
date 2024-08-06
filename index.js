@@ -15,15 +15,17 @@ const allowedOrigins = [
   "https://hoophouselb.onrender.com",
   "https://hoophouse.store",
   "https://www.hoophouse.store",
+  "*",
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    callback(null, true);
+    /*if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
-    }
+    }*/
   },
 };
 
@@ -33,6 +35,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+
 app.use(express.static("src/uploads"));
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -46,10 +49,13 @@ const {
   analyticsRouter,
   authenticationRouter,
   paymentsRouter,
+  variantsRouter,
 } = require("./src/routes/index.js");
 const sendOrderMail = require("./src/utils/mail.js");
 const prisma = require("./src/utils/prisma.js");
+const delay = require("./src/middleware/delay.middleware.js");
 
+app.use(delay(1));
 app.use("/items", itemsRouter);
 app.use("/categories", categoriesRouter);
 app.use("/orders", ordersRouter);
@@ -58,6 +64,7 @@ app.use("/images", imagesRouter);
 app.use("/analytics", analyticsRouter);
 app.use("/authentication", authenticationRouter);
 app.use("/payments", paymentsRouter);
+app.use("/variants", variantsRouter);
 app.use("/", async (req, res) => {
   /*const order = await prisma.order.findUnique({
     where: { id: 12 },

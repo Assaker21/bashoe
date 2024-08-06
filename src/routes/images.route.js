@@ -6,10 +6,15 @@ const getAllFiles = require("../utils/getAllFiles.js");
 const {
   getImages,
   createImages,
+  updateImage,
+  removeImage,
 } = require("../controllers/images.controller.js");
 
 router.get("/", getImages);
 router.post("/", upload.array("files", 10), createImages);
+router.put("/", updateImage);
+router.delete("/", removeImage);
+
 router.get("/all", (req, res) => {
   res.status(200).send(getAllFiles());
 });

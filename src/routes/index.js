@@ -6,6 +6,7 @@ const imagesRouter = require("./images.route.js");
 const analyticsRouter = require("./analytics.route.js");
 const authenticationRouter = require("./authentication.route.js");
 const paymentsRouter = require("./payments.route.js");
+const variantsRouter = require("./variants.route.js");
 
 module.exports = {
   itemsRouter,
@@ -16,4 +17,5 @@ module.exports = {
   analyticsRouter,
   authenticationRouter,
   paymentsRouter,
+  variantsRouter,
 };

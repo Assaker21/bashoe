@@ -6,16 +6,70 @@ async function getItems(query, data) {
     isActive: true,
   };
 
-  if (query.categorySku) {
+  const prismaSelect = {
+    id: true,
+    name: true,
+    description: true,
+    price: true,
+    discount: true,
+    imagesType: true,
+    sku: true,
+    categories: {
+      select: {
+        id: true,
+        description: true,
+        sku: true,
+      },
+    },
+    images: {
+      select: {
+        id: true,
+        url: true,
+        sequenceNumber: true,
+      },
+      orderBy: {
+        sequenceNumber: "asc",
+      },
+    },
+    itemCustomVariants: {
+      where: {
+        isActive: true,
+      },
+      select: {
+        id: true,
+        description: true,
+        url: true,
+        enabled: true,
+        sequenceNumber: true,
+        itemVariantGroup: {
+          select: {
+            id: true,
+            description: true,
+          },
+        },
+      },
+      orderBy: {
+        sequenceNumber: "asc",
+      },
+    },
+  };
+
+  if (query.categorySku && query.categorySku !== "all") {
     prismaQuery.categories = {
       some: {
         sku: query.categorySku,
       },
     };
+  } else if (query.categoryId && query.categorySku !== "all") {
+    prismaQuery.categories = {
+      some: {
+        id: query.categoryId,
+      },
+    };
+  }
 
-    if (query.categorySku === "all") {
-      delete prismaQuery.categories;
-    }
+  if (query.enabledItemCustomVariants) {
+    prismaSelect.itemCustomVariants.where.enabled = true;
   }
 
   if (query.itemSku) {
@@ -28,45 +82,25 @@ async function getItems(query, data) {
     };
   }
 
-  var result = await prisma.item.findMany({
-    where: prismaQuery,
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      price: true,
-      discount: true,
-      imagesType: true,
-      sku: true,
-      categories: {
-        select: {
-          id: true,
-          description: true,
-          sku: true,
-        },
-      },
-      images: {
-        select: {
-          id: true,
-          url: true,
-        },
-      },
-      itemVariants: {
-        select: {
-          id: true,
-          description: true,
-        },
-      },
-    },
-  });
+  let result;
 
   if (query.itemSku) {
-    result = result[0];
-    result.itemVariantGroups = await getItemVariants({
-      variants: result.itemVariants.map(({ id }) => id),
+    console.log("Query: ", query);
+    result = await prisma.item.findUnique({
+      where: prismaQuery,
+      select: prismaSelect,
     });
-    console.log("Result: ", result);
+
+    /*result.itemVariantGroups = await getItemVariants({
+      variants: result.itemVariants.map(({ id }) => id),
+    });*/
+  } else {
+    result = await prisma.item.findMany({
+      where: prismaQuery,
+      select: prismaSelect,
+    });
   }
+
   return result;
 }
 
@@ -80,39 +114,110 @@ async function getItem(query, data) {
     prismaQuery.sku = query.sku;
   }
 
-  return await prisma.item.findFirst({
-    where: prismaQuery,
-    select: {
-      id: true,
-      shortDescription: true,
-      longDescription: true,
-      price: true,
-      discount: true,
-      imagesType: true,
-      sku: true,
-      categories: {
-        select: {
-          id: true,
-          description: true,
-        },
-      },
-      images: {
-        select: {
-          id: true,
-          url: true,
-        },
-      },
-      itemVariants: {
-        select: {
-          id: true,
-          description: true,
-        },
+  const prismaSelect = {
+    id: true,
+    shortDescription: true,
+    longDescription: true,
+    price: true,
+    discount: true,
+    imagesType: true,
+    sku: true,
+    categories: {
+      select: {
+        id: true,
+        description: true,
       },
     },
+    images: {
+      select: {
+        id: true,
+        url: true,
+        sequenceNumber: true,
+      },
+      orderBy: {
+        sequenceNumber: "asc",
+      },
+    },
+    itemCustomVariants: {
+      where: {
+        isActive: true,
+      },
+      select: {
+        id: true,
+        description: true,
+        url: true,
+        enabled: true,
+        sequenceNumber: true,
+        itemVariantGroup: {
+          select: {
+            id: true,
+            description: true,
+          },
+        },
+        itemVariant: {
+          select: {
+            id: true,
+            description: true,
+            sequenceNumber: true,
+          },
+          orderBy: {
+            sequenceNumber,
+          },
+        },
+      },
+      orderBy: {
+        sequenceNumber: "asc",
+      },
+    },
+  };
+
+  if (query.enabledItemCustomVariants) {
+    prismaSelect.itemCustomVariants.where.enabled = true;
+  }
+
+  const result = await prisma.item.findUnique({
+    where: prismaQuery,
+    select: prismaSelect,
   });
+
+  console.log("Item: ", result);
+
+  return result;
 }
 
 async function createItem(query, data) {
+  const itemVariants = await prisma.itemVariant.findMany({
+    where: {
+      isActive: true,
+    },
+    select: {
+      description: true,
+      id: true,
+      sequenceNumber: true,
+      itemVariantGroupId: true,
+    },
+  });
+
+  console.log(
+    "CREATED VARIANTS: ",
+    itemVariants.map((itemVariant) => ({
+      description: itemVariant.description,
+      url: "",
+      sequenceNumber: itemVariant.sequenceNumber,
+      enabled: false,
+      itemVariant: {
+        connect: {
+          id: itemVariant.id,
+        },
+      },
+      itemVariantGroup: {
+        connect: {
+          id: itemVariant.itemVariantGroupId,
+        },
+      },
+    }))
+  );
+
   await prisma.item.create({
     data: {
       name: data.name,
@@ -132,9 +237,22 @@ async function createItem(query, data) {
           }),
         },
       },
-      itemVariants: {
-        connect: data.itemVariants.map((itemVariant) => ({
-          id: itemVariant.id,
+      itemCustomVariants: {
+        create: itemVariants.map((itemVariant) => ({
+          description: itemVariant.description,
+          url: "",
+          sequenceNumber: itemVariant.sequenceNumber,
+          enabled: false,
+          itemVariant: {
+            connect: {
+              id: itemVariant.id,
+            },
+          },
+          itemVariantGroup: {
+            connect: {
+              id: itemVariant.itemVariantGroupId,
+            },
+          },
         })),
       },
     },
@@ -142,7 +260,18 @@ async function createItem(query, data) {
 }
 
 async function updateItem(query, data) {
-  const oldItem = await prisma.item.findFirst({
+  console.log("req: ", query, " - ", data.categories);
+  const prismaWhere = {};
+
+  if (query.id) prismaWhere.id = Number(query.id);
+  if (query.sku) prismaWhere.sku = query.sku;
+
+  return await prisma.item.update({
+    where: prismaWhere,
+    data: { ...data },
+  });
+
+  /*const oldItem = await prisma.item.findFirst({
     where: { id: data.id },
     include: {
       itemVariants: true,
@@ -213,7 +342,7 @@ async function updateItem(query, data) {
     },
   });
 
-  return await getItems({ itemSku: data.sku });
+  return await getItems({ itemSku: data.sku });*/
 }
 
 async function removeItem(query, data) {

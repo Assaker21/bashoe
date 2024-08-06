@@ -1,7 +1,6 @@
 const prisma = require("../utils/prisma");
 
 async function getLists(query, data) {
-  console.log("Getting lists");
   const prismaQuery = {
     where: {
       isActive: true,
@@ -20,7 +19,6 @@ async function createLists(query, data) {
   const result = await prisma.list.createMany({
     data: data,
   });
-  console.log("Result: ", result);
   return await getLists();
 }
 

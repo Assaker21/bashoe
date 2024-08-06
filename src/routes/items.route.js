@@ -14,15 +14,15 @@ const {
 } = require("../controllers/items.controller.js");
 
 router.get("/", getItems);
-router.get("/variants", getItemVariants);
+//router.get("/variants", getItemVariants);
 
 router.post("/", createItem);
-router.post("/variants", upsertItemVariant);
-router.post("/variantGroups", upsertItemVariantGroup);
+//router.post("/variants", upsertItemVariant);
+//router.post("/variantGroups", upsertItemVariantGroup);
 
 router.delete("/", removeItem);
-router.delete("/variants", removeItemVariant);
-router.delete("/variantGroups", removeItemVariantGroup);
+//router.delete("/variants", removeItemVariant);
+//router.delete("/variantGroups", removeItemVariantGroup);
 
 router.put("/", updateItem);
 
