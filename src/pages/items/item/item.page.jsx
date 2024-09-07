@@ -1,9 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Breadcrumbs from "../../../components/breadcrumbs/breadcrumbs.component";
 import { useGeneralContext } from "../../../contexts/context";
 
 import "./item.page.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PreloadImages from "../../../basic-components/preload-images/preload-images.component";
 import Line from "../../../basic-components/line/line.component";
 import ItemList from "../../../components/item-list/item-list.component";
@@ -18,6 +18,7 @@ export default function Item() {
   const { categorySku, itemSku } = useParams();
   const { getCategoryBySku, addToCart, itemList } = useGeneralContext();
   const category = getCategoryBySku(categorySku);
+  const location = useLocation();
 
   const [item, setItem] = useState(null);
   const [cartItem, setCartItem] = useState(null);
@@ -29,12 +30,44 @@ export default function Item() {
 
   async function fetch() {
     setItem(null);
-    const [ok, data] = await itemsServices.getItems({ categorySku, itemSku });
+    const [ok, data] = await itemsServices.getItems({
+      categorySku,
+      itemSku,
+      enabledItemCustomVariants: true,
+    });
     if (ok) {
       setItem(data);
       console.log("Item: ", data);
     }
   }
+
+  const itemVariantGroups = useMemo(() => {
+    if (!item?.itemCustomVariants) return [];
+
+    const groups = [];
+    item?.itemCustomVariants?.forEach((variant) => {
+      const group = variant.itemVariantGroup;
+      let index = groups.findIndex((savedGroup) => savedGroup.id == group.id);
+
+      if (index === -1) {
+        groups.push(group);
+        group.itemVariants = [];
+        index = groups.length - 1;
+      }
+
+      groups[index].itemVariants.push({
+        id: variant.id,
+        description: variant.description,
+        url: variant.url,
+        itemVariantGroup: {
+          id: group.id,
+          description: group.description,
+        },
+      });
+    });
+
+    return groups;
+  }, [item]);
 
   useEffect(() => {
     fetch();
@@ -51,18 +84,23 @@ export default function Item() {
       setSelectedImage(1);
       for (var i = 1; i < 37; i++) {
         _allPossibleImages.push(
-          item?.images[0].url.replace("<number>", String(i).padStart(2, "0"))
+          item?.images[0]?.url.replace("<number>", String(i).padStart(2, "0"))
         );
       }
     }
 
     setAllPossibleImages(_allPossibleImages);
 
+    const variants = {};
+    itemVariantGroups?.map((element) => {
+      variants[element.id] = {
+        ...element.itemVariants[0],
+      };
+    });
+
     setCartItem({
       item,
-      variant: item?.itemVariantGroups.find(
-        ({ itemVariants }) => itemVariants.length > 0
-      ).itemVariants[0],
+      variants: variants,
       quantity: 1,
     });
   }, [item]);
@@ -72,7 +110,7 @@ export default function Item() {
       setImage(item?.images[selectedImage]?.url);
     } else {
       setImage(
-        item?.images[0].url.replace(
+        item?.images[0]?.url.replace(
           "<number>",
           String(selectedImage).padStart(2, "0")
         )
@@ -82,36 +120,35 @@ export default function Item() {
 
   return (
     <section className="single-item">
-      <Helmet>
-        <meta property="og:title" content={item?.name || "TITLE HERE"} />
-        <meta
-          property="og:description"
-          content={item?.description || "DESC HERE"}
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hoophousev2.onrender.com" />
-        <meta
-          property="og:image"
-          content={
-            item?.images[0]?.url?.replace("<number>", "01") ||
-            "https://mir-s3-cdn-cf.behance.net/projects/404/5b96ce111493611.Y3JvcCwyNDAwLDE4NzcsMCw0NTE.png"
-          }
-        />
-      </Helmet>
       <Breadcrumbs
         items={[
           {
             name: "Home",
             to: "/",
           },
-          {
-            name: category?.description,
-            to: `/${categorySku}`,
-          },
-          {
-            name: item?.name,
-            to: `/${categorySku}/${itemSku}`,
-          },
+          ...location.pathname
+            .slice(1)
+            .split("/")
+            .map((element, index) => {
+              let to = "";
+              const elements = location.pathname.split("/");
+              for (let i = 0; i < elements.length; i++) {
+                to += `/${elements[i]}`;
+                if (i == index + 1) {
+                  break;
+                }
+              }
+              to = to.replace("//", "/");
+              let name = element
+                .split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+              return {
+                name: name,
+                to: to,
+              };
+            })
+            .filter((element) => element.name !== "Product"),
         ]}
       />
       <PreloadImages images={allPossibleImages} />
@@ -218,58 +255,57 @@ export default function Item() {
             {(item?.price && "$" + item?.price) || <Skeleton />}
           </span>
           <span className="single-item-description">
-            {item?.description?.split("\n").map((line) => (
-              <>
-                <p>{line}</p>
-                <br />
-              </>
-            )) || <Skeleton />}
+            {item?.description?.split("\n").map((line) => <p>{line}</p>) || (
+              <Skeleton />
+            )}
           </span>
           <div className="single-item-variants-container">
-            {item?.itemVariantGroups.map((group, groupIndex) => {
-              if (
-                item?.itemVariantGroups[groupIndex].itemVariants?.length === 0
-              )
+            {itemVariantGroups.map((group, groupIndex) => {
+              if (itemVariantGroups[groupIndex].itemVariants?.length === 0)
                 return;
               return (
                 <React.Fragment key={"Group: " + group.id}>
                   <span className="single-item-variant-name">
-                    {item?.itemVariantGroups[groupIndex].description}
+                    {itemVariantGroups[groupIndex].description}
                   </span>
                   <div className="single-item-variant-table">
-                    {item?.itemVariantGroups[groupIndex].itemVariants.map(
+                    {itemVariantGroups[groupIndex].itemVariants.map(
                       (variant, index) => {
                         return (
                           <button
                             key={`Variant: ${variant.id}`}
                             className={
-                              variant === cartItem?.variant
+                              cartItem?.variants[group.id]?.id == variant.id
                                 ? "single-item-variant selected"
                                 : "single-item-variant"
                             }
                             onClick={() => {
+                              let variants = cartItem?.variants || {};
+                              variants[group.id] = variant;
+
+                              console.log("VARIANTS: ", variants);
+
                               setCartItem({
                                 ...cartItem,
-                                variant: variant,
+                                variant: variants,
                                 quantity: 1,
                               });
                             }}
                           >
-                            {item?.itemVariantGroups[groupIndex].itemVariants[
-                              index
-                            ].url && (
+                            {itemVariantGroups[groupIndex].itemVariants[index]
+                              .url && (
                               <img
                                 className="single-item-variant-image"
                                 src={
-                                  item?.itemVariantGroups[groupIndex]
-                                    .itemVariants[index].url
+                                  itemVariantGroups[groupIndex].itemVariants[
+                                    index
+                                  ].url
                                 }
                               />
                             )}
                             {
-                              item?.itemVariantGroups[groupIndex].itemVariants[
-                                index
-                              ].description
+                              itemVariantGroups[groupIndex].itemVariants[index]
+                                .description
                             }
                           </button>
                         );
@@ -284,7 +320,13 @@ export default function Item() {
             <button
               className="single-item-button"
               onClick={() => {
-                addToCart(cartItem);
+                const newCartItem = { ...cartItem };
+                newCartItem.variants = Object.keys(newCartItem.variants).map(
+                  (key) => ({
+                    ...newCartItem.variants[key],
+                  })
+                );
+                addToCart(newCartItem);
               }}
             >
               Add To Cart

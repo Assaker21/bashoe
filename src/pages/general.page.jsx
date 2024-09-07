@@ -12,7 +12,7 @@ export default function General() {
 
   return (
     <>
-      <Helmet>
+      {/*<Helmet>
         <meta property="og:title" content={"TITLE HERE"} />
         <meta property="og:description" content={"DESC HERE"} />
         <meta property="og:type" content="website" />
@@ -32,7 +32,7 @@ export default function General() {
               : "/images/hoophouse-logo-favicon-black.png"
           }
         />
-      </Helmet>
+      </Helmet>*/}
       <Navbar />
       <div className="main-outlet">
         <Outlet />

@@ -90,7 +90,9 @@ function SearchItem({ item, onClick }) {
     <>
       {item ? (
         <Link
-          to={`/${item.categories[0].sku}/${item.sku}`}
+          to={`/${
+            item?.categories?.length > 0 ? item.categories[0]?.sku : "all"
+          }/${item.sku}`}
           className="search-item-container"
           onClick={onClick}
         >
@@ -120,6 +122,7 @@ export default function Navbar() {
   const { width, height } = useScreenDimensions();
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [categoriesWideMenuOpen, setCategoriesWideMenuOpen] = useState(false);
   const [menu, setMenu] = useState("");
   const [search, setSearch] = useState("");
   const [searchItems, setSearchItems] = useState(null);
@@ -268,6 +271,10 @@ export default function Navbar() {
                             : "")
                         }
                         key={`Category ${category.sku}`}
+                        onPointerEnter={() => {
+                          if (category.subcategories?.length > 0)
+                            setCategoriesWideMenuOpen(category);
+                        }}
                       >
                         <Link
                           to={`/${category.sku}`}
@@ -280,6 +287,42 @@ export default function Navbar() {
                     );
                   }
                 )}
+              </div>
+              <div
+                className={`navbar-subcategories ${
+                  categoriesWideMenuOpen ? "open" : ""
+                }`}
+                onPointerLeave={() => {
+                  setCategoriesWideMenuOpen(false);
+                }}
+              >
+                <div className="navbar-subcategories-container">
+                  {categoriesWideMenuOpen?.subcategories?.map((subcategory) => {
+                    return (
+                      <div className="navbar-subcategories-column">
+                        <Link
+                          to={`${categoriesWideMenuOpen.sku}/${subcategory.sku}`}
+                          className="navbar-subcateogries-title"
+                        >
+                          {subcategory.description}
+                        </Link>
+                        {subcategory.subcategories?.length > 0 && (
+                          <div className="navbar-subcategories-subcategories">
+                            {subcategory.subcategories.map((sub2) => {
+                              return (
+                                <Link
+                                  to={`${categoriesWideMenuOpen.sku}/${subcategory.sku}/${sub2.sku}`}
+                                >
+                                  {sub2.description}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </section>
@@ -409,7 +452,7 @@ export default function Navbar() {
                 </>
               )}
             </div>
-            <div className="small-navbar-bottom-container"></div>
+            <div className={`small-navbar-bottom-container`}></div>
           </section>
           <div className="small-navbar-offset"></div>
         </div>

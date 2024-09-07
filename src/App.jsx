@@ -35,11 +35,35 @@ const router = createBrowserRouter([
       },
       { path: "finish", element: <Finish /> },
       {
-        path: ":categorySku",
+        path: ":categorySku1",
         element: <Items />,
       },
       {
-        path: ":categorySku/:itemSku",
+        path: ":categorySku1/:categorySku2",
+        element: <Items />,
+      },
+      {
+        path: ":categorySku1/:categorySku2/:categorySku3",
+        element: <Items />,
+      },
+      {
+        path: ":categorySku1/:categorySku2/:categorySku3/:categorySku4",
+        element: <Items />,
+      },
+      {
+        path: ":categorySku/product/:itemSku",
+        element: <Item />,
+      },
+      {
+        path: ":categorySku1/:categorySku/product/:itemSku",
+        element: <Item />,
+      },
+      {
+        path: ":categorySku1/:categorySku2/:categorySku/product/:itemSku",
+        element: <Item />,
+      },
+      {
+        path: ":categorySku1/:categorySku2/:categorySku3/:categorySku/product/:itemSku",
         element: <Item />,
       },
     ],

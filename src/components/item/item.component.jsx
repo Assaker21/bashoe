@@ -1,14 +1,15 @@
 import "./item.component.scss";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-export default function Item({ item }) {
+export default function Item({ item, categorySku }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   function handleClick() {
-    navigate(`/${item?.categories[0].sku}/${item?.sku}`);
+    navigate(`${location.pathname}/product/${item?.sku}`);
   }
 
   return (
@@ -24,7 +25,7 @@ export default function Item({ item }) {
       )}
       <span className="list-item-name">{item?.name || <Skeleton />}</span>
       <span className="list-item-category">
-        {item?.categories[0].description || <Skeleton />}
+        {item?.categories[0]?.description || <Skeleton />}
       </span>
       <span className="list-item-price">
         {(item?.price && `$${item?.price}`) || <Skeleton />}

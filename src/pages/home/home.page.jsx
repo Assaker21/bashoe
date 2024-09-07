@@ -23,6 +23,7 @@ export default function Home() {
   async function fetch() {
     const [ok, data] = await listsServices.getLists();
     if (ok) {
+      console.log("Lists: ", data);
       setContent(data);
     }
   }

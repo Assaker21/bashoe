@@ -18,8 +18,11 @@ export function GeneralContextProvider({ children }) {
   const [itemList, setItemList] = useState(null);
 
   async function fetch() {
-    var [ok, data] = await categoriesServices.getCategories();
+    let [ok, data] = await categoriesServices.getCategories({
+      recursive: true,
+    });
     if (ok) {
+      console.log("Categories: ", data);
       setCategories(data);
     }
 
@@ -34,17 +37,33 @@ export function GeneralContextProvider({ children }) {
     }
   }
 
-  function getCategoryBySku(categorySku) {
+  function getCategoryBySku(categorySku, parent) {
     if (categorySku === "all")
       return {
         description: "All",
         sku: "all",
       };
+    if (parent) {
+      for (var i = 0; i < parent?.subcategories.length; i++) {
+        if (parent?.subcategories[i].sku == categorySku) {
+          return { ...parent?.subcategories[i] };
+        }
+      }
+    }
     for (var i = 0; i < categories.length; i++) {
       if (categories[i].sku == categorySku) {
         return { ...categories[i] };
       }
     }
+  }
+
+  function getCategoriesBySkus(...categorySkus) {
+    let parent = null;
+    return categorySkus.map((categorySku) => {
+      const category = getCategoryBySku(categorySku, parent);
+      parent = category;
+      return category;
+    });
   }
 
   function addToCart(item) {
@@ -105,6 +124,7 @@ export function GeneralContextProvider({ children }) {
         calculateTotal,
         shippingFee,
         getCategoryBySku,
+        getCategoriesBySkus,
         getNumberOfItems,
         itemList,
       }}

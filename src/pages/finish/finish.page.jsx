@@ -19,7 +19,11 @@ export default function Finish() {
   const [doOnce, setDoOnce] = useState(true);
 
   useEffect(() => {
-    if (searchParams.get("status") === "success" && doOnce) {
+    if (
+      searchParams.get("status") === "success" &&
+      searchParams.get("externalId") &&
+      doOnce
+    ) {
       setDoOnce(false);
       closeOrder({
         ...JSON.parse(localStorage.getItem("order")),

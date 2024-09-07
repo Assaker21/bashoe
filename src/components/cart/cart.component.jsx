@@ -72,10 +72,15 @@ function CartItem({ items, setItems, index, setCart }) {
         src={items[index].item?.images[0].url.replace("<number>", "01")}
       />
       <span className="cart-menu-item-name">{items[index].item?.name}</span>
-      <span className="cart-menu-item-variant">
-        {items[index].item?.itemVariantGroups[0].description}:{" "}
-        {items[index].variant?.description}
-      </span>
+      {items[index].variants.map((variant) => {
+        return (
+          <span className="cart-menu-item-variant" key={variant.id}>
+            {console.log("VARIANT: ", variant)}
+            {variant.itemVariantGroup.description}: {variant.description}
+          </span>
+        );
+      })}
+
       <div className="cart-menu-item-price-and-quantity">
         <span className="cart-menu-item-price">
           ${items[index].item?.price}

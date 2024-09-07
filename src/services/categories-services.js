@@ -1,7 +1,7 @@
 import { get } from "./basic-services";
 
-function getCategories() {
-  return get("categories");
+function getCategories(query) {
+  return get("categories", query);
 }
 
 export default {

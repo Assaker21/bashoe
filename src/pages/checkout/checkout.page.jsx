@@ -29,6 +29,7 @@ const theme = createTheme({
 export default function Checkout() {
   const { calculateTotal, getNumberOfItems, cart, setCart } =
     useGeneralContext();
+  console.log("MYCART: ", cart);
   const [info, setInfo] = useState({
     region: "Lebanon",
     paymentMethod: "Cash on delivery",
@@ -51,7 +52,7 @@ export default function Checkout() {
 
     setLoading(true);
 
-    if (info.paymentMethod === "Cash on delivery") {
+    if (info.paymentMethod.toLowerCase().trim() === "cash on delivery") {
       await closeOrder();
     } else {
       const externalId = Math.floor(Math.random() * 100000);
@@ -76,6 +77,7 @@ export default function Checkout() {
   };
 
   async function closeOrder() {
+    console.log("SENT DATA: ", { info, cart });
     const [ok, data] = await ordersService.createOrder({ info, cart });
     if (ok) {
       console.log("Response: ", data);

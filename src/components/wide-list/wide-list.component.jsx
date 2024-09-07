@@ -81,6 +81,7 @@ export default function WideList({ value }) {
           >
             {value?.content?.map((v, index) => (
               <img
+                key={"Image: " + index}
                 onLoad={(e) => {
                   setAspectRatios((oldAspectRatios) => {
                     oldAspectRatios[index] =
@@ -120,6 +121,7 @@ export default function WideList({ value }) {
           <div className="wide-list-markers">
             {value?.content?.map((v, index) => (
               <div
+                key={"div: " + index}
                 onClick={() => {
                   setShowingIndex(index);
                 }}

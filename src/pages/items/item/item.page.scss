@@ -95,6 +95,18 @@
         font-weight: 700;
       }
 
+      .single-item-description {
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        p {
+          margin: 0;
+        }
+      }
+
       .single-item-variants-container {
         display: flex;
         flex-direction: column;

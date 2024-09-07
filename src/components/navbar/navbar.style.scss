@@ -129,6 +129,64 @@
           }
         }
       }
+
+      .navbar-subcategories {
+        height: 0px;
+
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+        background-color: var(--background-color);
+        width: 100vw;
+        pointer-events: none;
+        transition: var(--transition);
+        overflow: hidden;
+
+        .navbar-subcategories-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+          padding-bottom: 40px;
+          display: flex;
+          flex-direction: row;
+          gap: 20px;
+          flex-wrap: wrap;
+          justify-content: center;
+
+          .navbar-subcategories-column {
+            flex: 1;
+            a {
+              color: var(--text-color);
+              text-decoration: none;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+
+            .navbar-subcateogries-title {
+              font-size: 16px;
+              font-weight: 600;
+              text-decoration: none;
+            }
+
+            .navbar-subcategories-subcategories {
+              max-height: 30vh;
+              margin-top: 12px;
+              display: flex;
+              flex-direction: column;
+              flex-wrap: wrap;
+            }
+          }
+        }
+        &.open {
+          height: auto;
+          pointer-events: all;
+        }
+
+        &:hover {
+          height: auto;
+          pointer-events: all;
+        }
+      }
     }
 
     &.overlay {
