@@ -28,7 +28,7 @@ async function getItems(query, data) {
         sequenceNumber: true,
       },
       orderBy: {
-        sequenceNumber: "desc",
+        sequenceNumber: "asc",
       },
     },
     itemCustomVariants: {
@@ -49,7 +49,7 @@ async function getItems(query, data) {
         },
       },
       orderBy: {
-        sequenceNumber: "desc",
+        sequenceNumber: "asc",
       },
     },
   };
@@ -135,7 +135,7 @@ async function getItem(query, data) {
         sequenceNumber: true,
       },
       orderBy: {
-        sequenceNumber: "desc",
+        sequenceNumber: "asc",
       },
     },
     itemCustomVariants: {
@@ -161,12 +161,12 @@ async function getItem(query, data) {
             sequenceNumber: true,
           },
           orderBy: {
-            sequenceNumber: "desc",
+            sequenceNumber: "asc",
           },
         },
       },
       orderBy: {
-        sequenceNumber: "desc",
+        sequenceNumber: "asc",
       },
     },
   };
