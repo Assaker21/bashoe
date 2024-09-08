@@ -6,7 +6,7 @@ import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import Icon from "@mui/material/Icon";
 import SearchIcon from "@mui/icons-material/Search";
 import Badge from "@mui/material/Badge";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGeneralContext } from "../../contexts/context.jsx";
 import BasicPopover from "../../basic-components/basic-popover/basic-popover.component.jsx";
 import Cart from "../cart/cart.component.jsx";
@@ -21,25 +21,111 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useParams } from "react-router-dom";
 import debounce from "../../utils/debounce.js";
 import itemsServices from "../../services/items-services.js";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Divider } from "@mui/material";
 
 function CategoriesMenu({ setMenuOpen }) {
   const { categories } = useGeneralContext();
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [lastCategories, setLastCategories] = useState([]);
+
+  const categoriesToDisplay = useMemo(() => {
+    if (!lastCategories || !lastCategories.length) {
+      return categories;
+    } else {
+      return lastCategories[lastCategories.length - 1].subcategories;
+    }
+  }, [lastCategories, categories]);
 
   return (
     <div className="small-navbar-categories-container">
-      {categories?.map((category) => (
+      {lastCategories[lastCategories.length - 1] && (
         <>
-          <Link
-            to={`/${category.sku}`}
-            onClick={() => setMenuOpen(false)}
+          <div className="small-navbar-category-title-container">
+            <IconButton
+              onClick={() => {
+                setLastCategories((curr) => {
+                  const newLastCategories = [...curr];
+                  newLastCategories.pop();
+                  return newLastCategories;
+                });
+              }}
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            {/*lastCategories.map((category, index) => {
+              return (
+                <>
+                  <span
+                    className={`small-navbar-category-title ${
+                      lastCategories.length - 1 == index ? "highlight" : ""
+                    }`}
+                  >
+                    {category?.description}
+                  </span>
+                  {lastCategories.length - 1 != index && (
+                    <ArrowForwardIcon style={{ fontSize: "16px" }} />
+                  )}
+                </>
+              );
+            })*/}
+            <span className={`small-navbar-category-title`}>
+              {lastCategories[lastCategories.length - 1]?.description}
+            </span>
+          </div>
+          <Line />
+        </>
+      )}
+      {categoriesToDisplay?.map((category) => (
+        <>
+          <div
+            onClick={() => {
+              navigate(`/${category.sku}`);
+              setMenuOpen(false);
+            }}
             className="small-navbar-category"
           >
-            {category.description}
-            <ArrowForwardIcon />
-          </Link>
+            <span>{category.description}</span>
+            {category?.subcategories?.length > 0 ? (
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedCategory(category);
+                  setLastCategories((curr) => {
+                    const newLastCategories = [...curr];
+                    newLastCategories.push(category);
+                    return newLastCategories;
+                  });
+                }}
+                style={{
+                  borderLeft: "1px solid rgba(0, 0, 0, 0.2)",
+                  borderRadius: "0px",
+                  minHeight: "200px !important",
+                  margin: 0,
+                  marginTop: "-1px",
+                  marginRight: "-24px",
+                  padding: "24px",
+                  paddingRight: "48px",
+                }}
+              >
+                <ArrowForwardIcon />
+              </IconButton>
+            ) : (
+              <div
+                style={{
+                  minHeight: "200px !important",
+                  margin: 0,
+                  marginTop: "-2px",
+                  marginRight: "-24px",
+                  padding: "36px 1px",
+                }}
+              />
+            )}
+          </div>
           <Line />
         </>
       ))}
@@ -369,7 +455,7 @@ export default function Navbar() {
 
               {!(menu == "search" && menuOpen) && (
                 <>
-                  <Link to="/" className="small-navbar-logo flex-center">
+                  <div className="flex-center">
                     <IconButton
                       onClick={() => {
                         setMenu("categories");
@@ -378,8 +464,10 @@ export default function Navbar() {
                     >
                       {!menuOpen ? <MenuIcon /> : <CloseIcon />}
                     </IconButton>
-                    HoopHouse
-                  </Link>
+                    <Link to="/" className="small-navbar-logo flex-center">
+                      HoopHouse
+                    </Link>
+                  </div>
 
                   <div className="flex-center">
                     <IconButton

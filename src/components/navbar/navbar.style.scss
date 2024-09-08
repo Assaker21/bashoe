@@ -300,6 +300,28 @@
   max-width: 1200px;
   margin: 0 auto;
   .small-navbar-categories-container {
+    .small-navbar-category-title-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: nowrap;
+      width: 100%;
+      padding-left: 16px;
+      gap: 12px;
+
+      .small-navbar-category-title {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 50px;
+
+        color: var(--text-color);
+        text-decoration: none;
+
+        &.highlight {
+          text-decoration: underline;
+        }
+      }
+    }
     .small-navbar-category {
       font-size: 18px;
       font-weight: 600;
