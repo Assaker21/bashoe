@@ -78,6 +78,8 @@ async function updateVariant(query, data) {
     },
     data: {
       ...data,
+      updatedAt: new Date(),
+      createdAt: new Date(),
     },
   });
 
