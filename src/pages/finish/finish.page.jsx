@@ -12,11 +12,22 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ordersService from "../../services/orders-service";
+import contentsServices from "../../services/contents-services";
 
 export default function Finish() {
-  const { itemList, setCart } = useGeneralContext();
+  const { setCart } = useGeneralContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [doOnce, setDoOnce] = useState(true);
+  const [itemList, setItemList] = useState();
+
+  async function fetch() {
+    const [ok, data] = await contentsServices.getContent({
+      location: "Checkout",
+    });
+    if (ok) {
+      if (data[0]) setItemList(data[0]);
+    }
+  }
 
   useEffect(() => {
     if (
@@ -30,6 +41,8 @@ export default function Finish() {
         externalId: localStorage.getItem("externalId"),
       });
     }
+
+    fetch();
   }, []);
 
   async function closeOrder(order) {
@@ -56,7 +69,7 @@ export default function Finish() {
           <div className="more-thanks">
             <span>In the meantime, check out what else we have</span>
           </div>
-          <ItemList value={itemList} />
+          {itemList && <ItemList value={itemList} />}
         </>
       )}
       {searchParams.get("status") === "fail" && (

@@ -13,10 +13,11 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import itemsServices from "../../../services/items-services";
 import Helmet from "react-helmet";
+import contentsServices from "../../../services/contents-services";
 
 export default function Item() {
   const { categorySku, itemSku } = useParams();
-  const { getCategoryBySku, addToCart, itemList } = useGeneralContext();
+  const { getCategoryBySku, addToCart } = useGeneralContext();
   const category = getCategoryBySku(categorySku);
   const location = useLocation();
 
@@ -27,10 +28,12 @@ export default function Item() {
   const [allPossibleImages, setAllPossibleImages] = useState([]);
   const [image, setImage] = useState("");
   const [clickingImage, setClickingImage] = useState(false);
+  const [itemList, setItemList] = useState();
 
   async function fetch() {
     setItem(null);
-    const [ok, data] = await itemsServices.getItems({
+
+    let [ok, data] = await itemsServices.getItems({
       categorySku,
       itemSku,
       enabledItemCustomVariants: true,
@@ -38,6 +41,13 @@ export default function Item() {
     if (ok) {
       setItem(data);
       console.log("Item: ", data);
+    }
+
+    [ok, data] = await contentsServices.getContent({
+      location: "Single Item Page",
+    });
+    if (ok) {
+      if (data[0]) setItemList(data[0]);
     }
   }
 
@@ -337,7 +347,7 @@ export default function Item() {
         </div>
       </div>
       <Line />
-      <ItemList value={itemList} />
+      {itemList && <ItemList value={itemList} />}
     </section>
   );
 }

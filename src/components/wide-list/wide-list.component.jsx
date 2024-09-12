@@ -13,7 +13,7 @@ export default function WideList({ value }) {
   const [aspectRatios, setAspectRatios] = useState({});
 
   const sectionRefs = useRef(
-    (value?.content || [1, 2, 3, 4, 5]).map(() => createRef())
+    (value?.data || [1, 2, 3, 4, 5]).map(() => createRef())
   );
   const scrollerRef = useRef();
   const timerRef = useRef();
@@ -46,14 +46,14 @@ export default function WideList({ value }) {
   }, [aspectRatios, value]);
 
   function incrementShowingIndex() {
-    setShowingIndex((showingIndex + 1) % value?.content?.length);
+    setShowingIndex((showingIndex + 1) % value?.data?.length);
   }
 
   function decrementShowingIndex() {
     if (showingIndex - 1 < 0) {
-      return setShowingIndex(value?.content?.length - 1);
+      return setShowingIndex(value?.data?.length - 1);
     }
-    setShowingIndex((showingIndex - 1) % value?.content?.length);
+    setShowingIndex((showingIndex - 1) % value?.data?.length);
   }
 
   function scrollToSection(index) {
@@ -70,7 +70,7 @@ export default function WideList({ value }) {
 
   return (
     <div className="wide-list">
-      {value?.content ? (
+      {value?.data ? (
         <>
           <div
             className="wide-list-items"
@@ -79,9 +79,8 @@ export default function WideList({ value }) {
               aspectRatio: 3.16455 || aspectRatios[showingIndex] || 3.16455,
             }}
           >
-            {value?.content?.map((v, index) => (
+            {value?.data?.map((v, index) => (
               <img
-                key={"Image: " + index}
                 onLoad={(e) => {
                   setAspectRatios((oldAspectRatios) => {
                     oldAspectRatios[index] =
@@ -109,7 +108,7 @@ export default function WideList({ value }) {
                 <ArrowBackIcon sx={{ color: "var(--text-color)" }} />
               </IconButton>
             )}
-            {showingIndex < value?.content?.length - 1 && (
+            {showingIndex < value?.data?.length - 1 && (
               <IconButton
                 className="wide-list-button wide-list-button-right"
                 onClick={incrementShowingIndex}
@@ -119,7 +118,7 @@ export default function WideList({ value }) {
             )}
           </div>
           <div className="wide-list-markers">
-            {value?.content?.map((v, index) => (
+            {value?.data?.map((v, index) => (
               <div
                 key={"div: " + index}
                 onClick={() => {

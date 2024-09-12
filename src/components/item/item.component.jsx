@@ -4,12 +4,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-export default function Item({ item, categorySku }) {
+export default function Item({ item, categorySku, navigateTo }) {
   const navigate = useNavigate();
   const location = useLocation();
 
   function handleClick() {
-    navigate(`${location.pathname}/product/${item?.sku}`);
+    navigate(
+      navigateTo ? navigateTo : `${location.pathname}/product/${item?.sku}`
+    );
   }
 
   return (

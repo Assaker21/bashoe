@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Grid from "@mui/material/Grid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ordersService from "../../services/orders-service";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -17,6 +17,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { Button } from "@mui/material";
 import whishServices from "../../services/whish-services";
+import contentsServices from "../../services/contents-services";
 
 const theme = createTheme({
   palette: {
@@ -87,6 +88,10 @@ export default function Checkout() {
       console.log("ERROR: ", data);
     }
   }
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   return (
     <section className="checkout">
@@ -204,23 +209,6 @@ export default function Checkout() {
               <span className="item-list-title">Payment method</span>
             </Grid>
             <Grid item xs={12}>
-              {/*<TextField
-                fullWidth
-                select
-                label="Payment method"
-                defaultValue="Cash on delivery"
-                variant="filled"
-                sx={{ backgroundColor: "var(--lighter-background-color)" }}
-                onChange={handleChange}
-                size="small"
-                required
-              >
-                {["Cash on delivery"].map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </TextField>*/}
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
                 name="paymentMethod"
@@ -278,9 +266,19 @@ export default function Checkout() {
                         className="checkout-order-summary-item-image"
                         src={item.item?.images[0].url.replace("<number>", "01")}
                       />
-                      <span className="checkout-order-summary-item-name">
-                        {item.item.name} - {item.variant.description}
-                      </span>
+                      <div
+                        className="checkout-order-summary-item-name"
+                        style={{ display: "flex", flexDirection: "column" }}
+                      >
+                        <span>{item.item.name}</span>
+                        <span style={{ fontSize: "0.9rem" }}>
+                          {item.variants.map((variant, index) => {
+                            return `${index !== 0 ? " - " : ""}${
+                              variant.itemVariantGroup.description
+                            }: ${variant.description}`;
+                          })}
+                        </span>
+                      </div>
 
                       <span className="checkout-order-summary-item-price">
                         ${item.item.price} x {item.quantity}

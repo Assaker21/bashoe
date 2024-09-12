@@ -6,24 +6,14 @@ import "./home.page.scss";
 
 import { useState, useEffect } from "react";
 import listsServices from "../../services/lists-services";
+import contentsServices from "../../services/contents-services";
 
 export default function Home() {
-  const [content, setContent] = useState([
-    { type: "wide-list" },
-    { type: "item-list" },
-    { type: "category-list" },
-    { type: "wide-list" },
-    { type: "item-list" },
-    { type: "category-list" },
-    { type: "wide-list" },
-    { type: "item-list" },
-    { type: "category-list" },
-  ]);
+  const [content, setContent] = useState([]);
 
   async function fetch() {
-    const [ok, data] = await listsServices.getLists();
+    const [ok, data] = await contentsServices.getContent({ location: "home" });
     if (ok) {
-      console.log("Lists: ", data);
       setContent(data);
     }
   }
@@ -35,9 +25,10 @@ export default function Home() {
   return (
     <section className="home">
       {content?.map((list, index) => {
-        if (list.type === "wide-list")
+        console.log("LIST: ", list);
+        if (list.type === "Banner")
           return <WideList key={"Home: " + index} value={list} />;
-        if (list.type === "item-list")
+        if (list.type === "List of items")
           return <ItemList key={"Home: " + index} value={list} />;
         if (list.type === "category-list")
           return <>{/*<CategoryList value={list} />*/}</>;
