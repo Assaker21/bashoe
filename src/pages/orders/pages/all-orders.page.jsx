@@ -44,19 +44,21 @@ export default function AllOrders() {
     return orders.map((order) => {
       return {
         id: order.id,
-        items: JSON.stringify(order.orderItems),
+        items: JSON.stringify(order.info),
         status: order.orderStatus.description,
         user: JSON.stringify({
           name: order.user.firstName + " " + order.user.lastName,
           email: order.user.email,
           phoneNumber: order.user.phoneNumber,
         }),
+        paymentMethod: order.paymentMethod,
         country: order.address.country.name,
         city: order.address.city,
         address: order.address.address,
-        price: order.orderItems.reduce((acc, curr) => {
+        price: order.info.reduce((acc, curr) => {
           return acc + Number(curr.item.price);
         }, 0),
+        shippingFee: order.shippingFee,
       };
     });
   }, [orders]);
@@ -100,7 +102,6 @@ export default function AllOrders() {
           setVisible(true);
           setSelected(orders.find((element) => element.id == row.id));
         }}
-        onRemoveClick={(e) => {}}
         columns={[
           {
             field: "id",
@@ -133,6 +134,12 @@ export default function AllOrders() {
             },
           },
           {
+            field: "paymentMethod",
+            header: "Payment",
+            sortable: true,
+            style: { width: "100px" },
+          },
+          {
             field: "country",
             header: "Country",
             sortable: true,
@@ -155,7 +162,12 @@ export default function AllOrders() {
             header: "Price",
             sortable: true,
             body: (row) => {
-              return "$" + Number(row.price).toFixed(2) + " + shipping";
+              return (
+                "$" +
+                Number(row.price).toFixed(2) +
+                " + shipping $" +
+                Number(row.shippingFee).toFixed(2)
+              );
             },
           },
           {
@@ -203,8 +215,16 @@ function DatatableItems({ items }) {
               <span className="datatable-items-item-name">
                 {item?.item?.name}
               </span>
-              <span className="datatable-items-item-variant">
-                Variant: {item?.itemVariant?.description}
+              {item?.variants?.map((variant) => {
+                return (
+                  <span className="datatable-items-item-variant">
+                    {variant?.itemVariantGroup?.description}:{" "}
+                    {variant?.description}
+                  </span>
+                );
+              })}
+              <span className="datatable-items-item-name">
+                Price: ${item?.item?.price}
               </span>
             </div>
           </div>

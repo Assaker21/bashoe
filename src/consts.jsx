@@ -1,4 +1,4 @@
-const DEVELOPER_MODE = false;
+const DEVELOPER_MODE = true;
 
 export const BACKEND_URL = DEVELOPER_MODE
   ? "http://localhost:3000"

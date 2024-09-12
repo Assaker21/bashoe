@@ -41,6 +41,7 @@ export default function DropDown({
           onChange={(e) => setValue(e.value)}
           optionLabel={optionLabel}
           placeholder={placeholder}
+          {...rest}
         />
       </div>
     );

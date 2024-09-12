@@ -152,7 +152,6 @@ export default function AllCategories() {
           setMode("edit");
           navigate(location.pathname + `?item=${selected.id}`);
         }}
-        onRemoveClick={(e) => {}}
         columns={[
           {
             field: "id",
