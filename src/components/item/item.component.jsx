@@ -19,7 +19,7 @@ export default function Item({ item, categorySku, navigateTo }) {
       {item?.images[0] ? (
         <img
           src={item?.images[0].url.replace("<number>", "01")}
-          alt="shoe"
+          alt=""
           className="list-item-image"
         />
       ) : (
