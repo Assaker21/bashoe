@@ -7,6 +7,7 @@ const analyticsRouter = require("./analytics.route.js");
 const authenticationRouter = require("./authentication.route.js");
 const paymentsRouter = require("./payments.route.js");
 const variantsRouter = require("./variants.route.js");
+const contentsRouter = require("./contents.route.js");
 
 module.exports = {
   itemsRouter,
@@ -18,4 +19,5 @@ module.exports = {
   authenticationRouter,
   paymentsRouter,
   variantsRouter,
+  contentsRouter,
 };

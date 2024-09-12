@@ -125,6 +125,5 @@ module.exports = function sendMail(email, type, data) {
     if (error) {
       return console.log(error);
     }
-    console.log("Message sent: %s", info.messageId);
   });
 };

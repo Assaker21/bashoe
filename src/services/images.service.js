@@ -7,7 +7,6 @@ async function createImages(query, data) {
       data: data.map((file) => ({ url: file.filename })),
     });
   } else {
-    console.log("Create image: ", data);
     await prisma.image.create({
       data: {
         url: data.url,
@@ -20,7 +19,6 @@ async function createImages(query, data) {
 
 async function getImages(query, data) {
   if (query.what == "all") {
-    console.log("Getting all image files", getAllFiles());
     return getAllFiles();
   }
 

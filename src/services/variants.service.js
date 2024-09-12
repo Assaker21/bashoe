@@ -63,14 +63,10 @@ async function updateVariant(query, data) {
     },
   });
 
-  console.log("All Elements unfiltered: ", allElements);
-
   allElements = allElements.filter(
     (element) =>
       element.updatedAt.toISOString() == element.createdAt.toISOString()
   );
-
-  console.log("All Elements filtered: ", allElements);
 
   await prisma.itemCustomVariant.updateMany({
     where: {

@@ -1,7 +1,6 @@
 const prisma = require("../utils/prisma");
 
 async function createOrder(query, data) {
-  console.log("DATA: ", data);
   return await prisma.order.create({
     data: {
       address: {
@@ -25,13 +24,10 @@ async function createOrder(query, data) {
         },
       },
       info: data.cart,
-      /*orderItems: {
-        create: data.cart.map((i) => ({
-          itemId: i.item.id,
-          quantity: i.quantity,
-          itemVariantId: i.variant.id,
-        })),
-      },*/
+      shippingFee: data.info.paymentMethod.toLowerCase().includes("whish")
+        ? 0
+        : 4,
+      paymentMethod: data.info.paymentMethod,
     },
     include: {
       user: true,

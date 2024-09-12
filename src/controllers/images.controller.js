@@ -27,7 +27,6 @@ async function createImages(req, res) {
 
 async function updateImage(req, res) {
   try {
-    console.log("REQ: ", req.query, " - ", req.body);
     const result = await imagesServices.updateImage(req.query, req.body);
 
     res.status(200).json(result);

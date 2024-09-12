@@ -142,6 +142,9 @@ model order {
   orderStatus   orderStatus? @relation(fields: [orderStatusId], references: [id])
   orderStatusId Int?
 
+  paymentMethod String?
+  shippingFee   Float?
+
   info Json?
 
   orderItems orderItem[]
@@ -228,6 +231,23 @@ model analytic {
 
   ipAddress String?
   time      DateTime?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model content {
+  id Int @id @default(autoincrement())
+
+  header         String?
+  description    String?
+  info           String?
+  sequenceNumber Int?
+  location       String?
+  type           String?
+  dataSelection  String?
+  data           Json?
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())

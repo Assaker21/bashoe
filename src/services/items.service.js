@@ -85,7 +85,6 @@ async function getItems(query, data) {
   let result;
 
   if (query.itemSku) {
-    console.log("Query: ", query);
     result = await prisma.item.findUnique({
       where: prismaQuery,
       select: prismaSelect,
@@ -180,8 +179,6 @@ async function getItem(query, data) {
     select: prismaSelect,
   });
 
-  console.log("Item: ", result);
-
   return result;
 }
 
@@ -197,26 +194,6 @@ async function createItem(query, data) {
       itemVariantGroupId: true,
     },
   });
-
-  console.log(
-    "CREATED VARIANTS: ",
-    itemVariants.map((itemVariant) => ({
-      description: itemVariant.description,
-      url: "",
-      sequenceNumber: itemVariant.sequenceNumber,
-      enabled: false,
-      itemVariant: {
-        connect: {
-          id: itemVariant.id,
-        },
-      },
-      itemVariantGroup: {
-        connect: {
-          id: itemVariant.itemVariantGroupId,
-        },
-      },
-    }))
-  );
 
   await prisma.item.create({
     data: {
@@ -260,7 +237,6 @@ async function createItem(query, data) {
 }
 
 async function updateItem(query, data) {
-  console.log("req: ", query, " - ", data.categories);
   const prismaWhere = {};
 
   if (query.id) prismaWhere.id = Number(query.id);
