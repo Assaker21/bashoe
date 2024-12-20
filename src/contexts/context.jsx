@@ -88,9 +88,13 @@ export function GeneralContextProvider({ children }) {
     return subtotal;
   }, [cart]);
 
+  const calculateFee = useCallback(() => {
+    return calculateSubtotal() * 0.1;
+  }, [cart, calculateSubtotal]);
+
   const calculateTotal = useCallback(() => {
-    return calculateSubtotal() + shippingFee;
-  }, [cart]);
+    return calculateSubtotal() + shippingFee + calculateFee();
+  }, [cart, calculateFee]);
 
   const getNumberOfItems = useCallback(() => {
     var count = 0;
@@ -121,6 +125,7 @@ export function GeneralContextProvider({ children }) {
         categories,
         setCategories,
         calculateSubtotal,
+        calculateFee,
         calculateTotal,
         shippingFee,
         getCategoryBySku,

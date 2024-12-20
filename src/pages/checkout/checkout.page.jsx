@@ -1,23 +1,17 @@
-import Slider from "../../basic-components/slider/slider.component";
+import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../components/breadcrumbs/breadcrumbs.component";
 import { useGeneralContext } from "../../contexts/context";
-import { useNavigate } from "react-router-dom";
 import "./checkout.page.scss";
 
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useEffect, useState } from "react";
-import ordersService from "../../services/orders-service";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import { Button } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import { useEffect, useState } from "react";
+import ordersService from "../../services/orders-service";
 import whishServices from "../../services/whish-services";
-import contentsServices from "../../services/contents-services";
 
 const theme = createTheme({
   palette: {
@@ -28,7 +22,7 @@ const theme = createTheme({
 });
 
 export default function Checkout() {
-  const { calculateTotal, getNumberOfItems, cart, setCart } =
+  const { calculateTotal, calculateFee, getNumberOfItems, cart, setCart } =
     useGeneralContext();
   console.log("MYCART: ", cart);
   const [info, setInfo] = useState({
@@ -285,6 +279,28 @@ export default function Checkout() {
                       </span>
                     </div>
                   ))}
+
+                  <div className="checkout-order-summary-item">
+                    <span
+                      className="checkout-order-summary-item-name"
+                      style={{ display: "flex", flexDirection: "column" }}
+                    >
+                      Cirucumstantial Fee
+                      <span
+                        style={{
+                          color: "rgba(0, 0, 0, 0.4)",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        Given the current circumstances, additional charges were
+                        necessary to account for the increased shipping costs.
+                      </span>
+                    </span>
+
+                    <span className="checkout-order-summary-item-price">
+                      ${calculateFee()}
+                    </span>
+                  </div>
 
                   <div className="checkout-order-summary-item">
                     <span className="checkout-order-summary-item-name">
