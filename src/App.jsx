@@ -6,17 +6,29 @@ import authenticationApi from "./api/authentication.api";
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [value, setValue] = useState("");
-  async function authenticate() {
-    const { ok, data } = await authenticationApi.authenticate(null, {
-      password: value,
-    });
-    if (ok) {
-      setAuthenticated(true);
+
+  async function authenticate(initial) {
+    if (initial && localStorage.getItem("value")) {
+      let value = localStorage.getItem("value");
+      const { ok, data } = await authenticationApi.authenticate(null, {
+        password: value,
+      });
+      if (ok) {
+        setAuthenticated(true);
+      }
+    } else {
+      const { ok, data } = await authenticationApi.authenticate(null, {
+        password: value,
+      });
+      if (ok) {
+        setAuthenticated(true);
+        localStorage.setItem("value", value);
+      }
     }
   }
 
   useEffect(() => {
-    authenticate();
+    authenticate(true);
   }, []);
 
   console.log("AUTHE: ", authenticated);
