@@ -89,7 +89,7 @@ export function GeneralContextProvider({ children }) {
   }, [cart]);
 
   const calculateFee = useCallback(() => {
-    return calculateSubtotal() * 0.1;
+    return calculateSubtotal() * 0.1 * 0;
   }, [cart, calculateSubtotal]);
 
   const calculateTotal = useCallback(() => {

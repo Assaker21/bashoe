@@ -280,7 +280,7 @@ export default function Checkout() {
                     </div>
                   ))}
 
-                  <div className="checkout-order-summary-item">
+                  {/*<div className="checkout-order-summary-item">
                     <span
                       className="checkout-order-summary-item-name"
                       style={{ display: "flex", flexDirection: "column" }}
@@ -300,7 +300,7 @@ export default function Checkout() {
                     <span className="checkout-order-summary-item-price">
                       ${calculateFee()}
                     </span>
-                  </div>
+                  </div>*/}
 
                   <div className="checkout-order-summary-item">
                     <span className="checkout-order-summary-item-name">
