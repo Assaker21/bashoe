@@ -10,6 +10,8 @@ async function request(method, endpoint, query, payload) {
     data: payload,
     headers: { "Content-Type": "application/json" },
   });
+
+  console.log("RESPONSE: ", res);
   return [res.status === 200, res.data];
 }
 

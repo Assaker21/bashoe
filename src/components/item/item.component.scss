@@ -6,8 +6,8 @@
   flex: 1;
 
   padding: 8px;
-  min-width: 160px;
-  max-width: 160px;
+  min-width: 260px;
+  max-width: 260px;
   /*max-width: 180px;*/
 
   &:hover {
@@ -19,10 +19,10 @@
 
   .list-item-image {
     width: 100%;
-    height: 140px;
+    height: 220px;
     object-fit: contain;
     margin: 0 auto;
-    max-width: 180px;
+    max-width: 380px;
 
     @media only screen and (max-width: 600px) {
       width: 100%;

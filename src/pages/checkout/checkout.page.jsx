@@ -12,6 +12,8 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import ordersService from "../../services/orders-service";
 import whishServices from "../../services/whish-services";
+import { Button, InputAdornment } from "@mui/material";
+import { CheckCircle } from "@mui/icons-material";
 
 const theme = createTheme({
   palette: {
@@ -24,12 +26,15 @@ const theme = createTheme({
 export default function Checkout() {
   const { calculateTotal, calculateFee, getNumberOfItems, cart, setCart } =
     useGeneralContext();
-  console.log("MYCART: ", cart);
   const [info, setInfo] = useState({
     region: "Lebanon",
     paymentMethod: "Cash on delivery",
   });
+  const [coupon, setCoupon] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingCoupon, setLoadingCoupon] = useState(false);
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponError, setCouponError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -55,7 +60,10 @@ export default function Checkout() {
       localStorage.setItem("order", JSON.stringify({ info, cart }));
       const [ok, data] = await whishServices.requestPayment({
         invoice: `Payment for HoopHouse ${process.env.IS_OG ? "OG" : ""}`,
-        amount: calculateTotal() - 4,
+        amount:
+          calculateTotal() -
+          4 -
+          (info.coupon ? 0.01 * couponDiscount * (calculateTotal() - 4) : 0),
         externalId: externalId,
         successRedirectUrl: `${window.location.origin}/finish?status=success&externalId=${externalId}`,
         failureRedirectUrl: `${window.location.origin}/finish?status=fail&externalId=${externalId}`,
@@ -83,6 +91,30 @@ export default function Checkout() {
     }
   }
 
+  const applyCoupon = async () => {
+    if (!coupon) {
+      setCouponError("Enter a coupon first");
+      return;
+    }
+    setLoadingCoupon(true);
+
+    let ok = false,
+      data = null;
+    try {
+      [ok, data] = await ordersService.checkCoupon(coupon);
+    } catch (err) {}
+
+    if (ok && data?.discount) {
+      setCouponDiscount(Number(data.discount));
+      setInfo({ ...info, coupon });
+      setCouponError("");
+    } else {
+      setCouponError(coupon + " is not valid.");
+    }
+
+    setLoadingCoupon(false);
+  };
+
   useEffect(() => {
     fetch();
   }, []);
@@ -97,7 +129,14 @@ export default function Checkout() {
       />
 
       <ThemeProvider theme={theme}>
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault(); // Prevent form submission
+            }
+          }}
+        >
           <Grid container spacing={1.5} sx={{ pb: 1.5 }}>
             <Grid item xs={12}>
               <span className="item-list-title">Personal details</span>
@@ -246,6 +285,79 @@ export default function Checkout() {
 
           <Grid container spacing={1.5} sx={{ pb: 1.5, mt: 1.5 }}>
             <Grid item xs={12}>
+              <span className="item-list-title">Coupon Code</span>
+            </Grid>
+            <Grid
+              container
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "start",
+                gap: 1.5,
+              }}
+            >
+              <Grid item xs sx={{ position: "relative" }}>
+                <TextField
+                  disabled={!!info.coupon}
+                  fullWidth
+                  placeholder="None"
+                  value={coupon}
+                  onChange={(e) => {
+                    setCoupon(e.target.value);
+                  }}
+                  error={!!couponError}
+                  helperText={couponError}
+                />
+                {!!info.coupon && (
+                  <InputAdornment
+                    sx={{
+                      position: "absolute",
+                      right: 10,
+                      top: "50%",
+                      transform: "translate(0, -50%)",
+                    }}
+                    position="end"
+                  >
+                    <CheckCircle />
+                  </InputAdornment>
+                )}
+              </Grid>
+              <Grid item sx={{ height: "56px" }}>
+                {loadingCoupon ? (
+                  <button
+                    disabled={true}
+                    className="checkout-button"
+                    style={{ height: "100%", width: "180px", fontSize: "16px" }}
+                  >
+                    {"Applying Coupon..."}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (!info.coupon) applyCoupon();
+                      else
+                        setInfo(() => {
+                          const newInfo = { ...info };
+                          delete newInfo.coupon;
+                          return newInfo;
+                        });
+                    }}
+                    type="button"
+                    disabled={getNumberOfItems() === 0}
+                    className="checkout-button"
+                    style={{ height: "100%", width: "180px", fontSize: "16px" }}
+                  >
+                    {info.coupon ? "Disable Coupon" : "Apply Coupon"}
+                  </button>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={1.5} sx={{ pb: 1.5, mt: 1.5 }}>
+            <Grid item xs={12}>
               <span className="item-list-title">Order summary</span>
             </Grid>
             <Grid item xs={12}>
@@ -302,6 +414,21 @@ export default function Checkout() {
                     </span>
                   </div>*/}
 
+                  {info.coupon ? (
+                    <div className="checkout-order-summary-item">
+                      <span className="checkout-order-summary-item-name">
+                        Discount
+                      </span>
+
+                      <span
+                        className="checkout-order-summary-item-price"
+                        style={{ color: "green" }}
+                      >
+                        - ${0.01 * couponDiscount * (calculateTotal() - 4)}
+                      </span>
+                    </div>
+                  ) : null}
+
                   <div className="checkout-order-summary-item">
                     <span className="checkout-order-summary-item-name">
                       Shipping
@@ -320,7 +447,10 @@ export default function Checkout() {
                     <span className="checkout-order-summary-item-price">
                       $
                       {calculateTotal() -
-                        (info.paymentMethod == "Whish money" ? 4 : 0)}
+                        (info.paymentMethod == "Whish money" ? 4 : 0) -
+                        (info.coupon
+                          ? 0.01 * couponDiscount * (calculateTotal() - 4)
+                          : 0)}
                     </span>
                   </div>
                 </div>
@@ -329,6 +459,7 @@ export default function Checkout() {
             </Grid>
             <Grid item xs={12}></Grid>
           </Grid>
+
           {!loading ? (
             <button
               disabled={getNumberOfItems() === 0}
