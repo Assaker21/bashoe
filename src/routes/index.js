@@ -8,6 +8,7 @@ const authenticationRouter = require("./authentication.route.js");
 const paymentsRouter = require("./payments.route.js");
 const variantsRouter = require("./variants.route.js");
 const contentsRouter = require("./contents.route.js");
+const couponsRouter = require("./coupons.route.js");
 
 module.exports = {
   itemsRouter,
@@ -20,4 +21,5 @@ module.exports = {
   paymentsRouter,
   variantsRouter,
   contentsRouter,
+  couponsRouter,
 };

@@ -23,6 +23,7 @@ async function createOrder(query, data) {
           id: 1,
         },
       },
+      coupon: data.info.coupon,
       info: data.cart,
       shippingFee: data.info.paymentMethod.toLowerCase().includes("whish")
         ? 0
@@ -56,6 +57,9 @@ async function getOrders(query, data) {
   return await prisma.order.findMany({
     where: {
       isActive: true,
+    },
+    orderBy: {
+      id: "desc",
     },
     include: {
       user: true,

@@ -1,2 +1,5 @@
 -- AlterTable
-ALTER TABLE `orderitem` ADD COLUMN `info` JSON NULL;
+ALTER TABLE
+    `orderItem`
+ADD
+    COLUMN `info` JSON NULL;

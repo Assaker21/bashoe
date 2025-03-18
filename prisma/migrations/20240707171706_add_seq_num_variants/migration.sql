@@ -1,2 +1,5 @@
 -- AlterTable
-ALTER TABLE `itemvariant` ADD COLUMN `sequenceNumber` DOUBLE NULL;
+ALTER TABLE
+    `itemVariant`
+ADD
+    COLUMN `sequenceNumber` DOUBLE NULL;

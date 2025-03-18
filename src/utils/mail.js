@@ -96,6 +96,13 @@ function generateOrderEmail(order) {
           </div>`;
           })
           .join("\n")}
+        
+      </div>
+
+      <div class="order-items">
+        <h2>Coupon Used</h2>
+        <p>${order?.coupon}</p>
+        
       </div>
       <div class="footer">
         <p>If you have any questions about your order, please contact us at <a href="mailto:help@hoophouse.store">help@hoophouse.store</a>.</p>

@@ -51,10 +51,11 @@ const {
   paymentsRouter,
   variantsRouter,
   contentsRouter,
+  couponsRouter,
 } = require("./src/routes/index.js");
 const delay = require("./src/middleware/delay.middleware.js");
 
-app.use(delay(200));
+app.use(delay(0));
 app.use("/items", itemsRouter);
 app.use("/categories", categoriesRouter);
 app.use("/orders", ordersRouter);
@@ -65,6 +66,7 @@ app.use("/authentication", authenticationRouter);
 app.use("/payments", paymentsRouter);
 app.use("/variants", variantsRouter);
 app.use("/contents", contentsRouter);
+app.use("/coupons", couponsRouter);
 app.use("/", async (req, res) => {
   res.send("No.");
 });
