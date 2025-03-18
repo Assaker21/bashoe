@@ -4,7 +4,7 @@ import PageHeader from "../../../components/page-header/page-header.component";
 import { useNavigate, useParams } from "react-router-dom";
 import ordersApi from "../../../api/orders.api";
 import "./all-orders.page.scss";
-import OrderDialog from "../dialogs/order.dialog";
+import OrderDialog from "../dialogs/discount.dialog";
 import useQuery from "../../../hooks/useQuery";
 
 export default function AllOrders() {

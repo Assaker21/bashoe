@@ -1,0 +1,48 @@
+.datatable-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .datatable-items-item {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+
+    img {
+      width: 50px;
+      border-radius: 0.5rem;
+      object-fit: contain;
+    }
+
+    .datatable-items-item-info {
+      display: flex;
+      flex-direction: column;
+
+      .datatable-items-item-name {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .datatable-items-item-variant {
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.datatable-user {
+  display: flex;
+  flex-direction: column;
+  .datatable-user-name {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .datatable-user-email {
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .datatable-user-phone-number {
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
