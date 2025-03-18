@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="footer">
       <a
         className="footer-link"
-        href="https://www.instagram.com/hoophouse.lb"
+        href="https://www.instagram.com/hoophouse.store"
         target="_blank"
       >
         Contact us on Instagram

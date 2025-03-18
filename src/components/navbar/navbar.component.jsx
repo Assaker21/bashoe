@@ -286,7 +286,7 @@ export default function Navbar() {
                   src="/images/hoophouse-logo-white-512.jpg"
                   alt="logo"
                 />
-                HoopHouse
+                HoopHouse {process.env.IS_OG ? "OG" : ""}
               </Link>
               <div
                 className={`navbar-search-container ${
@@ -465,7 +465,7 @@ export default function Navbar() {
                       {!menuOpen ? <MenuIcon /> : <CloseIcon />}
                     </IconButton>
                     <Link to="/" className="small-navbar-logo flex-center">
-                      HoopHouse
+                      HoopHouse {process.env.IS_OG ? "OG" : ""}
                     </Link>
                   </div>
 

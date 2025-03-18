@@ -54,7 +54,7 @@ export default function Checkout() {
       localStorage.setItem("externalId", externalId);
       localStorage.setItem("order", JSON.stringify({ info, cart }));
       const [ok, data] = await whishServices.requestPayment({
-        invoice: "Payment for HoopHouse",
+        invoice: `Payment for HoopHouse ${process.env.IS_OG ? "OG" : ""}`,
         amount: calculateTotal() - 4,
         externalId: externalId,
         successRedirectUrl: `${window.location.origin}/finish?status=success&externalId=${externalId}`,
