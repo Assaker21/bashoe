@@ -35,7 +35,7 @@ export default function Dashboard() {
   const chartData = useMemo(() => {
     if (!analytics?.entries) return [];
     const ordersData = {};
-    analytics.orders.forEach((order) => {
+    analytics?.orders?.forEach?.((order) => {
       const newDate = new Date(order.createdAt).toISOString().split("T")[0];
       if (!ordersData[newDate]) ordersData[newDate] = 0;
       ordersData[newDate] += 1;

@@ -14,7 +14,7 @@ export default function Navigation() {
 
   return (
     <nav>
-      <h1>Hoop house {process.env.IS_OG ? "OG" : ""} admin</h1>
+      <h1>{process.env.VITE_APP_TITLE} admin</h1>
       <ul>
         {routes.map((route) => {
           if (route.hidden) return;
