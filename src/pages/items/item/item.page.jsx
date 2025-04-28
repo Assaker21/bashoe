@@ -94,7 +94,7 @@ export default function Item() {
       setSelectedImage(1);
       for (var i = 1; i < 37; i++) {
         _allPossibleImages.push(
-          item?.images[0]?.url.replace("<number>", String(i).padStart(2, "0"))
+          item?.images[0]?.url?.replace("<number>", String(i).padStart(2, "0"))
         );
       }
     }
@@ -120,7 +120,7 @@ export default function Item() {
       setImage(item?.images[selectedImage]?.url);
     } else {
       setImage(
-        item?.images[0]?.url.replace(
+        item?.images[0]?.url?.replace(
           "<number>",
           String(selectedImage).padStart(2, "0")
         )

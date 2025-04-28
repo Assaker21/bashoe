@@ -184,7 +184,7 @@ function SearchItem({ item, onClick }) {
         >
           <img
             className="search-item-image"
-            src={item.images[0].url.replace("<number>", "01")}
+            src={item?.images?.[0]?.url?.replace("<number>", "01")}
           />
           <div className="search-item-info">
             <span className="search-item-name">{item.name}</span>
@@ -279,14 +279,22 @@ export default function Navbar() {
             </Drawer>
             <div className="navbar-top-container">
               <Link to="/" className="navbar-logo">
-                <img
-                  style={{
-                    width: "50px",
-                  }}
-                  src="/images/hoophouse-logo-white-512.jpg"
-                  alt="logo"
-                />
-                HoopHouse {process.env.IS_OG ? "OG" : ""}
+                {process.env.VITE_APP_TITLE == "MedNMotion" ? (
+                  ""
+                ) : (
+                  <img
+                    style={{
+                      width: "50px",
+                    }}
+                    src={
+                      process.env.VITE_APP_TITLE
+                        ? "images/image.psd.jpg"
+                        : "/images/hoophouse-logo-white-512.jpg"
+                    }
+                    alt="logo"
+                  />
+                )}
+                {process.env.VITE_APP_TITLE}
               </Link>
               <div
                 className={`navbar-search-container ${

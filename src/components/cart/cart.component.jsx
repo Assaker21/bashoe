@@ -69,7 +69,7 @@ function CartItem({ items, setItems, index, setCart }) {
     <div className="cart-menu-item">
       <img
         className="cart-menu-item-image"
-        src={items[index].item?.images[0].url.replace("<number>", "01")}
+        src={items[index].item?.images?.[0]?.url?.replace("<number>", "01")}
       />
       <span className="cart-menu-item-name">{items[index].item?.name}</span>
       {items[index].variants.map((variant) => {

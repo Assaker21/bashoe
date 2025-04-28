@@ -59,7 +59,7 @@ export default function Checkout() {
       localStorage.setItem("externalId", externalId);
       localStorage.setItem("order", JSON.stringify({ info, cart }));
       const [ok, data] = await whishServices.requestPayment({
-        invoice: `Payment for HoopHouse ${process.env.IS_OG ? "OG" : ""}`,
+        invoice: `Payment for ${process.env.VITE_APP_TITLE}}`,
         amount:
           calculateTotal() -
           4 -
