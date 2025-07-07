@@ -287,7 +287,7 @@ export default function Navbar() {
                       width: "50px",
                     }}
                     src={
-                      process.env.VITE_APP_TITLE
+                      process.env.VITE_APP_TITLE != "Hoophouse"
                         ? "images/image.psd.jpg"
                         : "/images/hoophouse-logo-white-512.jpg"
                     }
