@@ -178,7 +178,7 @@ function SearchItem({ item, onClick }) {
         <Link
           to={`/${
             item?.categories?.length > 0 ? item.categories[0]?.sku : "all"
-          }/${item.sku}`}
+          }/product/${item.sku}`}
           className="search-item-container"
           onClick={onClick}
         >
