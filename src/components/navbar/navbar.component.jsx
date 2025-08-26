@@ -397,6 +397,10 @@ export default function Navbar() {
                         <Link
                           to={`${categoriesWideMenuOpen.sku}/${subcategory.sku}`}
                           className="navbar-subcateogries-title"
+                          style={{
+                            fontSize: "25px",
+                            fontWeight: "700",
+                          }}
                         >
                           {subcategory.description}
                         </Link>
@@ -405,6 +409,10 @@ export default function Navbar() {
                             {subcategory.subcategories.map((sub2) => {
                               return (
                                 <Link
+                                  style={{
+                                    fontSize: "24px",
+                                    fontWeight: "500",
+                                  }}
                                   to={`${categoriesWideMenuOpen.sku}/${subcategory.sku}/${sub2.sku}`}
                                 >
                                   {sub2.description}
